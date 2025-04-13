@@ -3,19 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fashion Runway</title>
+    <title>RUNWAY - Fashion Collection</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4">
-        <header class="text-center py-10">
-            <h1 class="text-4xl font-bold text-gray-800">Fashion Runway</h1>
-        </header>
-        <main>
-            <!-- Fashion content will go here -->
-        </main>
-    </div>
+<body class="bg-black text-white font-[Montserrat] overflow-x-hidden">
+    <!-- Header -->
+    <header class="fixed w-full z-50 bg-black/80 backdrop-blur-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold font-[Playfair] tracking-widest">RUNWAY</a>
+            <nav>
+                <ul class="hidden md:flex space-x-8 font-light">
+                    <li><a href="index.html" class="hover:text-amber-400 transition">HOME</a></li>
+                    <li><a href="collections.html" class="hover:text-amber-400 transition">COLLECTIONS</a></li>
+                    <li><a href="about.html" class="hover:text-amber-400 transition">ABOUT</a></li>
+                    <li><a href="showcase.html" class="hover:text-amber-400 transition">SHOWCASE</a></li>
+                    <li><a href="contact.html" class="hover:text-amber-400 transition">CONTACT</a></li>
+                </ul>
+                <button class="md:hidden text-2xl">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="h-screen relative flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1523260578934-e9318da58c8d?q=80&w=1974&auto=format&fit=crop" alt="Fashion Model" class="w-full h-full object-cover opacity-60">
+        </div>
+        <div class="container mx-auto px-4 z-10 text-center">
+            <h1 class="text-4xl md:text-7xl font-[Playfair] font-bold leading-tight hero-title">
+                SPRING<br><span class="text-amber-400">COLLECTION</span><br>2025
+            </h1>
+            <p class="mt-6 text-xl max-w-lg mx-auto hero-subtitle">Elevating everyday fashion with sustainable luxury and timeless designs.</p>
+            <a href="collections.html" class="mt-8 inline-block px-8 py-3 bg-amber-400 text-black font-medium rounded-full hover:bg-white transition duration-300 hero-button">EXPLORE COLLECTION</a>
+        </div>
+    </section>
+
+    <!-- Featured Collections -->
+    <section class="py-20 bg-neutral-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-[Playfair] text-center mb-16">Featured <span class="text-amber-400">Collections</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Collection 1 -->
+                <div class="group">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=987&auto=format&fit=crop" alt="Urban Collection" class="w-full h-96 object-cover transform transition duration-700 group-hover:scale-110">
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-xl font-medium">Urban Elegance</h3>
+                        <p class="text-neutral-400 mt-2">Modern city-inspired designs with a touch of sophistication.</p>
+                        <a href="collections.html" class="inline-block mt-4 text-amber-400 hover:underline">View Collection →</a>
+                    </div>
+                </div>
+                
+                <!-- Collection 2 -->
+                <div class="group">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1170&auto=format&fit=crop" alt="Minimalist Collection" class="w-full h-96 object-cover transform transition duration-700 group-hover:scale-110">
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-xl font-medium">Minimalist Dream</h3>
+                        <p class="text-neutral-400 mt-2">Subtle elegance with clean lines and understated luxury.</p>
+                        <a href="collections.html" class="inline-block mt-4 text-amber-400 hover:underline">View Collection →</a>
+                    </div>
+                </div>
+                
+                <!-- Collection 3 -->
+                <div class="group">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=962&auto=format&fit=crop" alt="Bohemian Collection" class="w-full h-96 object-cover transform transition duration-700 group-hover:scale-110">
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-xl font-medium">Bohemian Rhapsody</h3>
+                        <p class="text-neutral-400 mt-2">Free-spirited designs inspired by global artistic influences.</p>
+                        <a href="collections.html" class="inline-block mt-4 text-amber-400 hover:underline">View Collection →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Showcase Highlight -->
+    <section class="py-20 relative">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1542295669297-4d352b042bca?q=80&w=1974&auto=format&fit=crop" alt="Runway Show" class="w-full h-full object-cover opacity-30">
+        </div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-3xl md:text-5xl font-[Playfair] mb-6">Paris Fashion Week <span class="text-amber-400">Showcase</span></h2>
+                <p class="text-xl mb-8">Experience our latest runway show that captivated the fashion world at Paris Fashion Week 2025.</p>
+                <a href="showcase.html" class="inline-block px-8 py-3 bg-transparent border-2 border-white text-white font-medium rounded-full hover:bg-white hover:text-black transition duration-300">WATCH SHOWCASE</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-neutral-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-[Playfair] text-center mb-16">What the <span class="text-amber-400">Critics Say</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Testimonial 1 -->
+                <div class="bg-neutral-800 p-8 rounded-lg">
+                    <div class="text-amber-400 text-4xl mb-4">"</div>
+                    <p class="italic mb-6">The attention to detail and sustainable practices make RUNWAY not just a fashion statement, but a commitment to a better future.</p>
+                    <div class="flex items-center">
+                        <div>
+                            <p class="font-medium">Vogue Magazine</p>
+                            <p class="text-sm text-neutral-400">Fashion Editor</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-neutral-800 p-8 rounded-lg">
+                    <div class="text-amber-400 text-4xl mb-4">"</div>
+                    <p class="italic mb-6">Innovative designs that respect traditional craftsmanship while pushing the boundaries of contemporary fashion.</p>
+                    <div class="flex items-center">
+                        <div>
+                            <p class="font-medium">Elle</p>
+                            <p class="text-sm text-neutral-400">Style Director</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-neutral-800 p-8 rounded-lg">
+                    <div class="text-amber-400 text-4xl mb-4">"</div>
+                    <p class="italic mb-6">RUNWAY's Spring Collection is a breath of fresh air in an industry that often prioritizes trend over substance.</p>
+                    <div class="flex items-center">
+                        <div>
+                            <p class="font-medium">GQ</p>
+                            <p class="text-sm text-neutral-400">Fashion Correspondent</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-20 bg-amber-400 text-black">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-[Playfair] mb-4">Join Our Exclusive List</h2>
+            <p class="max-w-xl mx-auto mb-8">Subscribe to get VIP access to new collections, runway show invitations, and exclusive content.</p>
+            
+            <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-4">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-black">
+                <button type="submit" class="px-6 py-3 bg-black text-white font-medium rounded-full hover:bg-neutral-800 transition duration-300">SUBSCRIBE</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-black">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div>
+                    <h3 class="text-2xl font-bold font-[Playfair] tracking-widest mb-6">RUNWAY</h3>
+                    <p class="text-neutral-400">Redefining fashion with sustainable luxury and timeless designs since 2015.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">Explore</h4>
+                    <ul class="space-y-2 text-neutral-400">
+                        <li><a href="index.html" class="hover:text-white transition">Home</a></li>
+                        <li><a href="collections.html" class="hover:text-white transition">Collections</a></li>
+                        <li><a href="about.html" class="hover:text-white transition">About Us</a></li>
+                        <li><a href="showcase.html" class="hover:text-white transition">Showcase</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">Legal</h4>
+                    <ul class="space-y-2 text-neutral-400">
+                        <li><a href="#" class="hover:text-white transition">Terms & Conditions</a></li>
+                        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">Connect</h4>
+                    <ul class="space-y-2 text-neutral-400">
+                        <li><a href="#" class="hover:text-white transition">Instagram</a></li>
+                        <li><a href="#" class="hover:text-white transition">Twitter</a></li>
+                        <li><a href="#" class="hover:text-white transition">Pinterest</a></li>
+                        <li><a href="#" class="hover:text-white transition">YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-8 border-t border-neutral-800 text-neutral-400 text-sm text-center">
+                <p>&copy; 2025 RUNWAY Fashion. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
