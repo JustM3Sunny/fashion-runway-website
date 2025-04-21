@@ -1,9 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // GSAP animations will be added here
-    gsap.from('header h1', {
-        opacity: 0,
-        y: -50,
-        duration: 1,
-        ease: 'power3.out'
-    });
+    const headerTitle = document.querySelector('header h1');
+
+    if (headerTitle) {
+        gsap.from(headerTitle, {
+            opacity: 0,
+            y: -50,
+            duration: 1,
+            ease: 'power3.out',
+            delay: 0.2 // Optional: Add a slight delay for a smoother feel
+        });
+    } else {
+        console.warn('Header title element not found.');
+    }
 });
