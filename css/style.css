@@ -149,3 +149,19 @@ a:hover {
     flex: 0 0 100%; /* Stack columns on smaller screens */
   }
 }
+
+/* ==========================================================================
+   6. GitHub Pages Specific Styles
+   ========================================================================== */
+
+/* GitHub Pages often serves content from a subdirectory.
+   This ensures that relative paths in CSS (e.g., for background images)
+   still work correctly when deployed to GitHub Pages. */
+
+body {
+  /* Add a base URL for relative paths if needed.  This depends on your project structure.
+     For example, if your site is served from /my-project/, you would set:
+     background-image: url('/my-project/images/background.jpg');
+     If you are using a custom domain or serving from the root, this may not be needed.
+  */
+}

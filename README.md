@@ -27,14 +27,8 @@ A sophisticated and visually stunning fashion clothing website designed to showc
 3. Install dependencies: `npm install`
 4. Run the project: `npm start` (or the appropriate command for your development environment)
 
-## Customization
-- **Tailwind CSS:** Customize the `tailwind.config.js` file to adjust the color palette, typography, and other design elements.
-- **JavaScript:** Modify the JavaScript files to add new features, animations, or interactions.
-- **HTML:** Update the HTML templates to change the structure and content of the website.
+## Deployment to GitHub Pages
 
-## Contributing
-(Optional) If this were an open-source project, this section would describe how others can contribute.  For example:
-We welcome contributions! Please fork the repository and submit a pull request with your changes.
-
-## License
-Private project - All rights reserved.
+1.  **Enable GitHub Pages:** In your repository settings on GitHub, navigate to the "Pages" section.
+2.  **Choose a Source:** Select the branch you want to deploy from (e.g., `main` or `gh-pages`) and the folder (e.g., `/root` or `/docs`).
+3.  **GitHub Actions (Recommended):**  For automated deployments, consider using a GitHub Actions workflow.  Here's a basic example to add to `.github/workflows/deploy.yml`:

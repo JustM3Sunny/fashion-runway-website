@@ -157,6 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.warn('Cart container not found. Ensure an element with id "cart-container" exists in the HTML.');
         }
     }
+
+    // Add a simple message to the console to indicate the script is running
+    console.log('Fashion clothing website script loaded.');
 });
 
 // Moved product data and cart functionality to separate files for better organization

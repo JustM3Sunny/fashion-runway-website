@@ -15,7 +15,10 @@ const Products = {
    */
   fetchProducts: async function() {
     try {
-      const response = await fetch('data/products.json'); // Assuming products.json is in the data folder
+      // Adjust the path to products.json for GitHub Pages deployment.
+      // GitHub Pages serves files from the root of the repository, so
+      // we need to ensure the path is correct relative to the HTML file.
+      const response = await fetch('./data/products.json');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
