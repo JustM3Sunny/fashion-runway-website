@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Functionality for product search (clothes)
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
-        searchInput.addEventListener('input', (event) => { // Changed keyup to input for better UX
+        searchInput.addEventListener('input', (event) => {
             const searchTerm = event.target.value.toLowerCase();
             filterProducts(searchTerm);
         });
@@ -41,7 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return; // Skip this item if h3 is missing
             }
             const productName = productNameElement.textContent.toLowerCase();
-            item.style.display = productName.includes(searchTerm) ? 'block' : 'none';
+            const shouldDisplay = productName.includes(searchTerm);
+            item.style.display = shouldDisplay ? 'block' : 'none';
         });
     }
 
@@ -81,6 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (productContainer) {
             productContainer.innerHTML = ''; // Clear existing products before adding new ones
 
+            const fragment = document.createDocumentFragment(); // Use a document fragment for performance
+
             products.forEach(product => {
                 const productDiv = document.createElement('div');
                 productDiv.classList.add('product-item', 'p-4', 'border', 'rounded', 'shadow-md', 'bg-white'); // Added Tailwind classes
@@ -114,8 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 productDiv.appendChild(productPrice);
                 productDiv.appendChild(addToCartButton);
 
-                productContainer.appendChild(productDiv);
+                fragment.appendChild(productDiv); // Append to the fragment
             });
+
+            productContainer.appendChild(fragment); // Append the fragment to the container
         } else {
             console.warn('Product container not found. Ensure an element with id "product-container" exists in the HTML.');
         }
@@ -143,6 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            const fragment = document.createDocumentFragment();
+
             cartItems.forEach(item => {
                 const cartItemDiv = document.createElement('div');
                 cartItemDiv.classList.add('cart-item', 'flex', 'items-center', 'justify-between', 'py-2', 'border-b'); // Added Tailwind classes
@@ -158,8 +165,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartItemDiv.appendChild(itemName);
                 cartItemDiv.appendChild(itemPrice);
 
-                cartContainer.appendChild(cartItemDiv);
+                fragment.appendChild(cartItemDiv);
             });
+
+            cartContainer.appendChild(fragment);
         } else {
             console.warn('Cart container not found. Ensure an element with id "cart-container" exists in the HTML.');
         }

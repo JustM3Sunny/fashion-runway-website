@@ -3,37 +3,45 @@
 // This file handles the user profile functionality, including displaying user information,
 // allowing users to edit their profile details, and managing user authentication state.
 
-// Assuming we have a global object 'app' to manage application state and utilities.
-// If not, consider using a module bundler like Webpack or Parcel for better organization.
+// Consider using a module bundler like Webpack or Parcel for better organization in larger projects.
 
 document.addEventListener('DOMContentLoaded', () => {
-  const profileContainer = document.getElementById('profile-container'); // Get the profile container element
+  const profileContainer = document.getElementById('profile-container');
 
   if (!profileContainer) {
     console.error("Profile container element not found.");
     return;
   }
 
+  const defaultProfilePicture = "images/default-profile.jpg"; // Define default profile picture
+
   // Function to fetch user profile data from an API (replace with your actual API endpoint)
   async function fetchUserProfile() {
     try {
       // Simulate fetching data from an API
-      const userData = {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        address: "123 Main St, Anytown",
-        phone: "555-123-4567",
-        profilePicture: "images/default-profile.jpg" // Replace with actual image path
-      };
+      // In a real application, replace this with an actual API call using 'fetch' or 'axios'.
+      const response = await new Promise(resolve => setTimeout(() => {
+        resolve({
+          ok: true, // Simulate a successful response
+          json: () => Promise.resolve({
+            name: "John Doe",
+            email: "john.doe@example.com",
+            address: "123 Main St, Anytown",
+            phone: "555-123-4567",
+            profilePicture: "images/john-doe.jpg" // Replace with actual image path
+          })
+        });
+      }, 500));
 
-      // Simulate a delay to mimic network request
-      await new Promise(resolve => setTimeout(resolve, 500));
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
+      const userData = await response.json();
       return userData;
 
     } catch (error) {
       console.error("Error fetching user profile:", error);
-      // Display an error message to the user
       profileContainer.innerHTML = `<p class="text-red-500">Error loading profile. Please try again later.</p>`;
       return null;
     }
@@ -44,22 +52,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const userData = await fetchUserProfile();
 
     if (!userData) {
-      return; // Exit if fetching failed
+      return;
     }
 
-    // Create HTML elements to display the user profile data
+    const { name, email, address, phone, profilePicture } = userData; // Destructure userData
+
+    // Sanitize data to prevent XSS vulnerabilities
+    const sanitizedName = DOMPurify.sanitize(name);
+    const sanitizedEmail = DOMPurify.sanitize(email);
+    const sanitizedAddress = DOMPurify.sanitize(address);
+    const sanitizedPhone = DOMPurify.sanitize(phone);
+    const sanitizedProfilePicture = DOMPurify.sanitize(profilePicture || defaultProfilePicture); // Use default if undefined
+
     const profileHTML = `
       <div class="bg-white shadow rounded-lg p-4">
         <div class="flex items-center space-x-4">
-          <img class="h-12 w-12 rounded-full object-cover" src="${userData.profilePicture}" alt="Profile Picture">
+          <img class="h-12 w-12 rounded-full object-cover" src="${sanitizedProfilePicture}" alt="Profile Picture">
           <div>
-            <h2 class="text-xl font-semibold">${userData.name}</h2>
-            <p class="text-gray-500">${userData.email}</p>
+            <h2 class="text-xl font-semibold">${sanitizedName}</h2>
+            <p class="text-gray-500">${sanitizedEmail}</p>
           </div>
         </div>
         <div class="mt-4">
-          <p class="text-gray-700">Address: ${userData.address}</p>
-          <p class="text-gray-700">Phone: ${userData.phone}</p>
+          <p class="text-gray-700">Address: ${sanitizedAddress}</p>
+          <p class="text-gray-700">Phone: ${sanitizedPhone}</p>
         </div>
         <div class="mt-4">
           <button id="edit-profile-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit Profile</button>
@@ -69,11 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     profileContainer.innerHTML = profileHTML;
 
-    // Add event listener to the edit profile button
     const editProfileButton = document.getElementById('edit-profile-button');
     if (editProfileButton) {
       editProfileButton.addEventListener('click', () => {
-        // Redirect to the edit profile page (replace with your actual URL)
         window.location.href = 'edit-profile.html';
       });
     } else {
@@ -84,14 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Call the function to display the user profile
   displayUserProfile();
 
-  // Example of handling user logout (replace with your actual logout logic)
-  const logoutButton = document.getElementById('logout-button'); // Assuming a logout button exists in the HTML
+  const logoutButton = document.getElementById('logout-button');
   if (logoutButton) {
     logoutButton.addEventListener('click', () => {
-      // Clear user session (e.g., remove token from local storage)
       localStorage.removeItem('authToken');
-
-      // Redirect to the login page (replace with your actual URL)
       window.location.href = 'login.html';
     });
   } else {

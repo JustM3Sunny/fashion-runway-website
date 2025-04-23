@@ -15,18 +15,20 @@ const Products = {
    */
   fetchProducts: async function() {
     try {
-      // Adjust the path to products.json for GitHub Pages deployment.
-      // GitHub Pages serves files from the root of the repository, so
-      // we need to ensure the path is correct relative to the HTML file.
       const response = await fetch('./data/products.json');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new TypeError("Oops, we haven't got JSON!");
       }
       const data = await response.json();
       return data;
     } catch (error) {
       console.error('Error fetching products:', error);
-      return []; // Return an empty array to avoid breaking the application
+      // Consider a more user-friendly error handling strategy, like displaying a message on the page.
+      return [];
     }
   },
 
@@ -35,18 +37,22 @@ const Products = {
    * @param {Array} products An array of product objects to display.
    */
   displayProducts: function(products) {
-    const productListContainer = document.getElementById('product-list'); // Assuming an element with id 'product-list' exists
+    const productListContainer = document.getElementById('product-list');
     if (!productListContainer) {
       console.error("Product list container not found!");
       return;
     }
 
-    productListContainer.innerHTML = ''; // Clear existing content
+    // Use a document fragment for better performance
+    const fragment = document.createDocumentFragment();
 
     products.forEach(product => {
       const productCard = this.createProductCard(product);
-      productListContainer.appendChild(productCard);
+      fragment.appendChild(productCard);
     });
+
+    productListContainer.innerHTML = ''; // Clear existing content
+    productListContainer.appendChild(fragment); // Append the fragment to the container
   },
 
   /**
@@ -56,35 +62,43 @@ const Products = {
    */
   createProductCard: function(product) {
     const card = document.createElement('div');
-    card.classList.add('product-card', 'bg-white', 'rounded-lg', 'shadow-md', 'p-4', 'flex', 'flex-col', 'justify-between'); // Add Tailwind CSS classes for styling
+    card.classList.add('product-card', 'bg-white', 'rounded-lg', 'shadow-md', 'p-4', 'flex', 'flex-col', 'justify-between');
 
     const image = document.createElement('img');
-    image.src = product.image; // Assuming product object has an 'image' property
-    image.alt = product.name; // Assuming product object has a 'name' property
-    image.classList.add('w-full', 'h-48', 'object-cover', 'rounded-md', 'mb-2'); // Tailwind classes for image styling
+    image.src = product.image;
+    image.alt = product.name;
+    image.classList.add('w-full', 'h-48', 'object-cover', 'rounded-md', 'mb-2');
+    image.onerror = () => {
+      image.src = 'path/to/placeholder-image.png'; // Provide a fallback image
+      console.warn(`Failed to load image for product: ${product.name}`);
+    };
     card.appendChild(image);
 
     const name = document.createElement('h3');
     name.textContent = product.name;
-    name.classList.add('text-lg', 'font-semibold', 'mb-1'); // Tailwind classes for name styling
+    name.classList.add('text-lg', 'font-semibold', 'mb-1');
     card.appendChild(name);
 
     const price = document.createElement('p');
-    price.textContent = `$${product.price.toFixed(2)}`; // Assuming product object has a 'price' property
-    price.classList.add('text-gray-700', 'mb-2'); // Tailwind classes for price styling
+    price.textContent = `$${product.price.toFixed(2)}`;
+    price.classList.add('text-gray-700', 'mb-2');
     card.appendChild(price);
 
     const description = document.createElement('p');
-    description.textContent = product.description; // Assuming product object has a 'description' property
-    description.classList.add('text-gray-600', 'text-sm', 'mb-4'); // Tailwind classes for description styling
+    description.textContent = product.description;
+    description.classList.add('text-gray-600', 'text-sm', 'mb-4');
     card.appendChild(description);
 
     const addToCartButton = document.createElement('button');
     addToCartButton.textContent = 'Add to Cart';
-    addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'focus:outline-none', 'focus:shadow-outline'); // Tailwind classes for button styling
+    addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'focus:outline-none', 'focus:shadow-outline');
     addToCartButton.addEventListener('click', () => {
-      // Call a function to add the product to the cart (defined in cart.js)
-      Cart.addToCart(product); // Assuming Cart object is available globally (defined in cart.js)
+      if (typeof Cart !== 'undefined' && Cart && typeof Cart.addToCart === 'function') {
+        Cart.addToCart(product);
+      } else {
+        console.error('Cart object or addToCart function is not defined.');
+        // Optionally display an error message to the user.
+      }
     });
     card.appendChild(addToCartButton);
 
@@ -95,8 +109,17 @@ const Products = {
    * Initializes the product functionality.  Fetches and displays products on page load.
    */
   init: async function() {
-    const products = await this.fetchProducts();
-    this.displayProducts(products);
+    try {
+      const products = await this.fetchProducts();
+      this.displayProducts(products);
+    } catch (error) {
+      console.error("Failed to initialize products:", error);
+      // Display a user-friendly error message on the page.
+      const productListContainer = document.getElementById('product-list');
+      if (productListContainer) {
+        productListContainer.innerHTML = '<p class="text-red-500">Failed to load products. Please try again later.</p>';
+      }
+    }
   }
 };
 

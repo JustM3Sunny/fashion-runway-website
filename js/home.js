@@ -5,53 +5,65 @@
 // potentially, managing the display of different sections like featured products.
 
 // Document Ready Function - Ensures the DOM is fully loaded before executing JavaScript
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
 
   // Function to fetch and display featured products.  This assumes an API endpoint
   // or a data source that provides product information.
-  function loadFeaturedProducts() {
+  async function loadFeaturedProducts() {
     // Placeholder for API endpoint or data source.  Replace with actual URL.
     const apiUrl = '/api/featured-products';
 
-    fetch(apiUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(products => {
-        // Render the products to the DOM.  Assumes a container with id "featured-products-container".
-        const container = document.getElementById('featured-products-container');
-        if (container) {
-          container.innerHTML = ''; // Clear existing content
+    try {
+      const response = await fetch(apiUrl);
 
-          products.forEach(product => {
-            const productElement = document.createElement('div');
-            productElement.classList.add('product-card', 'p-4', 'border', 'rounded-lg', 'shadow-md'); // Tailwind classes for styling
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-            // Construct the product HTML.  Customize based on your product data structure.
-            productElement.innerHTML = `
-              <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-48 object-cover rounded-md mb-2">
-              <h3 class="text-lg font-semibold">${product.name}</h3>
-              <p class="text-gray-600">${product.description.substring(0, 50)}...</p>
-              <p class="text-blue-500 font-bold">$${product.price}</p>
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Add to Cart</button>
-            `;
+      const products = await response.json();
 
-            container.appendChild(productElement);
-          });
-        } else {
-          console.warn('Featured products container not found.');
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching featured products:', error);
-        // Display an error message to the user (e.g., in the container).
-        if (document.getElementById('featured-products-container')) {
-          document.getElementById('featured-products-container').innerHTML = '<p class="text-red-500">Failed to load featured products.</p>';
-        }
-      });
+      // Render the products to the DOM.  Assumes a container with id "featured-products-container".
+      const container = document.getElementById('featured-products-container');
+
+      if (container) {
+        container.innerHTML = ''; // Clear existing content
+
+        const fragment = document.createDocumentFragment(); // Use a fragment for better performance
+
+        products.forEach(product => {
+          const productElement = document.createElement('div');
+          productElement.classList.add('product-card', 'p-4', 'border', 'rounded-lg', 'shadow-md'); // Tailwind classes for styling
+
+          // Sanitize data to prevent XSS
+          const productName = DOMPurify.sanitize(product.name);
+          const productDescription = DOMPurify.sanitize(product.description);
+          const productImageUrl = DOMPurify.sanitize(product.imageUrl);
+          const productPrice = DOMPurify.sanitize(product.price);
+
+          // Construct the product HTML.  Customize based on your product data structure.
+          productElement.innerHTML = `
+            <img src="${productImageUrl}" alt="${productName}" class="w-full h-48 object-cover rounded-md mb-2">
+            <h3 class="text-lg font-semibold">${productName}</h3>
+            <p class="text-gray-600">${productDescription ? productDescription.substring(0, 50) + '...' : ''}</p>
+            <p class="text-blue-500 font-bold">$${productPrice}</p>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Add to Cart</button>
+          `;
+
+          fragment.appendChild(productElement);
+        });
+
+        container.appendChild(fragment); // Append the entire fragment at once
+      } else {
+        console.warn('Featured products container not found.');
+      }
+    } catch (error) {
+      console.error('Error fetching featured products:', error);
+      // Display an error message to the user (e.g., in the container).
+      const featuredProductsContainer = document.getElementById('featured-products-container');
+      if (featuredProductsContainer) {
+        featuredProductsContainer.innerHTML = '<p class="text-red-500">Failed to load featured products.</p>';
+      }
+    }
   }
 
   // Function to handle navigation based on URL hash.  This allows for simple
@@ -66,18 +78,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Show the section corresponding to the hash.
-    if (hash) {
-      const targetSection = document.querySelector(hash);
-      if (targetSection) {
-        targetSection.classList.remove('hidden');
-      } else {
-        // Handle invalid hash (e.g., show a 404 page or redirect to home).
-        console.warn('Invalid hash:', hash);
-        document.getElementById('home').classList.remove('hidden'); // Default to home
+    const targetSection = document.querySelector(hash);
+    if (targetSection) {
+      targetSection.classList.remove('hidden');
+    } else if (hash) {
+      // Handle invalid hash (e.g., show a 404 page or redirect to home).
+      console.warn('Invalid hash:', hash);
+      const homeSection = document.getElementById('home');
+      if (homeSection) {
+        homeSection.classList.remove('hidden'); // Default to home
       }
     } else {
       // If no hash, show the home page.
-      document.getElementById('home').classList.remove('hidden');
+      const homeSection = document.getElementById('home');
+      if (homeSection) {
+        homeSection.classList.remove('hidden');
+      }
     }
   }
 
@@ -93,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Example: Add an event listener to a specific button on the home page.
   const contactButton = document.getElementById('contact-button');
   if (contactButton) {
-    contactButton.addEventListener('click', function(event) {
+    contactButton.addEventListener('click', (event) => {
       event.preventDefault(); // Prevent default link behavior
       window.location.hash = '#contact'; // Navigate to the contact section
     });

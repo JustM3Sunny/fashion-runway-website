@@ -3,9 +3,6 @@
 // This file handles the dynamic functionality for the accessories page.
 // It fetches accessory data, renders the accessory list, and handles user interactions.
 
-// Assuming we have a separate data file (accessoriesData.js) containing the accessory information.
-// This allows for separation of concerns and easier data management.
-
 import { accessories } from './data/accessoriesData.js'; // Import the accessory data
 import { updateCartCount } from './utils/cartUtils.js'; // Import utility function to update cart count
 
@@ -27,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
       accessoriesContainer.innerHTML = '<p>No accessories found.</p>';
       return;
     }
+
+    const fragment = document.createDocumentFragment(); // Use a document fragment for performance
 
     accessoriesList.forEach(accessory => {
       const accessoryCard = document.createElement('div');
@@ -61,14 +60,25 @@ document.addEventListener('DOMContentLoaded', () => {
       accessoryCard.appendChild(price);
       accessoryCard.appendChild(addToCartButton);
 
-      accessoriesContainer.appendChild(accessoryCard);
+      fragment.appendChild(accessoryCard); // Append to the fragment
     });
+
+    accessoriesContainer.appendChild(fragment); // Append the fragment to the container once
   }
 
   // Function to add an item to the cart (example implementation using local storage)
   function addToCart(accessory) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.push(accessory);
+    // Check if the item already exists in the cart
+    const existingItemIndex = cart.findIndex(item => item.name === accessory.name);
+    if (existingItemIndex > -1) {
+        // If the item exists, update the quantity (assuming you have a quantity property)
+        // cart[existingItemIndex].quantity = (cart[existingItemIndex].quantity || 1) + 1;
+        console.log("Item already in cart. Consider updating quantity."); // Or implement quantity update
+    } else {
+        // If the item doesn't exist, add it to the cart
+        cart.push(accessory);
+    }
     localStorage.setItem('cart', JSON.stringify(cart));
   }
 
@@ -77,20 +87,20 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAccessories(accessories);
 
   // Example of filtering accessories (can be triggered by user input)
-  // const filterButton = document.getElementById('filter-button');
-  // if (filterButton) {
-  //   filterButton.addEventListener('click', () => {
-  //     const filteredAccessories = accessories.filter(accessory => accessory.category === 'new'); // Example filter
-  //     renderAccessories(filteredAccessories);
-  //   });
-  // }
+  const filterButton = document.getElementById('filter-button');
+  if (filterButton) {
+    filterButton.addEventListener('click', () => {
+      const filteredAccessories = accessories.filter(accessory => accessory.category === 'new'); // Example filter
+      renderAccessories(filteredAccessories);
+    });
+  }
 
   // Example of sorting accessories (can be triggered by user input)
-  // const sortButton = document.getElementById('sort-button');
-  // if (sortButton) {
-  //   sortButton.addEventListener('click', () => {
-  //     const sortedAccessories = [...accessories].sort((a, b) => a.price - b.price); // Example sort by price
-  //     renderAccessories(sortedAccessories);
-  //   });
-  // }
+  const sortButton = document.getElementById('sort-button');
+  if (sortButton) {
+    sortButton.addEventListener('click', () => {
+      const sortedAccessories = [...accessories].sort((a, b) => a.price - b.price); // Example sort by price
+      renderAccessories(sortedAccessories);
+    });
+  }
 });

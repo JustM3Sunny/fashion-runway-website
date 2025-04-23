@@ -11,34 +11,49 @@ document.addEventListener('DOMContentLoaded', function() {
   const carouselImages = document.querySelectorAll('.showcase-carousel img');
   const prevButton = document.querySelector('.showcase-prev-button');
   const nextButton = document.querySelector('.showcase-next-button');
+  let carouselInterval; // Store the interval ID
 
-  let currentIndex = 0;
+  if (carouselContainer && carouselImages.length > 0 && prevButton && nextButton) {
+    let currentIndex = 0;
 
-  function updateCarousel() {
-    // Hide all images
-    carouselImages.forEach(img => img.classList.add('hidden'));
+    function updateCarousel() {
+      carouselImages.forEach((img, index) => {
+        img.classList.toggle('hidden', index !== currentIndex);
+      });
+    }
 
-    // Show the current image
-    carouselImages[currentIndex].classList.remove('hidden');
-  }
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % carouselImages.length;
+      updateCarousel();
+    }
 
-  function nextImage() {
-    currentIndex = (currentIndex + 1) % carouselImages.length;
-    updateCarousel();
-  }
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + carouselImages.length) % carouselImages.length;
+      updateCarousel();
+    }
 
-  function prevImage() {
-    currentIndex = (currentIndex - 1 + carouselImages.length) % carouselImages.length;
-    updateCarousel();
-  }
+    function startCarousel() {
+      carouselInterval = setInterval(nextImage, 5000);
+    }
 
-  // Event listeners for navigation buttons
-  if (prevButton && nextButton) {
-    prevButton.addEventListener('click', prevImage);
-    nextButton.addEventListener('click', nextImage);
+    function stopCarousel() {
+      clearInterval(carouselInterval);
+    }
 
-    // Optional: Auto-advance the carousel every 5 seconds
-    setInterval(nextImage, 5000);
+    prevButton.addEventListener('click', () => {
+      stopCarousel(); // Stop auto-advance on manual navigation
+      prevImage();
+      startCarousel(); // Restart auto-advance
+    });
+
+    nextButton.addEventListener('click', () => {
+      stopCarousel(); // Stop auto-advance on manual navigation
+      nextImage();
+      startCarousel(); // Restart auto-advance
+    });
+
+    updateCarousel(); // Initial display
+    startCarousel(); // Auto-advance the carousel
   }
 
 
@@ -47,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   highlightedProducts.forEach(product => {
     product.addEventListener('mouseover', function() {
-      // Add a subtle animation or visual cue on hover
       this.classList.add('hovered');
     });
 
@@ -72,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Close the modal if the user clicks outside of it
-    window.addEventListener('click', function(event) {
-      if (event.target == showcaseModal) {
+    showcaseModal.addEventListener('click', function(event) { //Event delegation on the modal itself
+      if (event.target === showcaseModal) {
         showcaseModal.classList.add('hidden');
       }
     });
@@ -102,7 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  window.addEventListener('resize', debounce(handleResize, 250)); // Debounce to prevent excessive calls
+  const debouncedHandleResize = debounce(handleResize, 250); // Store the debounced function
+
+  window.addEventListener('resize', debouncedHandleResize); // Debounce to prevent excessive calls
 
   // Initial call to handleResize on page load
   handleResize();
