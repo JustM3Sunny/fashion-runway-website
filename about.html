@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - [Your Brand Name]</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="style.css"> <!-- Optional: Your custom CSS file -->
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Navigation Bar (Consider moving to a separate component file) -->
+    <nav class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <a href="index.html" class="text-2xl font-bold text-gray-800">[Your Brand Name]</a>
+            <ul class="flex space-x-6">
+                <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
+                <li><a href="about.html" class="text-blue-500 font-semibold">About</a></li>
+                <li><a href="collection.html" class="hover:text-blue-500">Collection</a></li>
+                <li><a href="products.html" class="hover:text-blue-500">Products</a></li>
+                <li><a href="contact.html" class="hover:text-blue-500">Contact</a></li>
+                <li><a href="profile.html" class="hover:text-blue-500">Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-12 px-4">
+
+        <!-- Hero Section -->
+        <section class="mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-800 mb-4">Our Story</h1>
+                    <p class="text-gray-700 leading-relaxed">
+                        We started [Your Brand Name] with a simple vision: to provide high-quality, stylish [products/services] that are accessible to everyone.  We believe that [core value 1] and [core value 2] are essential to creating a brand that people can trust and love.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed mt-4">
+                        Our journey began in [Year] when [Founder's Name] [briefly describe the founding story].  Since then, we've been dedicated to [mention key achievements or milestones].
+                    </p>
+                </div>
+                <div>
+                    <img src="images/about-hero.jpg" alt="About Us Image" class="rounded-lg shadow-md">
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Values Section -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Our Core Values</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Value 1 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Quality</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        We are committed to using the finest materials and employing rigorous quality control measures to ensure that every product meets our high standards.
+                    </p>
+                </div>
+
+                <!-- Value 2 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Sustainability</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        We strive to minimize our environmental impact by using sustainable practices throughout our supply chain and reducing waste wherever possible.
+                    </p>
+                </div>
+
+                <!-- Value 3 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Customer Satisfaction</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Your satisfaction is our top priority. We are dedicated to providing exceptional customer service and ensuring that you have a positive experience with our brand.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Team Section (Optional) -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Meet the Team</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Team Member 1 -->
+                <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                    <img src="images/team-member-1.jpg" alt="Team Member 1" class="rounded-full w-32 h-32 mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">John Doe</h3>
+                    <p class="text-gray-600">CEO</p>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                    <img src="images/team-member-2.jpg" alt="Team Member 2" class="rounded-full w-32 h-32 mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Jane Smith</h3>
+                    <p class="text-gray-600">Head of Design</p>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                    <img src="images/team-member-3.jpg" alt="Team Member 3" class="rounded-full w-32 h-32 mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Peter Jones</h3>
+                    <p class="text-gray-600">Marketing Manager</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="text-center">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Ready to Get Started?</h2>
+            <p class="text-gray-700 leading-relaxed mb-6">
+                Explore our collection and discover the perfect [products/services] for you.
+            </p>
+            <a href="products.html" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Shop Now
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Footer (Consider moving to a separate component file) -->
+    <footer class="bg-gray-200 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-600">&copy; 2023 [Your Brand Name]. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

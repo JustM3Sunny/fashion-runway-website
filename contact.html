@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - [Your Brand Name]</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> <!-- Optional: For any custom styles beyond Tailwind -->
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Header (Consider moving this to a separate header.html and including it) -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <a href="home.html" class="text-2xl font-bold text-gray-800">[Your Brand Name]</a>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="home.html" class="hover:text-blue-500">Home</a></li>
+                    <li><a href="about.html" class="hover:text-blue-500">About</a></li>
+                    <li><a href="collection.html" class="hover:text-blue-500">Collection</a></li>
+                    <li><a href="products.html" class="hover:text-blue-500">Products</a></li>
+                    <li><a href="contact.html" class="text-blue-500 font-semibold">Contact</a></li>
+                    <li><a href="profile.html" class="hover:text-blue-500">Profile</a></li>
+                    <li><a href="cart.html" class="hover:text-blue-500">Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-12 px-4">
+        <section class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">Contact Us</h1>
+            <p class="text-gray-700">We'd love to hear from you!  Please use the form below to send us a message, or feel free to reach out via the contact information provided.</p>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Contact Form -->
+            <div>
+                <form action="#" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                            Name
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Your Name">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                            Email
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Your Email">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="message">
+                            Message
+                        </label>
+                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message" rows="5" placeholder="Your Message"></textarea>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Contact Information -->
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Contact Information</h2>
+                <ul class="list-none">
+                    <li class="mb-2">
+                        <strong class="text-gray-700">Address:</strong>
+                        <span class="text-gray-600">123 Main Street, Anytown, USA</span>
+                    </li>
+                    <li class="mb-2">
+                        <strong class="text-gray-700">Phone:</strong>
+                        <span class="text-gray-600">(555) 123-4567</span>
+                    </li>
+                    <li class="mb-2">
+                        <strong class="text-gray-700">Email:</strong>
+                        <span class="text-gray-600">info@[yourdomain].com</span>
+                    </li>
+                </ul>
+
+                <!-- Optional: Google Map Embed -->
+                <div class="mt-6">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.006283587847!2d-74.0059723845148!3d40.71435287933156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a23e28c1e7b%3A0x9a0624f06f87a5a4!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1678886400000!5m2!1sen!2sus" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (Consider moving this to a separate footer.html and including it) -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 [Your Brand Name]. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script> <!-- Optional: For any custom JavaScript -->
+</body>
+</html>

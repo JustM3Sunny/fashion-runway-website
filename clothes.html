@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clothes - [Your Brand Name]</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="style.css"> <!-- Optional: For custom styles beyond Tailwind -->
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Header (Consider moving to a separate header.html and using JavaScript to load) -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <a href="home.html" class="text-2xl font-bold text-gray-800">[Your Brand Name]</a>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="home.html" class="hover:text-blue-500">Home</a></li>
+                    <li><a href="about.html" class="hover:text-blue-500">About</a></li>
+                    <li><a href="collection.html" class="hover:text-blue-500">Collection</a></li>
+                    <li><a href="products.html" class="hover:text-blue-500">Products</a></li>
+                    <li><a href="contact.html" class="hover:text-blue-500">Contact</a></li>
+                    <li><a href="profile.html" class="hover:text-blue-500">Profile</a></li>
+                    <li><a href="cart.html" class="hover:text-blue-500">Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <h1 class="text-3xl font-semibold mb-6 text-gray-800">Our Clothing Collection</h1>
+
+        <!-- Filters (Consider moving to a separate filters.html and using JavaScript to load) -->
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-2 text-gray-700">Filters</h2>
+            <div class="flex space-x-4">
+                <div>
+                    <label for="category" class="block text-gray-600 text-sm font-medium mb-1">Category:</label>
+                    <select id="category" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">All</option>
+                        <option value="shirts">Shirts</option>
+                        <option value="pants">Pants</option>
+                        <option value="dresses">Dresses</option>
+                        <option value="jackets">Jackets</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="size" class="block text-gray-600 text-sm font-medium mb-1">Size:</label>
+                    <select id="size" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">All</option>
+                        <option value="s">S</option>
+                        <option value="m">M</option>
+                        <option value="l">L</option>
+                        <option value="xl">XL</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="color" class="block text-gray-600 text-sm font-medium mb-1">Color:</label>
+                    <select id="color" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">All</option>
+                        <option value="red">Red</option>
+                        <option value="blue">Blue</option>
+                        <option value="green">Green</option>
+                        <option value="black">Black</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+            <!-- Example Product Card -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="placeholder-image.jpg" alt="Product Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Product Name</h3>
+                    <p class="text-gray-600 text-sm mb-3">Product Description.  This is a sample description of the product.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700 font-bold">$49.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More Product Cards (Repeat the above structure for each product) -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="placeholder-image.jpg" alt="Product Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Another Product</h3>
+                    <p class="text-gray-600 text-sm mb-3">Another sample product description.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700 font-bold">$79.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="placeholder-image.jpg" alt="Product Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Yet Another Product</h3>
+                    <p class="text-gray-600 text-sm mb-3">Yet another sample product description.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700 font-bold">$29.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="placeholder-image.jpg" alt="Product Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Final Product Example</h3>
+                    <p class="text-gray-600 text-sm mb-3">The last sample product description.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700 font-bold">$99.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer (Consider moving to a separate footer.html and using JavaScript to load) -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 [Your Brand Name]. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Basic filter functionality (Needs more robust implementation with JavaScript)
+        const categorySelect = document.getElementById('category');
+        const sizeSelect = document.getElementById('size');
+        const colorSelect = document.getElementById('color');
+
+        categorySelect.addEventListener('change', filterProducts);
+        sizeSelect.addEventListener('change', filterProducts);
+        colorSelect.addEventListener('change', filterProducts);
+
+        function filterProducts() {
+            // In a real application, you would fetch product data and filter it based on the selected values.
+            // This is a placeholder function.
+            console.log('Filtering products...');
+            console.log('Category:', categorySelect.value);
+            console.log('Size:', sizeSelect.value);
+            console.log('Color:', colorSelect.value);
+            // You would then update the product grid with the filtered results.
+        }
+    </script>
+</body>
+</html>

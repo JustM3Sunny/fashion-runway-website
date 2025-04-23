@@ -3,165 +3,53 @@
   Description: Main stylesheet for the website. Contains global styles and imports
                specific component styles.  This file is organized to improve
                maintainability and scalability.
+
+  NOTE: This file has been significantly refactored to utilize Tailwind CSS.
+        Most of the original CSS has been removed and replaced with Tailwind classes
+        applied directly in the HTML files. This file now primarily contains
+        global Tailwind directives and any necessary custom styles that cannot
+        be easily achieved with Tailwind classes.
 */
 
 /* ==========================================================================
    Table of Contents:
-   1. Global Styles
-   2. Typography
-   3. Layout
-   4. Components
-      4.1 Cart Styles (imported)
-      4.2 Product Styles (imported)
-   5. Media Queries
+   1. Tailwind Directives
+   2. Global Styles (Overrides and Customizations)
    ========================================================================== */
 
 /* ==========================================================================
-   1. Global Styles
+   1. Tailwind Directives
    ========================================================================== */
 
-:root {
-  /* Define global color variables */
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
-  --success-color: #28a745;
-  --danger-color: #dc3545;
-  --light-color: #f8f9fa;
-  --dark-color: #343a40;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  /* Define global font variables */
-  --main-font: sans-serif;
-  --heading-font: serif;
-}
+/* ==========================================================================
+   2. Global Styles (Overrides and Customizations)
+   ========================================================================== */
+
+/* Override default Tailwind styles or add custom global styles here */
 
 body {
-  font-family: var(--main-font);
-  margin: 0;
-  padding: 0;
-  background-color: var(--light-color);
-  color: var(--dark-color);
-  line-height: 1.6;
+  @apply font-sans bg-gray-100 text-gray-800 leading-relaxed; /* Apply Tailwind classes for body styles */
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box; /* Use border-box for consistent sizing */
-}
-
-/* ==========================================================================
-   2. Typography
-   ========================================================================== */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--heading-font);
-  font-weight: bold;
-  margin-bottom: 0.5em;
-  color: var(--primary-color); /* Example: Use primary color for headings */
-}
-
-p {
-  margin-bottom: 1em;
+h1, h2, h3, h4, h5, h6 {
+  @apply font-serif font-bold mb-2 text-blue-500; /* Apply Tailwind classes for heading styles */
 }
 
 a {
-  color: var(--primary-color);
-  text-decoration: none;
+  @apply text-blue-500 hover:underline; /* Apply Tailwind classes for link styles */
 }
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* ==========================================================================
-   3. Layout
-   ========================================================================== */
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1em;
+  @apply max-w-6xl mx-auto px-4; /* Apply Tailwind classes for container styles */
 }
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: -1em;
-  margin-right: -1em;
-}
-
-.col {
-  flex: 1;
-  padding-left: 1em;
-  padding-right: 1em;
-}
-
-.col-2 {
-  flex: 0 0 50%; /* Two columns */
-  padding-left: 1em;
-  padding-right: 1em;
-}
-
-.col-3 {
-  flex: 0 0 33.33333%; /* Three columns */
-  padding-left: 1em;
-  padding-right: 1em;
-}
-
-/* ==========================================================================
-   4. Components
-   ========================================================================== */
-
-/* Import component-specific stylesheets */
-@import "components/cart.css";
-@import "components/product.css";
-
-/* Example of a global component style (e.g., button) */
+/* Example of a custom button style using Tailwind classes */
 .button {
-  display: inline-block;
-  padding: 0.75em 1.5em;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease;
+  @apply inline-block px-4 py-2 bg-blue-500 text-white rounded cursor-pointer text-sm transition-colors duration-300 hover:bg-blue-700;
 }
 
-.button:hover {
-  background-color: darken(var(--primary-color), 10%);
-}
-
-/* ==========================================================================
-   5. Media Queries
-   ========================================================================== */
-
-/* Example: Adjust layout for smaller screens */
-@media (max-width: 768px) {
-  .col-2,
-  .col-3 {
-    flex: 0 0 100%; /* Stack columns on smaller screens */
-  }
-}
-
-/* ==========================================================================
-   6. GitHub Pages Specific Styles
-   ========================================================================== */
-
-/* GitHub Pages often serves content from a subdirectory.
-   This ensures that relative paths in CSS (e.g., for background images)
-   still work correctly when deployed to GitHub Pages. */
-
-body {
-  /* Add a base URL for relative paths if needed.  This depends on your project structure.
-     For example, if your site is served from /my-project/, you would set:
-     background-image: url('/my-project/images/background.jpg');
-     If you are using a custom domain or serving from the root, this may not be needed.
-  */
-}
+/* Additional custom styles can be added below as needed */

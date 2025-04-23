@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile - [Your Brand Name]</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Navigation Bar (Consider moving this to a separate component file for reusability) -->
+    <nav class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <a href="home.html" class="text-2xl font-bold text-gray-800">[Your Brand Name]</a>
+            <ul class="flex space-x-6">
+                <li><a href="home.html" class="hover:text-blue-500">Home</a></li>
+                <li><a href="products.html" class="hover:text-blue-500">Products</a></li>
+                <li><a href="about.html" class="hover:text-blue-500">About</a></li>
+                <li><a href="contact.html" class="hover:text-blue-500">Contact</a></li>
+                <li><a href="cart.html" class="hover:text-blue-500">Cart</a></li>
+                <li><a href="profile.html" class="font-semibold text-blue-500">Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+
+        <h1 class="text-3xl font-semibold mb-6 text-gray-800">Your Profile</h1>
+
+        <!-- User Information Section -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Personal Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-2" for="name">Name:</label>
+                    <input type="text" id="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="John Doe" disabled>
+                </div>
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-2" for="email">Email:</label>
+                    <input type="email" id="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="john.doe@example.com" disabled>
+                </div>
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-2" for="phone">Phone:</label>
+                    <input type="tel" id="phone" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="123-456-7890" disabled>
+                </div>
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-2" for="address">Address:</label>
+                    <textarea id="address" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" disabled>123 Main St, Anytown, USA</textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order History Section -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Order History</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full leading-normal">
+                    <thead>
+                        <tr>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Order ID
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Total
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Details
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                12345
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                2023-10-26
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                $50.00
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                Shipped
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <a href="#" class="text-blue-500 hover:text-blue-700">View</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                67890
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                2023-10-20
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                $25.00
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                Delivered
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <a href="#" class="text-blue-500 hover:text-blue-700">View</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer (Consider moving this to a separate component file for reusability) -->
+    <footer class="bg-gray-800 text-white py-4 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 [Your Brand Name]. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

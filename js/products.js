@@ -56,27 +56,32 @@ const Products = {
    */
   createProductCard: function(product) {
     const card = document.createElement('div');
-    card.classList.add('product-card'); // Add a CSS class for styling
+    card.classList.add('product-card', 'bg-white', 'rounded-lg', 'shadow-md', 'p-4', 'flex', 'flex-col', 'justify-between'); // Add Tailwind CSS classes for styling
 
     const image = document.createElement('img');
     image.src = product.image; // Assuming product object has an 'image' property
     image.alt = product.name; // Assuming product object has a 'name' property
+    image.classList.add('w-full', 'h-48', 'object-cover', 'rounded-md', 'mb-2'); // Tailwind classes for image styling
     card.appendChild(image);
 
     const name = document.createElement('h3');
     name.textContent = product.name;
+    name.classList.add('text-lg', 'font-semibold', 'mb-1'); // Tailwind classes for name styling
     card.appendChild(name);
 
     const price = document.createElement('p');
     price.textContent = `$${product.price.toFixed(2)}`; // Assuming product object has a 'price' property
+    price.classList.add('text-gray-700', 'mb-2'); // Tailwind classes for price styling
     card.appendChild(price);
 
     const description = document.createElement('p');
     description.textContent = product.description; // Assuming product object has a 'description' property
+    description.classList.add('text-gray-600', 'text-sm', 'mb-4'); // Tailwind classes for description styling
     card.appendChild(description);
 
     const addToCartButton = document.createElement('button');
     addToCartButton.textContent = 'Add to Cart';
+    addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'focus:outline-none', 'focus:shadow-outline'); // Tailwind classes for button styling
     addToCartButton.addEventListener('click', () => {
       // Call a function to add the product to the cart (defined in cart.js)
       Cart.addToCart(product); // Assuming Cart object is available globally (defined in cart.js)

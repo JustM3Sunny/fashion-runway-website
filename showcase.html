@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showcase - Your Awesome Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> <!-- Optional: For any custom styles not covered by Tailwind -->
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Header (Consider moving to header.html and using JavaScript to load) -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-gray-800">Your Store</a>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
+                    <li><a href="about.html" class="hover:text-blue-500">About</a></li>
+                    <li><a href="collection.html" class="hover:text-blue-500">Collection</a></li>
+                    <li><a href="showcase.html" class="hover:text-blue-500">Showcase</a></li>
+                    <li><a href="contact.html" class="hover:text-blue-500">Contact</a></li>
+                    <li><a href="products.html" class="hover:text-blue-500">Products</a></li>
+                    <li><a href="profile.html" class="hover:text-blue-500">Profile</a></li>
+                    <li><a href="cart.html" class="hover:text-blue-500">Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Showcase Section -->
+    <section class="container mx-auto py-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Featured Products</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Product Card 1 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="images/product1.jpg" alt="Product 1" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Stylish T-Shirt</h3>
+                    <p class="text-gray-600 mb-4">A comfortable and trendy t-shirt for everyday wear.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-700 font-bold">$29.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 2 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="images/product2.jpg" alt="Product 2" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Elegant Dress</h3>
+                    <p class="text-gray-600 mb-4">A beautiful dress perfect for special occasions.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-700 font-bold">$79.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 3 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="images/product3.jpg" alt="Product 3" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Leather Jacket</h3>
+                    <p class="text-gray-600 mb-4">A classic leather jacket for a timeless look.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-700 font-bold">$149.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 4 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="images/product4.jpg" alt="Product 4" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Running Shoes</h3>
+                    <p class="text-gray-600 mb-4">High-performance running shoes for your active lifestyle.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-700 font-bold">$89.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 5 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="images/product5.jpg" alt="Product 5" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Denim Jeans</h3>
+                    <p class="text-gray-600 mb-4">Classic denim jeans for a versatile wardrobe staple.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-700 font-bold">$59.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 6 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="images/product6.jpg" alt="Product 6" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Wool Sweater</h3>
+                    <p class="text-gray-600 mb-4">A warm and cozy wool sweater for the colder months.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-700 font-bold">$69.99</span>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer (Consider moving to footer.html and using JavaScript to load) -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2023 Your Awesome Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script> <!-- Optional: For any JavaScript functionality -->
+</body>
+</html>

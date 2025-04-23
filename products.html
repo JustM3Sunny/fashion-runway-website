@@ -4,52 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products</title>
-    <link rel="stylesheet" href="css/products.css"> <!-- Link to separate CSS file for styling -->
-    <link rel="stylesheet" href="css/global.css"> <!-- Link to global styles -->
+    <!-- Tailwind CSS CDN Link -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- No more separate CSS files, using Tailwind -->
 </head>
-<body>
+<body class="bg-gray-100 font-sans">
 
-    <header>
-        <!-- Navigation bar (consider moving to a separate header.html and using JavaScript to load it) -->
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="products.html">Products</a></li>
-                <li><a href="cart.html">Cart</a></li>
+    <!-- Header (Navigation) - Consider using a separate header.html and JavaScript to load -->
+    <header class="bg-white shadow-md py-4">
+        <nav class="container mx-auto px-4">
+            <ul class="flex justify-center space-x-6">
+                <li><a href="index.html" class="hover:text-blue-500">Home</a></li>
+                <li><a href="products.html" class="text-blue-500 font-semibold">Products</a></li>
+                <li><a href="cart.html" class="hover:text-blue-500">Cart</a></li>
+                <li><a href="about.html" class="hover:text-blue-500">About</a></li>
+                <li><a href="collection.html" class="hover:text-blue-500">Collection</a></li>
+                <li><a href="showcase.html" class="hover:text-blue-500">Showcase</a></li>
+                <li><a href="contact.html" class="hover:text-blue-500">Contact</a></li>
+                <li><a href="clothes.html" class="hover:text-blue-500">Clothes</a></li>
+                <li><a href="accessories.html" class="hover:text-blue-500">Accessories</a></li>
+                <li><a href="shoes.html" class="hover:text-blue-500">Shoes</a></li>
+                <li><a href="profile.html" class="hover:text-blue-500">Profile</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
+    <!-- Main Content -->
+    <main class="container mx-auto py-8">
         <section id="product-list">
-            <h2>Our Products</h2>
+            <h2 class="text-3xl font-bold mb-6 text-gray-800 text-center">Our Products</h2>
 
-            <div class="product-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Example Product 1 -->
-                <div class="product-item">
-                    <img src="images/product1.jpg" alt="Product 1">
-                    <h3>Product Name 1</h3>
-                    <p class="product-description">A brief description of the product.  Highlighting key features and benefits.</p>
-                    <p class="product-price">$19.99</p>
-                    <button class="add-to-cart-btn" data-product-id="1">Add to Cart</button>
+                <div class="product-item bg-white rounded-lg shadow-md p-4">
+                    <img src="images/product1.jpg" alt="Product 1" class="w-full h-48 object-cover rounded-md mb-2">
+                    <h3 class="text-xl font-semibold text-gray-700">Product Name 1</h3>
+                    <p class="product-description text-gray-600 mb-3">A brief description of the product. Highlighting key features and benefits.</p>
+                    <p class="product-price text-gray-900 font-bold">$19.99</p>
+                    <button class="add-to-cart-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" data-product-id="1">Add to Cart</button>
                 </div>
 
                 <!-- Example Product 2 -->
-                <div class="product-item">
-                    <img src="images/product2.jpg" alt="Product 2">
-                    <h3>Product Name 2</h3>
-                    <p class="product-description">Another product description.  Focus on what makes this product unique.</p>
-                    <p class="product-price">$29.99</p>
-                    <button class="add-to-cart-btn" data-product-id="2">Add to Cart</button>
+                <div class="product-item bg-white rounded-lg shadow-md p-4">
+                    <img src="images/product2.jpg" alt="Product 2" class="w-full h-48 object-cover rounded-md mb-2">
+                    <h3 class="text-xl font-semibold text-gray-700">Product Name 2</h3>
+                    <p class="product-description text-gray-600 mb-3">Another product description. Focus on what makes this product unique.</p>
+                    <p class="product-price text-gray-900 font-bold">$29.99</p>
+                    <button class="add-to-cart-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" data-product-id="2">Add to Cart</button>
                 </div>
 
                 <!-- Example Product 3 -->
-                <div class="product-item">
-                    <img src="images/product3.jpg" alt="Product 3">
-                    <h3>Product Name 3</h3>
-                    <p class="product-description">Yet another product description.  Consider adding customer testimonials here.</p>
-                    <p class="product-price">$39.99</p>
-                    <button class="add-to-cart-btn" data-product-id="3">Add to Cart</button>
+                <div class="product-item bg-white rounded-lg shadow-md p-4">
+                    <img src="images/product3.jpg" alt="Product 3" class="w-full h-48 object-cover rounded-md mb-2">
+                    <h3 class="text-xl font-semibold text-gray-700">Product Name 3</h3>
+                    <p class="product-description text-gray-600 mb-3">Yet another product description. Consider adding customer testimonials here.</p>
+                    <p class="product-price text-gray-900 font-bold">$39.99</p>
+                    <button class="add-to-cart-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" data-product-id="3">Add to Cart</button>
                 </div>
 
                 <!-- Add more product items here -->
@@ -57,8 +67,8 @@
         </section>
     </main>
 
-    <footer>
-        <!-- Footer information (consider moving to a separate footer.html and using JavaScript to load it) -->
+    <!-- Footer - Consider using a separate footer.html and JavaScript to load -->
+    <footer class="bg-gray-800 text-white py-4 text-center">
         <p>&copy; 2023 My Store</p>
     </footer>
 

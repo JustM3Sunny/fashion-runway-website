@@ -83,11 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             products.forEach(product => {
                 const productDiv = document.createElement('div');
-                productDiv.classList.add('product-item');
+                productDiv.classList.add('product-item', 'p-4', 'border', 'rounded', 'shadow-md', 'bg-white'); // Added Tailwind classes
 
                 const productImage = document.createElement('img');
                 productImage.src = product.image;
                 productImage.alt = product.name;
+                productImage.classList.add('w-full', 'h-48', 'object-cover', 'mb-2'); // Added Tailwind classes
                 productImage.onerror = () => { // Handle image loading errors
                     productImage.src = 'placeholder.jpg'; // Use a placeholder image
                     console.warn(`Failed to load image for product: ${product.name}`);
@@ -95,12 +96,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const productName = document.createElement('h3');
                 productName.textContent = product.name;
+                productName.classList.add('text-xl', 'font-semibold', 'mb-1'); // Added Tailwind classes
 
                 const productPrice = document.createElement('p');
                 productPrice.textContent = `$${product.price.toFixed(2)}`;
+                productPrice.classList.add('text-gray-700', 'mb-2'); // Added Tailwind classes
 
                 const addToCartButton = document.createElement('button');
                 addToCartButton.textContent = 'Add to Cart';
+                addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded'); // Added Tailwind classes
                 addToCartButton.addEventListener('click', () => {
                     addToCart(product); // Use the addToCart function from cart.js
                 });
@@ -135,18 +139,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (cartItems.length === 0) {
                 cartContainer.textContent = 'Your cart is empty.';
+                cartContainer.classList.add('text-center', 'py-4'); // Added Tailwind classes
                 return;
             }
 
             cartItems.forEach(item => {
                 const cartItemDiv = document.createElement('div');
-                cartItemDiv.classList.add('cart-item');
+                cartItemDiv.classList.add('cart-item', 'flex', 'items-center', 'justify-between', 'py-2', 'border-b'); // Added Tailwind classes
 
                 const itemName = document.createElement('h4');
                 itemName.textContent = item.name;
+                itemName.classList.add('text-lg', 'font-medium'); // Added Tailwind classes
 
                 const itemPrice = document.createElement('p');
                 itemPrice.textContent = `$${item.price.toFixed(2)}`;
+                itemPrice.classList.add('text-gray-700'); // Added Tailwind classes
 
                 cartItemDiv.appendChild(itemName);
                 cartItemDiv.appendChild(itemPrice);
