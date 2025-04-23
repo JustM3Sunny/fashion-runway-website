@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" href="css/products.css"> <!-- Link to separate CSS file for styling -->
+    <link rel="stylesheet" href="css/global.css"> <!-- Link to global styles -->
+</head>
+<body>
+
+    <header>
+        <!-- Navigation bar (consider moving to a separate header.html and using JavaScript to load it) -->
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="product-list">
+            <h2>Our Products</h2>
+
+            <div class="product-grid">
+                <!-- Example Product 1 -->
+                <div class="product-item">
+                    <img src="images/product1.jpg" alt="Product 1">
+                    <h3>Product Name 1</h3>
+                    <p class="product-description">A brief description of the product.  Highlighting key features and benefits.</p>
+                    <p class="product-price">$19.99</p>
+                    <button class="add-to-cart-btn" data-product-id="1">Add to Cart</button>
+                </div>
+
+                <!-- Example Product 2 -->
+                <div class="product-item">
+                    <img src="images/product2.jpg" alt="Product 2">
+                    <h3>Product Name 2</h3>
+                    <p class="product-description">Another product description.  Focus on what makes this product unique.</p>
+                    <p class="product-price">$29.99</p>
+                    <button class="add-to-cart-btn" data-product-id="2">Add to Cart</button>
+                </div>
+
+                <!-- Example Product 3 -->
+                <div class="product-item">
+                    <img src="images/product3.jpg" alt="Product 3">
+                    <h3>Product Name 3</h3>
+                    <p class="product-description">Yet another product description.  Consider adding customer testimonials here.</p>
+                    <p class="product-price">$39.99</p>
+                    <button class="add-to-cart-btn" data-product-id="3">Add to Cart</button>
+                </div>
+
+                <!-- Add more product items here -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Footer information (consider moving to a separate footer.html and using JavaScript to load it) -->
+        <p>&copy; 2023 My Store</p>
+    </footer>
+
+    <script src="js/products.js"></script> <!-- Link to separate JavaScript file for functionality -->
+</body>
+</html>

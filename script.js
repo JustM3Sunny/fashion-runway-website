@@ -60,13 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // const response = await fetch('/api/products'); // Example API endpoint
             // const products = await response.json();
 
-            // Mock product data
-            const products = [
-                { id: 1, name: 'Elegant Dress', price: 79.99, image: 'dress1.jpg' },
-                { id: 2, name: 'Casual Jeans', price: 49.99, image: 'jeans1.jpg' },
-                { id: 3, name: 'Stylish Top', price: 39.99, image: 'top1.jpg' },
-                { id: 4, name: 'Comfortable Sweater', price: 59.99, image: 'sweater1.jpg' }
-            ];
+            // Mock product data - Moved to a separate file (products.js)
+            const products = await getProducts();
 
             displayProducts(products);
 
@@ -107,12 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const addToCartButton = document.createElement('button');
                 addToCartButton.textContent = 'Add to Cart';
                 addToCartButton.addEventListener('click', () => {
-                    // Implement add to cart functionality here
-                    console.log(`Added ${product.name} to cart`);
-                    // Store product ID in local storage (example)
-                    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-                    cart.push(product.id);
-                    localStorage.setItem('cart', JSON.stringify(cart));
+                    addToCart(product); // Use the addToCart function from cart.js
                 });
 
                 productDiv.appendChild(productImage);
@@ -126,4 +116,49 @@ document.addEventListener('DOMContentLoaded', () => {
             console.warn('Product container not found. Ensure an element with id "product-container" exists in the HTML.');
         }
     }
+
+    // Cart page functionality
+    if (window.location.pathname.includes('cart.html')) {
+        loadCart();
+    }
+
+    async function loadCart() {
+        // Load cart items from local storage and display them
+        const cartItems = getCartItems(); // Use the getCartItems function from cart.js
+        displayCartItems(cartItems);
+    }
+
+    function displayCartItems(cartItems) {
+        const cartContainer = document.getElementById('cart-container');
+        if (cartContainer) {
+            cartContainer.innerHTML = ''; // Clear existing cart items
+
+            if (cartItems.length === 0) {
+                cartContainer.textContent = 'Your cart is empty.';
+                return;
+            }
+
+            cartItems.forEach(item => {
+                const cartItemDiv = document.createElement('div');
+                cartItemDiv.classList.add('cart-item');
+
+                const itemName = document.createElement('h4');
+                itemName.textContent = item.name;
+
+                const itemPrice = document.createElement('p');
+                itemPrice.textContent = `$${item.price.toFixed(2)}`;
+
+                cartItemDiv.appendChild(itemName);
+                cartItemDiv.appendChild(itemPrice);
+
+                cartContainer.appendChild(cartItemDiv);
+            });
+        } else {
+            console.warn('Cart container not found. Ensure an element with id "cart-container" exists in the HTML.');
+        }
+    }
 });
+
+// Moved product data and cart functionality to separate files for better organization
+// products.js: Contains product data and related functions (getProducts)
+// cart.js: Contains cart related functions (addToCart, getCartItems)
