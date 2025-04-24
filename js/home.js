@@ -9,15 +9,16 @@ import DOMPurify from 'dompurify'; // Assuming DOMPurify is installed via npm
 // Document Ready Function - Ensures the DOM is fully loaded before executing JavaScript
 document.addEventListener('DOMContentLoaded', () => {
 
+  const FEATURED_PRODUCTS_API_URL = '/api/featured-products';
+  const FEATURED_PRODUCTS_CONTAINER_ID = 'featured-products-container';
+  const PAGE_SECTION_CLASS = 'page-section';
+  const HOME_ID = 'home';
+
   // Function to fetch and display featured products.  This assumes an API endpoint
   // or a data source that provides product information.
   async function loadFeaturedProducts() {
-    // Placeholder for API endpoint or data source.  Replace with actual URL.
-    const apiUrl = '/api/featured-products';
-    const containerId = 'featured-products-container'; // Define container ID
-
     try {
-      const response = await fetch(apiUrl);
+      const response = await fetch(FEATURED_PRODUCTS_API_URL);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -25,47 +26,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const products = await response.json();
 
-      // Render the products to the DOM.  Assumes a container with id "featured-products-container".
-      const container = document.getElementById(containerId);
+      renderProducts(products, FEATURED_PRODUCTS_CONTAINER_ID);
 
-      if (container) {
-        container.innerHTML = ''; // Clear existing content
-
-        const fragment = document.createDocumentFragment(); // Use a fragment for better performance
-
-        products.forEach(product => {
-          const productElement = document.createElement('div');
-          productElement.classList.add('product-card', 'p-4', 'border', 'rounded-lg', 'shadow-md'); // Tailwind classes for styling
-
-          // Sanitize data to prevent XSS
-          const productName = DOMPurify.sanitize(product.name);
-          const productDescription = DOMPurify.sanitize(product.description);
-          const productImageUrl = DOMPurify.sanitize(product.imageUrl);
-          const productPrice = DOMPurify.sanitize(String(product.price)); // Ensure price is a string for sanitization
-
-          // Construct the product HTML.  Customize based on your product data structure.
-          productElement.innerHTML = `
-            <img src="${productImageUrl}" alt="${productName}" class="w-full h-48 object-cover rounded-md mb-2">
-            <h3 class="text-lg font-semibold">${productName}</h3>
-            <p class="text-gray-600">${productDescription ? productDescription.substring(0, 50) + '...' : ''}</p>
-            <p class="text-blue-500 font-bold">$${productPrice}</p>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Add to Cart</button>
-          `;
-
-          fragment.appendChild(productElement);
-        });
-
-        container.appendChild(fragment); // Append the entire fragment at once
-      } else {
-        console.warn('Featured products container not found.');
-      }
     } catch (error) {
       console.error('Error fetching featured products:', error);
-      // Display an error message to the user (e.g., in the container).
-      const featuredProductsContainer = document.getElementById(containerId);
-      if (featuredProductsContainer) {
-        featuredProductsContainer.innerHTML = '<p class="text-red-500">Failed to load featured products.</p>';
-      }
+      displayErrorMessage(FEATURED_PRODUCTS_CONTAINER_ID, 'Failed to load featured products.');
+    }
+  }
+
+  function renderProducts(products, containerId) {
+    const container = document.getElementById(containerId);
+
+    if (!container) {
+      console.warn('Featured products container not found.');
+      return;
+    }
+
+    container.innerHTML = ''; // Clear existing content
+
+    const fragment = document.createDocumentFragment(); // Use a fragment for better performance
+
+    products.forEach(product => {
+      const productElement = createProductElement(product);
+      fragment.appendChild(productElement);
+    });
+
+    container.appendChild(fragment); // Append the entire fragment at once
+  }
+
+  function createProductElement(product) {
+    const productElement = document.createElement('div');
+    productElement.classList.add('product-card', 'p-4', 'border', 'rounded-lg', 'shadow-md'); // Tailwind classes for styling
+
+    // Sanitize data to prevent XSS
+    const productName = DOMPurify.sanitize(product.name);
+    const productDescription = DOMPurify.sanitize(product.description);
+    const productImageUrl = DOMPurify.sanitize(product.imageUrl);
+    const productPrice = DOMPurify.sanitize(String(product.price)); // Ensure price is a string for sanitization
+
+    // Construct the product HTML.  Customize based on your product data structure.
+    productElement.innerHTML = `
+      <img src="${productImageUrl}" alt="${productName}" class="w-full h-48 object-cover rounded-md mb-2">
+      <h3 class="text-lg font-semibold">${productName}</h3>
+      <p class="text-gray-600">${productDescription ? productDescription.substring(0, 50) + '...' : ''}</p>
+      <p class="text-blue-500 font-bold">$${productPrice}</p>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Add to Cart</button>
+    `;
+
+    return productElement;
+  }
+
+  function displayErrorMessage(containerId, message) {
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.innerHTML = `<p class="text-red-500">${message}</p>`;
     }
   }
 
@@ -73,11 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // single-page application-like behavior.
   function handleNavigation() {
     const hash = window.location.hash;
-    const sectionClass = 'page-section'; // Define section class
-    const homeId = 'home'; // Define home ID
 
     // Hide all sections by default.  Assumes sections have a class "page-section".
-    const sections = document.querySelectorAll(`.${sectionClass}`);
+    const sections = document.querySelectorAll(`.${PAGE_SECTION_CLASS}`);
     sections.forEach(section => {
       section.classList.add('hidden');
     });
@@ -89,16 +101,17 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (hash) {
       // Handle invalid hash (e.g., show a 404 page or redirect to home).
       console.warn('Invalid hash:', hash);
-      const homeSection = document.getElementById(homeId);
-      if (homeSection) {
-        homeSection.classList.remove('hidden'); // Default to home
-      }
+      navigateToHome();
     } else {
       // If no hash, show the home page.
-      const homeSection = document.getElementById(homeId);
-      if (homeSection) {
-        homeSection.classList.remove('hidden');
-      }
+      navigateToHome();
+    }
+  }
+
+  function navigateToHome() {
+    const homeSection = document.getElementById(HOME_ID);
+    if (homeSection) {
+      homeSection.classList.remove('hidden');
     }
   }
 

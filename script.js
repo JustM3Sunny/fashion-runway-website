@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await loadProducts();
         } catch (error) {
             console.error('Error initializing products page:', error);
+            displayErrorMessage('product-container', 'Failed to load products. Please try again later.');
         }
     }
 
@@ -77,10 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error loading products:', error);
             // Display an error message to the user
-            const productContainer = document.getElementById('product-container');
-            if (productContainer) {
-                productContainer.textContent = 'Failed to load products. Please try again later.';
-            }
+            displayErrorMessage('product-container', 'Failed to load products. Please try again later.');
             throw error; // Re-throw the error to be caught by initProductsPage
         }
     }
@@ -90,6 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const productContainer = document.getElementById('product-container');
         if (productContainer) {
             productContainer.innerHTML = ''; // Clear existing products before adding new ones
+
+            if (products.length === 0) {
+                displayErrorMessage('product-container', 'No products found.');
+                return;
+            }
 
             const fragment = document.createDocumentFragment(); // Use a document fragment for performance
 
@@ -145,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await loadCart();
         } catch (error) {
             console.error('Error initializing cart page:', error);
+            displayErrorMessage('cart-container', 'Failed to load cart. Please try again later.');
         }
     }
 
@@ -155,10 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             displayCartItems(cartItems);
         } catch (error) {
             console.error('Error loading cart:', error);
-            const cartContainer = document.getElementById('cart-container');
-            if (cartContainer) {
-                cartContainer.textContent = 'Failed to load cart. Please try again later.';
-            }
+            displayErrorMessage('cart-container', 'Failed to load cart. Please try again later.');
             throw error; // Re-throw the error to be caught by initCartPage
         }
     }
@@ -169,8 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cartContainer.innerHTML = ''; // Clear existing cart items
 
             if (cartItems.length === 0) {
-                cartContainer.textContent = 'Your cart is empty.';
-                cartContainer.classList.add('text-center', 'py-4'); // Added Tailwind classes
+                displayErrorMessage('cart-container', 'Your cart is empty.', 'text-center', 'py-4');
                 return;
             }
 
@@ -197,6 +197,18 @@ document.addEventListener('DOMContentLoaded', () => {
             cartContainer.appendChild(fragment);
         } else {
             console.warn('Cart container not found. Ensure an element with id "cart-container" exists in the HTML.');
+        }
+    }
+
+    // Helper function to display error messages
+    function displayErrorMessage(containerId, message, ...classes) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.textContent = message;
+            container.className = ''; // Clear existing classes
+            classes.forEach(cls => container.classList.add(cls)); // Add new classes
+        } else {
+            console.warn(`Container with id "${containerId}" not found.`);
         }
     }
 

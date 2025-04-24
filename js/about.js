@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log("About page script loaded.");
 
   const API_ENDPOINT = '/api/about'; // Example API endpoint
+  const ERROR_CONTAINER_ID = 'error-container';
+  const TEAM_CONTAINER_ID = 'team-container';
+  const LEARN_MORE_BUTTON_ID = 'learn-more-button';
+  const ABOUT_SECTION_ID = 'about-section';
+  const ABOUT_TITLE_ID = 'about-title';
+  const ABOUT_DESCRIPTION_ID = 'about-description';
 
   // Function to fetch about page content (replace with actual API call)
   async function fetchAboutContent() {
@@ -15,79 +21,76 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const aboutData = await response.json();
-      return aboutData;
-
-      // Mock data for demonstration purposes (commented out for production)
-      // return new Promise(resolve => {
-      //   setTimeout(() => {
-      //     const aboutData = {
-      //       title: "About Our Company",
-      //       description: "We are a company dedicated to providing high-quality products and services.  Our mission is to exceed customer expectations and build lasting relationships.",
-      //       teamMembers: [
-      //         { name: "John Doe", role: "CEO", bio: "Experienced leader with a passion for innovation." },
-      //         { name: "Jane Smith", role: "CTO", bio: "Technical expert driving our technology strategy." },
-      //         { name: "Peter Jones", role: "Marketing Manager", bio: "Creative marketer focused on customer engagement." }
-      //       ]
-      //     };
-      //     resolve(aboutData);
-      //   }, 500); // Simulate network latency
-      // });
+      return await response.json();
 
     } catch (error) {
       console.error("Failed to fetch about content:", error);
-      // Handle the error gracefully, e.g., display an error message to the user
       displayErrorMessage("Failed to load about information. Please try again later.");
       return {
         title: "Error Loading Content",
         description: "Failed to load about information. Please try again later.",
         teamMembers: []
-      }; // Return default data to prevent the app from breaking
+      };
     }
   }
 
   // Function to render the about page content
   async function renderAboutContent() {
-    const aboutData = await fetchAboutContent();
+    try {
+      const aboutData = await fetchAboutContent();
 
-    // Update the title
-    updateTextContent('about-title', aboutData.title);
+      updateTextContent(ABOUT_TITLE_ID, aboutData.title);
+      updateTextContent(ABOUT_DESCRIPTION_ID, aboutData.description);
 
-    // Update the description
-    updateTextContent('about-description', aboutData.description);
+      renderTeamMembers(aboutData.teamMembers);
 
-    // Render team members (example, adjust based on your HTML structure)
-    const teamContainer = document.getElementById('team-container');
-    if (teamContainer) {
-      teamContainer.innerHTML = ''; // Clear existing content
-      const fragment = document.createDocumentFragment(); // Use a fragment for better performance
-
-      aboutData.teamMembers.forEach(member => {
-        const memberDiv = document.createElement('div');
-        memberDiv.classList.add('team-member', 'p-4', 'border', 'rounded', 'shadow-md'); // Tailwind classes
-
-        const nameElement = document.createElement('h3');
-        nameElement.classList.add('text-lg', 'font-semibold'); // Tailwind classes
-        nameElement.textContent = member.name;
-
-        const roleElement = document.createElement('p');
-        roleElement.classList.add('text-gray-600'); // Tailwind classes
-        roleElement.textContent = member.role;
-
-        const bioElement = document.createElement('p');
-        bioElement.classList.add('text-sm'); // Tailwind classes
-        bioElement.textContent = member.bio;
-
-        memberDiv.appendChild(nameElement);
-        memberDiv.appendChild(roleElement);
-        memberDiv.appendChild(bioElement);
-
-        fragment.appendChild(memberDiv); // Append to the fragment
-      });
-
-      teamContainer.appendChild(fragment); // Append the fragment to the container
+    } catch (error) {
+      console.error("Error rendering about content:", error);
+      displayErrorMessage("An unexpected error occurred while rendering the page.");
     }
   }
+
+  function renderTeamMembers(teamMembers) {
+    const teamContainer = document.getElementById(TEAM_CONTAINER_ID);
+    if (!teamContainer) {
+      console.warn(`Team container element with id "${TEAM_CONTAINER_ID}" not found.`);
+      return;
+    }
+
+    teamContainer.innerHTML = ''; // Clear existing content
+    const fragment = document.createDocumentFragment(); // Use a fragment for better performance
+
+    teamMembers.forEach(member => {
+      const memberDiv = createTeamMemberElement(member);
+      fragment.appendChild(memberDiv);
+    });
+
+    teamContainer.appendChild(fragment);
+  }
+
+  function createTeamMemberElement(member) {
+    const memberDiv = document.createElement('div');
+    memberDiv.classList.add('team-member', 'p-4', 'border', 'rounded', 'shadow-md'); // Tailwind classes
+
+    const nameElement = document.createElement('h3');
+    nameElement.classList.add('text-lg', 'font-semibold'); // Tailwind classes
+    nameElement.textContent = member.name;
+
+    const roleElement = document.createElement('p');
+    roleElement.classList.add('text-gray-600'); // Tailwind classes
+    roleElement.textContent = member.role;
+
+    const bioElement = document.createElement('p');
+    bioElement.classList.add('text-sm'); // Tailwind classes
+    bioElement.textContent = member.bio;
+
+    memberDiv.appendChild(nameElement);
+    memberDiv.appendChild(roleElement);
+    memberDiv.appendChild(bioElement);
+
+    return memberDiv;
+  }
+
 
   // Helper function to update text content of an element
   function updateTextContent(elementId, text) {
@@ -95,18 +98,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (element) {
       element.textContent = text;
     } else {
-      console.warn(`Element with id "${elementId}" not found.`); // Warn if element doesn't exist
+      console.warn(`Element with id "${elementId}" not found.`);
     }
   }
 
   // Helper function to display error messages
   function displayErrorMessage(message) {
-    const errorContainer = document.getElementById('error-container'); // Assuming you have an element with this ID
+    const errorContainer = document.getElementById(ERROR_CONTAINER_ID);
     if (errorContainer) {
       errorContainer.textContent = message;
-      errorContainer.style.display = 'block'; // Make the error message visible
+      errorContainer.style.display = 'block';
     } else {
-      console.error("Error: error-container element not found.  Cannot display error message:", message);
+      console.error(`Error: ${ERROR_CONTAINER_ID} element not found. Cannot display error message:`, message);
       alert(message); // Fallback if error container is missing
     }
   }
@@ -115,11 +118,10 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAboutContent();
 
   // Example of a simple UI interaction (replace with actual functionality)
-  const learnMoreButton = document.getElementById('learn-more-button');
+  const learnMoreButton = document.getElementById(LEARN_MORE_BUTTON_ID);
   if (learnMoreButton) {
     learnMoreButton.addEventListener('click', () => {
-      // Replace alert with more user-friendly action
-      window.location.href = "/learn-more"; // Example: Redirect to a "learn more" page
+      window.location.href = "/learn-more";
     });
   }
 
@@ -129,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // Smooth scrolling to sections (example)
-  const aboutSection = document.getElementById('about-section');
+  const aboutSection = document.getElementById(ABOUT_SECTION_ID);
   if (aboutSection) {
     aboutSection.scrollIntoView({ behavior: 'smooth' });
   }

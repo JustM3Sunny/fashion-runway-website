@@ -41,23 +41,25 @@ document.addEventListener('DOMContentLoaded', function() {
       clearInterval(carouselInterval);
     };
 
-    const handleCarouselButtonClick = () => {
-      stopCarousel(); // Stop auto-advance on manual navigation
-      startCarousel(); // Restart auto-advance
+    const resetCarousel = () => {
+      stopCarousel();
+      startCarousel();
     };
 
     prevButton.addEventListener('click', () => {
       prevImage();
-      handleCarouselButtonClick();
+      resetCarousel();
     });
 
     nextButton.addEventListener('click', () => {
       nextImage();
-      handleCarouselButtonClick();
+      resetCarousel();
     });
 
     updateCarousel(); // Initial display
     startCarousel(); // Auto-advance the carousel
+  } else {
+    console.warn("Carousel elements not found. Carousel functionality will not be initialized.");
   }
 
 
@@ -83,10 +85,12 @@ document.addEventListener('DOMContentLoaded', function() {
   if (showcaseModalButton && showcaseModal && showcaseModalCloseButton) {
     const openModal = () => {
       showcaseModal.classList.remove('hidden');
+      document.body.classList.add('modal-open'); // Prevent scrolling when modal is open
     };
 
     const closeModal = () => {
       showcaseModal.classList.add('hidden');
+      document.body.classList.remove('modal-open'); // Re-enable scrolling
     };
 
     showcaseModalButton.addEventListener('click', openModal);
@@ -99,6 +103,16 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModal();
       }
     });
+
+    // Close the modal when the Escape key is pressed
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+  } else {
+    console.warn("Modal elements not found. Modal functionality will not be initialized.");
   }
 
 

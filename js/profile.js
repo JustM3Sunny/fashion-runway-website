@@ -93,11 +93,13 @@ document.addEventListener('DOMContentLoaded', () => {
     profileContainer.innerHTML = profileHTML;
 
     // Use event delegation to handle the click event
-    profileContainer.addEventListener('click', (event) => {
-      if (event.target.id === 'edit-profile-button') {
-        window.location.href = 'edit-profile.html';
-      }
-    });
+    profileContainer.addEventListener('click', handleProfileClick);
+  }
+
+  function handleProfileClick(event) {
+    if (event.target.id === 'edit-profile-button') {
+      window.location.href = 'edit-profile.html';
+    }
   }
 
   // Call the function to display the user profile

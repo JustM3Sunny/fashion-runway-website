@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const errorMessage = document.getElementById('errorMessage');
 
   // Store the original button classes for toggling
-  const originalButtonClasses = submitButton ? submitButton.classList.value : '';
+  const originalButtonClasses = submitButton ? submitButton.classList.value : ''; // Unused variable, consider removing
 
   // Function to validate the form inputs
   function validateForm() {
@@ -28,16 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper function to add/remove error class
     const setError = (element, hasError) => {
-      if (hasError) {
-        element.classList.add('border-red-500');
-      } else {
-        element.classList.remove('border-red-500');
-      }
+      element.classList.toggle('border-red-500', hasError);
     };
 
-    const nameValid = !!nameInput.value.trim();
-    const emailValid = !!emailInput.value.trim() && isValidEmail(emailInput.value.trim());
-    const messageValid = !!messageInput.value.trim();
+    const nameValid = nameInput.value.trim() !== '';
+    const emailValid = nameInput.value.trim() !== '' && isValidEmail(emailInput.value.trim());
+    const messageValid = messageInput.value.trim() !== '';
 
     setError(nameInput, !nameValid);
     setError(emailInput, !emailValid);
@@ -84,11 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch (jsonError) {
+          errorData = { message: 'Failed to parse server error.' };
+          console.error('Error parsing JSON error response:', jsonError);
+        }
         throw new Error(errorData.message || 'Failed to submit form'); // Include server error message
       }
 
-      // Simulate a successful submission after 2 seconds
+      // Handle successful submission
       successMessage.classList.remove('hidden');
       errorMessage.classList.add('hidden');
 

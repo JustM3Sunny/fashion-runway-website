@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
     imageElement.alt = shoe.name;
     imageElement.classList.add('w-full', 'h-48', 'object-cover', 'rounded-md', 'mb-2');
     imageElement.onerror = () => {
-        imageElement.src = 'path/to/default/image.jpg'; // Replace with a default image path
-        console.warn(`Failed to load image for shoe: ${shoe.name}. Using default image.`);
+      imageElement.src = 'path/to/default/image.jpg'; // Replace with a default image path
+      console.warn(`Failed to load image for shoe: ${shoe.name}. Using default image.`);
     };
 
     const nameElement = document.createElement('h3');
@@ -60,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
     buttonElement.classList.add('add-to-cart-btn', 'bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'focus:outline-none', 'focus:shadow-outline');
     buttonElement.dataset.shoeId = shoe.id;
     buttonElement.textContent = 'Add to Cart';
+    buttonElement.addEventListener('click', () => {
+      addToCartHandler(shoe.id);
+    });
 
     shoeElement.appendChild(imageElement);
     shoeElement.appendChild(nameElement);
@@ -78,20 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   shoesContainer.appendChild(fragment);
 
-  // Event listener for "Add to Cart" buttons (using event delegation)
-  shoesContainer.addEventListener('click', (event) => {
-    if (event.target.classList.contains('add-to-cart-btn')) {
-      const shoeId = event.target.dataset.shoeId;
-      const selectedShoe = shoes.find(shoe => shoe.id === shoeId);
+  // Centralized add to cart handler
+  function addToCartHandler(shoeId) {
+    const selectedShoe = shoes.find(shoe => shoe.id === shoeId);
 
-      if (selectedShoe) {
-        addToCart(selectedShoe); // Add the selected shoe to the cart
-        showNotification(`${selectedShoe.name} added to cart!`);
-      } else {
-        console.error(`Shoe with ID ${shoeId} not found.`);
-      }
+    if (selectedShoe) {
+      addToCart(selectedShoe); // Add the selected shoe to the cart
+      showNotification(`${selectedShoe.name} added to cart!`);
+    } else {
+      console.error(`Shoe with ID ${shoeId} not found.`);
     }
-  });
+  }
 
   let notificationTimeout; // Store the timeout ID
 
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Remove the notification after a few seconds
     notificationTimeout = setTimeout(() => {
-      document.body.removeChild(notification);
+      notification.remove(); // Use .remove() for cleaner removal
     }, 3000); // 3 seconds
   }
 });

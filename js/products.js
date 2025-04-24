@@ -29,7 +29,7 @@ const Products = {
     } catch (error) {
       console.error('Error fetching products:', error);
       // Consider a more user-friendly error handling strategy, like displaying a message on the page.
-      return [];
+      return []; // Return an empty array to prevent errors in displayProducts
     }
   },
 
@@ -53,9 +53,7 @@ const Products = {
     });
 
     // Clear existing content more efficiently
-    while (productListContainer.firstChild) {
-      productListContainer.removeChild(productListContainer.firstChild);
-    }
+    productListContainer.innerHTML = ''; // More efficient way to clear the container
     productListContainer.appendChild(fragment); // Append the fragment to the container
   },
 
@@ -96,7 +94,8 @@ const Products = {
     const addToCartButton = document.createElement('button');
     addToCartButton.textContent = 'Add to Cart';
     addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'focus:outline-none', 'focus:shadow-outline');
-    addToCartButton.addEventListener('click', () => {
+    addToCartButton.addEventListener('click', (event) => { // Added event parameter
+      event.preventDefault(); // Prevent default form submission or page reload
       this.handleAddToCart(product);
     });
     card.appendChild(addToCartButton);

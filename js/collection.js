@@ -43,11 +43,11 @@ async function fetchProductData() {
 async function displayProducts(filterCategory = "all", sortOption = "price-low-to-high") {
     try {
         const productData = await fetchProductData(); // Fetch the product data
-        let filteredProducts = [...productData]; // Create a copy to avoid modifying the original
+        let filteredProducts = productData; // Directly use the fetched data
 
         // Filter products by category
         if (filterCategory !== "all") {
-            filteredProducts = filteredProducts.filter(product => product.category === filterCategory);
+            filteredProducts = productData.filter(product => product.category === filterCategory); // Filter from original data
         }
 
         // Sort products based on the selected option
@@ -65,10 +65,12 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
         productContainer.innerHTML = "";
 
         // Create and append product elements to the container
+        const fragment = document.createDocumentFragment(); // Use a document fragment for performance
         filteredProducts.forEach(product => {
             const productElement = createProductElement(product);
-            productContainer.appendChild(productElement);
+            fragment.appendChild(productElement);
         });
+        productContainer.appendChild(fragment); // Append the fragment once
     } catch (error) {
         console.error("Error displaying products:", error);
         // Optionally display an error message to the user.
@@ -77,18 +79,19 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
 
 // Function to sort products based on the selected option
 function sortProducts(products, sortOption) {
+    const productsCopy = [...products]; // Create a copy before sorting
     switch (sortOption) {
         case "price-low-to-high":
-            return [...products].sort((a, b) => a.price - b.price);
+            return productsCopy.sort((a, b) => a.price - b.price);
         case "price-high-to-low":
-            return [...products].sort((a, b) => b.price - a.price);
+            return productsCopy.sort((a, b) => b.price - a.price);
         case "name-a-to-z":
-            return [...products].sort((a, b) => a.name.localeCompare(b.name));
+            return productsCopy.sort((a, b) => a.name.localeCompare(b.name));
         case "name-z-to-a":
-            return [...products].sort((a, b) => b.name.localeCompare(a.name));
+            return productsCopy.sort((a, b) => b.name.localeCompare(a.name));
         default:
             // Default sorting (e.g., by ID)
-            return [...products].sort((a, b) => a.id - b.id);
+            return productsCopy.sort((a, b) => a.id - b.id);
     }
 }
 
