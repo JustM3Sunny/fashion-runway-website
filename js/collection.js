@@ -51,23 +51,7 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
         }
 
         // Sort products based on the selected option
-        switch (sortOption) {
-            case "price-low-to-high":
-                filteredProducts.sort((a, b) => a.price - b.price);
-                break;
-            case "price-high-to-low":
-                filteredProducts.sort((a, b) => b.price - a.price);
-                break;
-            case "name-a-to-z":
-                filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-                break;
-            case "name-z-to-a":
-                filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-                break;
-            default:
-                // Default sorting (e.g., by ID)
-                filteredProducts.sort((a, b) => a.id - b.id);
-        }
+        filteredProducts = sortProducts(filteredProducts, sortOption);
 
         // Get the product container element
         const productContainer = document.getElementById(productDisplayConfig.productContainerId);
@@ -82,47 +66,7 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
 
         // Create and append product elements to the container
         filteredProducts.forEach(product => {
-            const productElement = document.createElement("div");
-            productElement.className = productDisplayConfig.productClass;
-
-            // Product image
-            const imageElement = document.createElement("img");
-            imageElement.src = product.imageUrl;
-            imageElement.alt = product.name;
-            imageElement.className = productDisplayConfig.imageClass;
-            imageElement.style.width = productDisplayConfig.imageWidth;
-            imageElement.style.height = productDisplayConfig.imageHeight;
-            imageElement.style.objectFit = productDisplayConfig.imageObjectFit;
-            productElement.appendChild(imageElement);
-
-            // Product name
-            const nameElement = document.createElement("h3");
-            nameElement.textContent = product.name;
-            nameElement.className = productDisplayConfig.nameClass;
-            productElement.appendChild(nameElement);
-
-            // Product price
-            const priceElement = document.createElement("p");
-            priceElement.textContent = `$${product.price.toFixed(2)}`;
-            priceElement.className = productDisplayConfig.priceClass;
-            productElement.appendChild(priceElement);
-
-            // Product description
-            const descriptionElement = document.createElement("p");
-            descriptionElement.textContent = product.description;
-            descriptionElement.className = productDisplayConfig.descriptionClass;
-            productElement.appendChild(descriptionElement);
-
-            // Add to cart button (example)
-            const addToCartButton = document.createElement("button");
-            addToCartButton.textContent = "Add to Cart";
-            addToCartButton.className = productDisplayConfig.addToCartButtonClass;
-            addToCartButton.addEventListener("click", () => {
-                // Implement add to cart functionality here
-                console.log(`Added ${product.name} to cart`);
-            });
-            productElement.appendChild(addToCartButton);
-
+            const productElement = createProductElement(product);
             productContainer.appendChild(productElement);
         });
     } catch (error) {
@@ -130,6 +74,70 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
         // Optionally display an error message to the user.
     }
 }
+
+// Function to sort products based on the selected option
+function sortProducts(products, sortOption) {
+    switch (sortOption) {
+        case "price-low-to-high":
+            return [...products].sort((a, b) => a.price - b.price);
+        case "price-high-to-low":
+            return [...products].sort((a, b) => b.price - a.price);
+        case "name-a-to-z":
+            return [...products].sort((a, b) => a.name.localeCompare(b.name));
+        case "name-z-to-a":
+            return [...products].sort((a, b) => b.name.localeCompare(a.name));
+        default:
+            // Default sorting (e.g., by ID)
+            return [...products].sort((a, b) => a.id - b.id);
+    }
+}
+
+// Function to create a product element
+function createProductElement(product) {
+    const productElement = document.createElement("div");
+    productElement.className = productDisplayConfig.productClass;
+
+    // Product image
+    const imageElement = document.createElement("img");
+    imageElement.src = product.imageUrl;
+    imageElement.alt = product.name;
+    imageElement.className = productDisplayConfig.imageClass;
+    imageElement.style.width = productDisplayConfig.imageWidth;
+    imageElement.style.height = productDisplayConfig.imageHeight;
+    imageElement.style.objectFit = productDisplayConfig.imageObjectFit;
+    productElement.appendChild(imageElement);
+
+    // Product name
+    const nameElement = document.createElement("h3");
+    nameElement.textContent = product.name;
+    nameElement.className = productDisplayConfig.nameClass;
+    productElement.appendChild(nameElement);
+
+    // Product price
+    const priceElement = document.createElement("p");
+    priceElement.textContent = `$${product.price.toFixed(2)}`;
+    priceElement.className = productDisplayConfig.priceClass;
+    productElement.appendChild(priceElement);
+
+    // Product description
+    const descriptionElement = document.createElement("p");
+    descriptionElement.textContent = product.description;
+    descriptionElement.className = productDisplayConfig.descriptionClass;
+    productElement.appendChild(descriptionElement);
+
+    // Add to cart button (example)
+    const addToCartButton = document.createElement("button");
+    addToCartButton.textContent = "Add to Cart";
+    addToCartButton.className = productDisplayConfig.addToCartButtonClass;
+    addToCartButton.addEventListener("click", () => {
+        // Implement add to cart functionality here
+        console.log(`Added ${product.name} to cart`);
+    });
+    productElement.appendChild(addToCartButton);
+
+    return productElement;
+}
+
 
 // Function to handle category filtering
 function handleCategoryFilter() {

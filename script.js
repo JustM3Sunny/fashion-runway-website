@@ -49,7 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Product page functionality
     if (window.location.pathname.includes('products.html')) {
-        loadProducts();
+        initProductsPage();
+    }
+
+    async function initProductsPage() {
+        try {
+            await loadProducts();
+        } catch (error) {
+            console.error('Error initializing products page:', error);
+        }
     }
 
     // Function to load and display product data
@@ -73,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (productContainer) {
                 productContainer.textContent = 'Failed to load products. Please try again later.';
             }
+            throw error; // Re-throw the error to be caught by initProductsPage
         }
     }
 
@@ -128,13 +137,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cart page functionality
     if (window.location.pathname.includes('cart.html')) {
-        loadCart();
+        initCartPage();
+    }
+
+    async function initCartPage() {
+        try {
+            await loadCart();
+        } catch (error) {
+            console.error('Error initializing cart page:', error);
+        }
     }
 
     async function loadCart() {
         // Load cart items from local storage and display them
-        const cartItems = getCartItems(); // Use the getCartItems function from cart.js
-        displayCartItems(cartItems);
+        try {
+            const cartItems = getCartItems(); // Use the getCartItems function from cart.js
+            displayCartItems(cartItems);
+        } catch (error) {
+            console.error('Error loading cart:', error);
+            const cartContainer = document.getElementById('cart-container');
+            if (cartContainer) {
+                cartContainer.textContent = 'Failed to load cart. Please try again later.';
+            }
+            throw error; // Re-throw the error to be caught by initCartPage
+        }
     }
 
     function displayCartItems(cartItems) {

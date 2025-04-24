@@ -17,9 +17,10 @@ const clothesData = [
   { id: 8, name: "Sweater", price: 50, image: "img/clothes/sweater.jpg", category: "Tops", sizes: ["S", "M", "L", "XL"], colors: ["gray", "navy", "green"] },
 ];
 
+const clothesContainer = document.getElementById("clothes-container"); // Moved outside for efficiency
+
 // Function to render clothes items to the UI
 function renderClothes(clothes) {
-  const clothesContainer = document.getElementById("clothes-container"); // Assuming a container with this ID exists in the HTML
   if (!clothesContainer) {
     console.error("Clothes container not found in the HTML.");
     return;
@@ -27,40 +28,58 @@ function renderClothes(clothes) {
 
   clothesContainer.innerHTML = ""; // Clear existing content
 
+  const fragment = document.createDocumentFragment(); // Use a fragment for better performance
+
   clothes.forEach(item => {
     const itemElement = document.createElement("div");
     itemElement.classList.add("clothes-item", "p-4", "border", "rounded", "shadow-md", "hover:shadow-lg", "transition-shadow", "duration-300"); // Tailwind classes
 
-    itemElement.innerHTML = `
-      <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover rounded-md mb-2">
-      <h3 class="text-lg font-semibold">${item.name}</h3>
-      <p class="text-gray-600">$${item.price}</p>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Add to Cart</button>
-    `;
+    const imgElement = document.createElement("img");
+    imgElement.src = item.image;
+    imgElement.alt = item.name;
+    imgElement.classList.add("w-full", "h-48", "object-cover", "rounded-md", "mb-2");
 
-    clothesContainer.appendChild(itemElement);
+    const nameElement = document.createElement("h3");
+    nameElement.classList.add("text-lg", "font-semibold");
+    nameElement.textContent = item.name;
+
+    const priceElement = document.createElement("p");
+    priceElement.classList.add("text-gray-600");
+    priceElement.textContent = `$${item.price}`;
+
+    const buttonElement = document.createElement("button");
+    buttonElement.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded", "mt-2");
+    buttonElement.textContent = "Add to Cart";
+
+    itemElement.appendChild(imgElement);
+    itemElement.appendChild(nameElement);
+    itemElement.appendChild(priceElement);
+    itemElement.appendChild(buttonElement);
+
+    fragment.appendChild(itemElement);
   });
+
+  clothesContainer.appendChild(fragment); // Append the entire fragment at once
 }
 
 // Function to filter clothes by category
 function filterClothes(category) {
-  if (category === "All") {
-    renderClothes(clothesData);
-  } else {
-    const filteredClothes = clothesData.filter(item => item.category === category);
-    renderClothes(filteredClothes);
-  }
+  const filteredClothes = category === "All" ? clothesData : clothesData.filter(item => item.category === category);
+  renderClothes(filteredClothes);
 }
 
 // Function to sort clothes by price (ascending or descending)
 function sortClothes(sortBy) {
-  let sortedClothes = [...clothesData]; // Create a copy to avoid modifying the original data
+  const sortedClothes = [...clothesData]; // Create a copy to avoid modifying the original data
 
-  if (sortBy === "price-asc") {
-    sortedClothes.sort((a, b) => a.price - b.price);
-  } else if (sortBy === "price-desc") {
-    sortedClothes.sort((a, b) => b.price - a.price);
-  }
+  sortedClothes.sort((a, b) => {
+    if (sortBy === "price-asc") {
+      return a.price - b.price;
+    } else if (sortBy === "price-desc") {
+      return b.price - a.price;
+    }
+    return 0; // Add a default return in case sortBy is invalid.  Important for robustness.
+  });
 
   renderClothes(sortedClothes);
 }

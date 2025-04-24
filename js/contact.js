@@ -35,16 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    setError(nameInput, !nameInput.value.trim());
-    setError(emailInput, !emailInput.value.trim() || !isValidEmail(emailInput.value.trim()));
-    setError(messageInput, !messageInput.value.trim());
+    const nameValid = !!nameInput.value.trim();
+    const emailValid = !!emailInput.value.trim() && isValidEmail(emailInput.value.trim());
+    const messageValid = !!messageInput.value.trim();
 
-    isValid = !(
-      !nameInput.value.trim() ||
-      !emailInput.value.trim() ||
-      !isValidEmail(emailInput.value.trim()) ||
-      !messageInput.value.trim()
-    );
+    setError(nameInput, !nameValid);
+    setError(emailInput, !emailValid);
+    setError(messageInput, !messageValid);
+
+    isValid = nameValid && emailValid && messageValid;
 
     return isValid;
   }
@@ -65,33 +64,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Disable the submit button to prevent multiple submissions
     if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+      submitButton.disabled = true;
+      submitButton.classList.add('opacity-50', 'cursor-not-allowed');
     }
 
-
-    // Simulate sending data to a server (replace with actual API call)
     try {
-      // In a real application, you would send the form data to a server here
-      // using fetch or XMLHttpRequest.
-      // Example:
+      const formData = {
+        name: nameInput.value,
+        email: emailInput.value,
+        message: messageInput.value,
+      };
+
       const response = await fetch('/api/contact', {
         method: 'POST',
-        body: JSON.stringify({
-          name: nameInput.value,
-          email: emailInput.value,
-          message: messageInput.value,
-        }),
+        body: JSON.stringify(formData),
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit form');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to submit form'); // Include server error message
       }
-
-      const data = await response.json(); // Parse the JSON response
 
       // Simulate a successful submission after 2 seconds
       successMessage.classList.remove('hidden');
@@ -100,22 +95,17 @@ document.addEventListener('DOMContentLoaded', () => {
       // Reset the form
       contactForm.reset();
 
-      // Re-enable the submit button
-      if (submitButton) {
-          submitButton.disabled = false;
-          submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
-      }
-
-
     } catch (error) {
       console.error('Error submitting form:', error);
+      errorMessage.textContent = error.message; // Display the error message
       errorMessage.classList.remove('hidden');
       successMessage.classList.add('hidden');
 
-      // Re-enable the submit button
+    } finally {
+      // Re-enable the submit button in either success or failure
       if (submitButton) {
-          submitButton.disabled = false;
-          submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        submitButton.disabled = false;
+        submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
       }
     }
   }

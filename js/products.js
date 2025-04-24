@@ -11,11 +11,12 @@ const Products = {
 
   /**
    * Fetches product data from a JSON file or API endpoint.
+   * @param {string} url - The URL to fetch product data from. Defaults to './data/products.json'.
    * @returns {Promise<Array>} A promise that resolves to an array of product objects.
    */
-  fetchProducts: async function() {
+  fetchProducts: async function(url = './data/products.json') {
     try {
-      const response = await fetch('./data/products.json');
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -51,7 +52,10 @@ const Products = {
       fragment.appendChild(productCard);
     });
 
-    productListContainer.innerHTML = ''; // Clear existing content
+    // Clear existing content more efficiently
+    while (productListContainer.firstChild) {
+      productListContainer.removeChild(productListContainer.firstChild);
+    }
     productListContainer.appendChild(fragment); // Append the fragment to the container
   },
 
@@ -93,16 +97,24 @@ const Products = {
     addToCartButton.textContent = 'Add to Cart';
     addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'focus:outline-none', 'focus:shadow-outline');
     addToCartButton.addEventListener('click', () => {
-      if (typeof Cart !== 'undefined' && Cart && typeof Cart.addToCart === 'function') {
-        Cart.addToCart(product);
-      } else {
-        console.error('Cart object or addToCart function is not defined.');
-        // Optionally display an error message to the user.
-      }
+      this.handleAddToCart(product);
     });
     card.appendChild(addToCartButton);
 
     return card;
+  },
+
+  /**
+   * Handles the add to cart functionality.
+   * @param {Object} product The product to add to the cart.
+   */
+  handleAddToCart: function(product) {
+    if (typeof Cart !== 'undefined' && Cart && typeof Cart.addToCart === 'function') {
+      Cart.addToCart(product);
+    } else {
+      console.error('Cart object or addToCart function is not defined.');
+      // Optionally display an error message to the user.
+    }
   },
 
   /**

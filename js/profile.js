@@ -49,11 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to display the user profile data in the container
   async function displayUserProfile() {
-    const userData = await fetchUserProfile();
-
-    if (!userData) {
+    let userData;
+    try {
+      userData = await fetchUserProfile();
+      if (!userData) {
+        return;
+      }
+    } catch (error) {
+      console.error("Error in displayUserProfile:", error);
+      profileContainer.innerHTML = `<p class="text-red-500">Error loading profile. Please try again later.</p>`;
       return;
     }
+
 
     const { name, email, address, phone, profilePicture } = userData; // Destructure userData
 
@@ -85,19 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     profileContainer.innerHTML = profileHTML;
 
-    const editProfileButton = document.getElementById('edit-profile-button');
-    if (editProfileButton) {
-      editProfileButton.addEventListener('click', () => {
+    // Use event delegation to handle the click event
+    profileContainer.addEventListener('click', (event) => {
+      if (event.target.id === 'edit-profile-button') {
         window.location.href = 'edit-profile.html';
-      });
-    } else {
-      console.warn("Edit profile button not found.");
-    }
+      }
+    });
   }
 
   // Call the function to display the user profile
   displayUserProfile();
 
+  // Moved logout button logic outside displayUserProfile to ensure it always runs
   const logoutButton = document.getElementById('logout-button');
   if (logoutButton) {
     logoutButton.addEventListener('click', () => {

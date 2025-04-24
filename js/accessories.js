@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       image.src = accessory.imageUrl;
       image.alt = accessory.name;
       image.classList.add('accessory-image', 'w-32', 'h-32', 'object-cover', 'rounded-md', 'mb-2'); // Tailwind classes for styling
+      image.onerror = () => { image.src = 'path/to/placeholder-image.png'; }; // Add error handling for images
 
       const name = document.createElement('h3');
       name.textContent = accessory.name;
@@ -49,8 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
       addToCartButton.classList.add('add-to-cart-button', 'bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded'); // Tailwind classes for styling
       addToCartButton.addEventListener('click', () => {
         // Handle adding the accessory to the cart.
-        // This could involve updating a cart array in local storage or sending a request to a server.
-        console.log(`Added ${accessory.name} to cart`);
         addToCart(accessory); // Call the addToCart function
         updateCartCount(); // Update the cart count in the header
       });
@@ -69,16 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to add an item to the cart (example implementation using local storage)
   function addToCart(accessory) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    // Check if the item already exists in the cart
-    const existingItemIndex = cart.findIndex(item => item.name === accessory.name);
+    const existingItemIndex = cart.findIndex(item => item.id === accessory.id); // Use a unique ID for comparison
+
     if (existingItemIndex > -1) {
-        // If the item exists, update the quantity (assuming you have a quantity property)
-        // cart[existingItemIndex].quantity = (cart[existingItemIndex].quantity || 1) + 1;
-        console.log("Item already in cart. Consider updating quantity."); // Or implement quantity update
+      cart[existingItemIndex].quantity = (cart[existingItemIndex].quantity || 1) + 1; // Increment quantity
     } else {
-        // If the item doesn't exist, add it to the cart
-        cart.push(accessory);
+      cart.push({ ...accessory, quantity: 1 }); // Add item with quantity
     }
+
     localStorage.setItem('cart', JSON.stringify(cart));
   }
 

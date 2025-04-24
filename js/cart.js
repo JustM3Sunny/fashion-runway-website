@@ -31,7 +31,7 @@ function saveCart(cart) {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
     // Dispatch a custom event to notify other parts of the application
     // that the cart has been updated.
-    document.dispatchEvent(new Event(CART_UPDATED_EVENT));
+    document.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT));
   } catch (error) {
     console.error("Error saving cart to local storage:", error);
   }
@@ -40,10 +40,10 @@ function saveCart(cart) {
 // Function to add an item to the cart
 function addToCart(productId, quantity = 1, name, price, imageUrl) {
   const cart = getCart();
-  const existingItem = cart.find(item => item.productId === productId);
+  const existingItemIndex = cart.findIndex(item => item.productId === productId);
 
-  if (existingItem) {
-    existingItem.quantity += quantity;
+  if (existingItemIndex !== -1) {
+    cart[existingItemIndex].quantity += quantity;
   } else {
     cart.push({ productId, quantity, name, price, imageUrl });
   }
@@ -54,22 +54,24 @@ function addToCart(productId, quantity = 1, name, price, imageUrl) {
 // Function to remove an item from the cart
 function removeFromCart(productId) {
   let cart = getCart();
+  const initialLength = cart.length;
   cart = cart.filter(item => item.productId !== productId);
-  saveCart(cart);
+  if (cart.length !== initialLength) {
+    saveCart(cart);
+  }
 }
 
 // Function to update the quantity of an item in the cart
 function updateCartItemQuantity(productId, quantity) {
-  if (quantity <= 0) {
-    removeFromCart(productId);
-    return;
-  }
-
   const cart = getCart();
-  const item = cart.find(item => item.productId === productId);
+  const itemIndex = cart.findIndex(item => item.productId === productId);
 
-  if (item) {
-    item.quantity = quantity;
+  if (itemIndex !== -1) {
+    if (quantity <= 0) {
+      cart.splice(itemIndex, 1); // Remove the item if quantity is zero or negative
+    } else {
+      cart[itemIndex].quantity = quantity;
+    }
     saveCart(cart);
   }
 }
@@ -77,13 +79,13 @@ function updateCartItemQuantity(productId, quantity) {
 // Function to clear the entire cart
 function clearCart() {
   localStorage.removeItem(CART_STORAGE_KEY);
-  document.dispatchEvent(new Event(CART_UPDATED_EVENT));
+  document.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT));
 }
 
 // Function to calculate the total price of the cart
 function calculateCartTotal() {
   const cart = getCart();
-  return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  return cart.reduce((total, item) => total + (Number(item.price) * item.quantity), 0);
 }
 
 // Function to get the number of items in the cart

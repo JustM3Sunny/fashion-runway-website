@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
     imageElement.src = shoe.image;
     imageElement.alt = shoe.name;
     imageElement.classList.add('w-full', 'h-48', 'object-cover', 'rounded-md', 'mb-2');
+    imageElement.onerror = () => {
+        imageElement.src = 'path/to/default/image.jpg'; // Replace with a default image path
+        console.warn(`Failed to load image for shoe: ${shoe.name}. Using default image.`);
+    };
 
     const nameElement = document.createElement('h3');
     nameElement.classList.add('text-lg', 'font-semibold', 'text-gray-800');
@@ -82,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (selectedShoe) {
         addToCart(selectedShoe); // Add the selected shoe to the cart
-        // Replace alert with a more user-friendly notification (e.g., a toast)
         showNotification(`${selectedShoe.name} added to cart!`);
       } else {
         console.error(`Shoe with ID ${shoeId} not found.`);
@@ -90,10 +93,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  let notificationTimeout; // Store the timeout ID
+
   function showNotification(message) {
-    // Implement a more user-friendly notification system here.
-    // This could involve creating a temporary element and styling it.
-    // For simplicity, we'll use a basic alert, but this should be replaced.
-    alert(message);
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.classList.add('notification'); // Add a class for styling
+
+    // Basic styling (can be improved with CSS)
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    notification.style.color = 'white';
+    notification.style.padding = '10px';
+    notification.style.borderRadius = '5px';
+    notification.style.zIndex = '1000'; // Ensure it's on top
+
+    document.body.appendChild(notification);
+
+    // Clear any existing timeout
+    if (notificationTimeout) {
+      clearTimeout(notificationTimeout);
+    }
+
+    // Remove the notification after a few seconds
+    notificationTimeout = setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 3000); // 3 seconds
   }
 });

@@ -11,33 +11,33 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to fetch about page content (replace with actual API call)
   async function fetchAboutContent() {
     try {
-      // Simulate fetching data from a server (replace with actual API endpoint)
-      // const response = await fetch(API_ENDPOINT);
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! status: ${response.status}`);
-      // }
-      // const aboutData = await response.json();
-      // return aboutData;
+      const response = await fetch(API_ENDPOINT);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const aboutData = await response.json();
+      return aboutData;
 
-      // Mock data for demonstration purposes
-      return new Promise(resolve => {
-        setTimeout(() => {
-          const aboutData = {
-            title: "About Our Company",
-            description: "We are a company dedicated to providing high-quality products and services.  Our mission is to exceed customer expectations and build lasting relationships.",
-            teamMembers: [
-              { name: "John Doe", role: "CEO", bio: "Experienced leader with a passion for innovation." },
-              { name: "Jane Smith", role: "CTO", bio: "Technical expert driving our technology strategy." },
-              { name: "Peter Jones", role: "Marketing Manager", bio: "Creative marketer focused on customer engagement." }
-            ]
-          };
-          resolve(aboutData);
-        }, 500); // Simulate network latency
-      });
+      // Mock data for demonstration purposes (commented out for production)
+      // return new Promise(resolve => {
+      //   setTimeout(() => {
+      //     const aboutData = {
+      //       title: "About Our Company",
+      //       description: "We are a company dedicated to providing high-quality products and services.  Our mission is to exceed customer expectations and build lasting relationships.",
+      //       teamMembers: [
+      //         { name: "John Doe", role: "CEO", bio: "Experienced leader with a passion for innovation." },
+      //         { name: "Jane Smith", role: "CTO", bio: "Technical expert driving our technology strategy." },
+      //         { name: "Peter Jones", role: "Marketing Manager", bio: "Creative marketer focused on customer engagement." }
+      //       ]
+      //     };
+      //     resolve(aboutData);
+      //   }, 500); // Simulate network latency
+      // });
 
     } catch (error) {
       console.error("Failed to fetch about content:", error);
       // Handle the error gracefully, e.g., display an error message to the user
+      displayErrorMessage("Failed to load about information. Please try again later.");
       return {
         title: "Error Loading Content",
         description: "Failed to load about information. Please try again later.",
@@ -60,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamContainer = document.getElementById('team-container');
     if (teamContainer) {
       teamContainer.innerHTML = ''; // Clear existing content
+      const fragment = document.createDocumentFragment(); // Use a fragment for better performance
+
       aboutData.teamMembers.forEach(member => {
         const memberDiv = document.createElement('div');
         memberDiv.classList.add('team-member', 'p-4', 'border', 'rounded', 'shadow-md'); // Tailwind classes
@@ -80,8 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
         memberDiv.appendChild(roleElement);
         memberDiv.appendChild(bioElement);
 
-        teamContainer.appendChild(memberDiv);
+        fragment.appendChild(memberDiv); // Append to the fragment
       });
+
+      teamContainer.appendChild(fragment); // Append the fragment to the container
     }
   }
 
@@ -90,6 +94,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const element = document.getElementById(elementId);
     if (element) {
       element.textContent = text;
+    } else {
+      console.warn(`Element with id "${elementId}" not found.`); // Warn if element doesn't exist
+    }
+  }
+
+  // Helper function to display error messages
+  function displayErrorMessage(message) {
+    const errorContainer = document.getElementById('error-container'); // Assuming you have an element with this ID
+    if (errorContainer) {
+      errorContainer.textContent = message;
+      errorContainer.style.display = 'block'; // Make the error message visible
+    } else {
+      console.error("Error: error-container element not found.  Cannot display error message:", message);
+      alert(message); // Fallback if error container is missing
     }
   }
 
@@ -100,7 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const learnMoreButton = document.getElementById('learn-more-button');
   if (learnMoreButton) {
     learnMoreButton.addEventListener('click', () => {
-      alert("Learn more functionality triggered!"); // Replace with actual action
+      // Replace alert with more user-friendly action
+      window.location.href = "/learn-more"; // Example: Redirect to a "learn more" page
     });
   }
 

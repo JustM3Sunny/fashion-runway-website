@@ -4,6 +4,8 @@
 // It's responsible for dynamic content loading, user interaction, and
 // potentially, managing the display of different sections like featured products.
 
+import DOMPurify from 'dompurify'; // Assuming DOMPurify is installed via npm
+
 // Document Ready Function - Ensures the DOM is fully loaded before executing JavaScript
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -12,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadFeaturedProducts() {
     // Placeholder for API endpoint or data source.  Replace with actual URL.
     const apiUrl = '/api/featured-products';
+    const containerId = 'featured-products-container'; // Define container ID
 
     try {
       const response = await fetch(apiUrl);
@@ -23,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const products = await response.json();
 
       // Render the products to the DOM.  Assumes a container with id "featured-products-container".
-      const container = document.getElementById('featured-products-container');
+      const container = document.getElementById(containerId);
 
       if (container) {
         container.innerHTML = ''; // Clear existing content
@@ -38,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const productName = DOMPurify.sanitize(product.name);
           const productDescription = DOMPurify.sanitize(product.description);
           const productImageUrl = DOMPurify.sanitize(product.imageUrl);
-          const productPrice = DOMPurify.sanitize(product.price);
+          const productPrice = DOMPurify.sanitize(String(product.price)); // Ensure price is a string for sanitization
 
           // Construct the product HTML.  Customize based on your product data structure.
           productElement.innerHTML = `
@@ -59,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error('Error fetching featured products:', error);
       // Display an error message to the user (e.g., in the container).
-      const featuredProductsContainer = document.getElementById('featured-products-container');
+      const featuredProductsContainer = document.getElementById(containerId);
       if (featuredProductsContainer) {
         featuredProductsContainer.innerHTML = '<p class="text-red-500">Failed to load featured products.</p>';
       }
@@ -70,9 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // single-page application-like behavior.
   function handleNavigation() {
     const hash = window.location.hash;
+    const sectionClass = 'page-section'; // Define section class
+    const homeId = 'home'; // Define home ID
 
     // Hide all sections by default.  Assumes sections have a class "page-section".
-    const sections = document.querySelectorAll('.page-section');
+    const sections = document.querySelectorAll(`.${sectionClass}`);
     sections.forEach(section => {
       section.classList.add('hidden');
     });
@@ -84,17 +89,22 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (hash) {
       // Handle invalid hash (e.g., show a 404 page or redirect to home).
       console.warn('Invalid hash:', hash);
-      const homeSection = document.getElementById('home');
+      const homeSection = document.getElementById(homeId);
       if (homeSection) {
         homeSection.classList.remove('hidden'); // Default to home
       }
     } else {
       // If no hash, show the home page.
-      const homeSection = document.getElementById('home');
+      const homeSection = document.getElementById(homeId);
       if (homeSection) {
         homeSection.classList.remove('hidden');
       }
     }
+  }
+
+  // Function to navigate to a specific section
+  function navigateToSection(sectionId) {
+    window.location.hash = sectionId;
   }
 
   // Event listener for hash changes (navigation).
@@ -111,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (contactButton) {
     contactButton.addEventListener('click', (event) => {
       event.preventDefault(); // Prevent default link behavior
-      window.location.hash = '#contact'; // Navigate to the contact section
+      navigateToSection('contact'); // Navigate to the contact section
     });
   }
 

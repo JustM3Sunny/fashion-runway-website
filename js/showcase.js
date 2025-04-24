@@ -12,44 +12,48 @@ document.addEventListener('DOMContentLoaded', function() {
   const prevButton = document.querySelector('.showcase-prev-button');
   const nextButton = document.querySelector('.showcase-next-button');
   let carouselInterval; // Store the interval ID
+  const carouselIntervalTime = 5000; // Store interval time in a constant
 
   if (carouselContainer && carouselImages.length > 0 && prevButton && nextButton) {
     let currentIndex = 0;
 
-    function updateCarousel() {
+    const updateCarousel = () => {
       carouselImages.forEach((img, index) => {
         img.classList.toggle('hidden', index !== currentIndex);
       });
-    }
+    };
 
-    function nextImage() {
+    const nextImage = () => {
       currentIndex = (currentIndex + 1) % carouselImages.length;
       updateCarousel();
-    }
+    };
 
-    function prevImage() {
+    const prevImage = () => {
       currentIndex = (currentIndex - 1 + carouselImages.length) % carouselImages.length;
       updateCarousel();
-    }
+    };
 
-    function startCarousel() {
-      carouselInterval = setInterval(nextImage, 5000);
-    }
+    const startCarousel = () => {
+      carouselInterval = setInterval(nextImage, carouselIntervalTime);
+    };
 
-    function stopCarousel() {
+    const stopCarousel = () => {
       clearInterval(carouselInterval);
-    }
+    };
+
+    const handleCarouselButtonClick = () => {
+      stopCarousel(); // Stop auto-advance on manual navigation
+      startCarousel(); // Restart auto-advance
+    };
 
     prevButton.addEventListener('click', () => {
-      stopCarousel(); // Stop auto-advance on manual navigation
       prevImage();
-      startCarousel(); // Restart auto-advance
+      handleCarouselButtonClick();
     });
 
     nextButton.addEventListener('click', () => {
-      stopCarousel(); // Stop auto-advance on manual navigation
       nextImage();
-      startCarousel(); // Restart auto-advance
+      handleCarouselButtonClick();
     });
 
     updateCarousel(); // Initial display
@@ -61,12 +65,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const highlightedProducts = document.querySelectorAll('.highlighted-product');
 
   highlightedProducts.forEach(product => {
-    product.addEventListener('mouseover', function() {
-      this.classList.add('hovered');
+    product.addEventListener('mouseover', () => {
+      product.classList.add('hovered');
     });
 
-    product.addEventListener('mouseout', function() {
-      this.classList.remove('hovered');
+    product.addEventListener('mouseout', () => {
+      product.classList.remove('hovered');
     });
   });
 
@@ -77,18 +81,22 @@ document.addEventListener('DOMContentLoaded', function() {
   const showcaseModalCloseButton = document.querySelector('#showcase-modal-close');
 
   if (showcaseModalButton && showcaseModal && showcaseModalCloseButton) {
-    showcaseModalButton.addEventListener('click', function() {
-      showcaseModal.classList.remove('hidden'); // Show the modal
-    });
+    const openModal = () => {
+      showcaseModal.classList.remove('hidden');
+    };
 
-    showcaseModalCloseButton.addEventListener('click', function() {
-      showcaseModal.classList.add('hidden'); // Hide the modal
-    });
+    const closeModal = () => {
+      showcaseModal.classList.add('hidden');
+    };
+
+    showcaseModalButton.addEventListener('click', openModal);
+
+    showcaseModalCloseButton.addEventListener('click', closeModal);
 
     // Close the modal if the user clicks outside of it
-    showcaseModal.addEventListener('click', function(event) { //Event delegation on the modal itself
+    showcaseModal.addEventListener('click', (event) => { //Event delegation on the modal itself
       if (event.target === showcaseModal) {
-        showcaseModal.classList.add('hidden');
+        closeModal();
       }
     });
   }
@@ -96,17 +104,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --- Helper Functions (Example: Debounce) ---
   // A debounce function to limit the rate at which a function can fire.
-  function debounce(func, delay) {
+  const debounce = (func, delay) => {
     let timeout;
-    return function(...args) {
-      const context = this;
+    return (...args) => {
       clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(context, args), delay);
+      timeout = setTimeout(() => func(...args), delay);
     };
-  }
+  };
 
   // --- Example: Responsive adjustments (using debounce for performance) ---
-  function handleResize() {
+  const handleResize = () => {
     // Adjust carousel display based on screen size (example)
     if (window.innerWidth < 768) {
       // Smaller screens: show only one carousel image at a time
@@ -114,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       // Larger screens: show multiple carousel images
     }
-  }
+  };
 
   const debouncedHandleResize = debounce(handleResize, 250); // Store the debounced function
 
