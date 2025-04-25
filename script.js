@@ -97,38 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fragment = document.createDocumentFragment(); // Use a document fragment for performance
 
             products.forEach(product => {
-                const productDiv = document.createElement('div');
-                productDiv.classList.add('product-item', 'p-4', 'border', 'rounded', 'shadow-md', 'bg-white'); // Added Tailwind classes
-
-                const productImage = document.createElement('img');
-                productImage.src = product.image;
-                productImage.alt = product.name;
-                productImage.classList.add('w-full', 'h-48', 'object-cover', 'mb-2'); // Added Tailwind classes
-                productImage.onerror = () => { // Handle image loading errors
-                    productImage.src = 'placeholder.jpg'; // Use a placeholder image
-                    console.warn(`Failed to load image for product: ${product.name}`);
-                };
-
-                const productName = document.createElement('h3');
-                productName.textContent = product.name;
-                productName.classList.add('text-xl', 'font-semibold', 'mb-1'); // Added Tailwind classes
-
-                const productPrice = document.createElement('p');
-                productPrice.textContent = `$${product.price.toFixed(2)}`;
-                productPrice.classList.add('text-gray-700', 'mb-2'); // Added Tailwind classes
-
-                const addToCartButton = document.createElement('button');
-                addToCartButton.textContent = 'Add to Cart';
-                addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded'); // Added Tailwind classes
-                addToCartButton.addEventListener('click', () => {
-                    addToCart(product); // Use the addToCart function from cart.js
-                });
-
-                productDiv.appendChild(productImage);
-                productDiv.appendChild(productName);
-                productDiv.appendChild(productPrice);
-                productDiv.appendChild(addToCartButton);
-
+                const productDiv = createProductElement(product);
                 fragment.appendChild(productDiv); // Append to the fragment
             });
 
@@ -136,6 +105,42 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             console.warn('Product container not found. Ensure an element with id "product-container" exists in the HTML.');
         }
+    }
+
+    function createProductElement(product) {
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product-item', 'p-4', 'border', 'rounded', 'shadow-md', 'bg-white'); // Added Tailwind classes
+
+        const productImage = document.createElement('img');
+        productImage.src = product.image;
+        productImage.alt = product.name;
+        productImage.classList.add('w-full', 'h-48', 'object-cover', 'mb-2'); // Added Tailwind classes
+        productImage.onerror = () => { // Handle image loading errors
+            productImage.src = 'placeholder.jpg'; // Use a placeholder image
+            console.warn(`Failed to load image for product: ${product.name}`);
+        };
+
+        const productName = document.createElement('h3');
+        productName.textContent = product.name;
+        productName.classList.add('text-xl', 'font-semibold', 'mb-1'); // Added Tailwind classes
+
+        const productPrice = document.createElement('p');
+        productPrice.textContent = `$${product.price.toFixed(2)}`;
+        productPrice.classList.add('text-gray-700', 'mb-2'); // Added Tailwind classes
+
+        const addToCartButton = document.createElement('button');
+        addToCartButton.textContent = 'Add to Cart';
+        addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded'); // Added Tailwind classes
+        addToCartButton.addEventListener('click', () => {
+            addToCart(product); // Use the addToCart function from cart.js
+        });
+
+        productDiv.appendChild(productImage);
+        productDiv.appendChild(productName);
+        productDiv.appendChild(productPrice);
+        productDiv.appendChild(addToCartButton);
+
+        return productDiv;
     }
 
     // Cart page functionality
@@ -177,20 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fragment = document.createDocumentFragment();
 
             cartItems.forEach(item => {
-                const cartItemDiv = document.createElement('div');
-                cartItemDiv.classList.add('cart-item', 'flex', 'items-center', 'justify-between', 'py-2', 'border-b'); // Added Tailwind classes
-
-                const itemName = document.createElement('h4');
-                itemName.textContent = item.name;
-                itemName.classList.add('text-lg', 'font-medium'); // Added Tailwind classes
-
-                const itemPrice = document.createElement('p');
-                itemPrice.textContent = `$${item.price.toFixed(2)}`;
-                itemPrice.classList.add('text-gray-700'); // Added Tailwind classes
-
-                cartItemDiv.appendChild(itemName);
-                cartItemDiv.appendChild(itemPrice);
-
+                const cartItemDiv = createCartItemElement(item);
                 fragment.appendChild(cartItemDiv);
             });
 
@@ -198,6 +190,24 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             console.warn('Cart container not found. Ensure an element with id "cart-container" exists in the HTML.');
         }
+    }
+
+    function createCartItemElement(item) {
+        const cartItemDiv = document.createElement('div');
+        cartItemDiv.classList.add('cart-item', 'flex', 'items-center', 'justify-between', 'py-2', 'border-b'); // Added Tailwind classes
+
+        const itemName = document.createElement('h4');
+        itemName.textContent = item.name;
+        itemName.classList.add('text-lg', 'font-medium'); // Added Tailwind classes
+
+        const itemPrice = document.createElement('p');
+        itemPrice.textContent = `$${item.price.toFixed(2)}`;
+        itemPrice.classList.add('text-gray-700'); // Added Tailwind classes
+
+        cartItemDiv.appendChild(itemName);
+        cartItemDiv.appendChild(itemPrice);
+
+        return cartItemDiv;
     }
 
     // Helper function to display error messages

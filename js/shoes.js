@@ -94,23 +94,33 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let notificationTimeout; // Store the timeout ID
+  const notificationContainerId = 'notification-container';
 
   function showNotification(message) {
+    let notificationContainer = document.getElementById(notificationContainerId);
+
+    if (!notificationContainer) {
+      notificationContainer = document.createElement('div');
+      notificationContainer.id = notificationContainerId;
+      notificationContainer.style.position = 'fixed';
+      notificationContainer.style.top = '20px';
+      notificationContainer.style.right = '20px';
+      notificationContainer.style.zIndex = '1000';
+      document.body.appendChild(notificationContainer);
+    }
+
     const notification = document.createElement('div');
     notification.textContent = message;
     notification.classList.add('notification'); // Add a class for styling
 
     // Basic styling (can be improved with CSS)
-    notification.style.position = 'fixed';
-    notification.style.top = '20px';
-    notification.style.right = '20px';
     notification.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
     notification.style.color = 'white';
     notification.style.padding = '10px';
     notification.style.borderRadius = '5px';
-    notification.style.zIndex = '1000'; // Ensure it's on top
+    notification.style.marginBottom = '5px'; // Add some spacing between notifications
 
-    document.body.appendChild(notification);
+    notificationContainer.appendChild(notification);
 
     // Clear any existing timeout
     if (notificationTimeout) {
@@ -120,6 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Remove the notification after a few seconds
     notificationTimeout = setTimeout(() => {
       notification.remove(); // Use .remove() for cleaner removal
+      // Clean up the container if it's empty
+      if (notificationContainer && notificationContainer.children.length === 0) {
+          notificationContainer.remove();
+      }
     }, 3000); // 3 seconds
   }
 });

@@ -29,6 +29,7 @@ const Products = {
     } catch (error) {
       console.error('Error fetching products:', error);
       // Consider a more user-friendly error handling strategy, like displaying a message on the page.
+      this.displayError("Failed to load products. Please try again later."); // Use displayError function
       return []; // Return an empty array to prevent errors in displayProducts
     }
   },
@@ -67,7 +68,7 @@ const Products = {
     card.classList.add('product-card', 'bg-white', 'rounded-lg', 'shadow-md', 'p-4', 'flex', 'flex-col', 'justify-between');
 
     const image = document.createElement('img');
-    image.src = product.image;
+    image.src = product.image || 'path/to/placeholder-image.png'; // Use placeholder if image is missing
     image.alt = product.name;
     image.classList.add('w-full', 'h-48', 'object-cover', 'rounded-md', 'mb-2');
     image.onerror = () => {
@@ -82,7 +83,7 @@ const Products = {
     card.appendChild(name);
 
     const price = document.createElement('p');
-    price.textContent = `$${product.price.toFixed(2)}`;
+    price.textContent = `$${product.price?.toFixed(2) ?? '0.00'}`; // Use optional chaining and nullish coalescing
     price.classList.add('text-gray-700', 'mb-2');
     card.appendChild(price);
 
@@ -112,7 +113,20 @@ const Products = {
       Cart.addToCart(product);
     } else {
       console.error('Cart object or addToCart function is not defined.');
-      // Optionally display an error message to the user.
+      this.displayError("Failed to add product to cart. Cart functionality is unavailable."); // Use displayError
+    }
+  },
+
+  /**
+   * Displays an error message in the product list container.
+   * @param {string} message The error message to display.
+   */
+  displayError: function(message) {
+    const productListContainer = document.getElementById('product-list');
+    if (productListContainer) {
+      productListContainer.innerHTML = `<p class="text-red-500">${message}</p>`;
+    } else {
+      console.error("Product list container not found!");
     }
   },
 
@@ -125,11 +139,7 @@ const Products = {
       this.displayProducts(products);
     } catch (error) {
       console.error("Failed to initialize products:", error);
-      // Display a user-friendly error message on the page.
-      const productListContainer = document.getElementById('product-list');
-      if (productListContainer) {
-        productListContainer.innerHTML = '<p class="text-red-500">Failed to load products. Please try again later.</p>';
-      }
+      this.displayError("Failed to load products. Please try again later."); // Use displayError function
     }
   }
 };

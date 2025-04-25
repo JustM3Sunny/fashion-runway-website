@@ -49,52 +49,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to display the user profile data in the container
   async function displayUserProfile() {
-    let userData;
     try {
-      userData = await fetchUserProfile();
+      const userData = await fetchUserProfile();
+
       if (!userData) {
         return;
       }
+
+      const { name, email, address, phone, profilePicture } = userData; // Destructure userData
+
+      // Sanitize data to prevent XSS vulnerabilities
+      const sanitizedName = DOMPurify.sanitize(name);
+      const sanitizedEmail = DOMPurify.sanitize(email);
+      const sanitizedAddress = DOMPurify.sanitize(address);
+      const sanitizedPhone = DOMPurify.sanitize(phone);
+      const sanitizedProfilePicture = DOMPurify.sanitize(profilePicture || defaultProfilePicture); // Use default if undefined
+
+      const profileHTML = `
+        <div class="bg-white shadow rounded-lg p-4">
+          <div class="flex items-center space-x-4">
+            <img class="h-12 w-12 rounded-full object-cover" src="${sanitizedProfilePicture}" alt="Profile Picture">
+            <div>
+              <h2 class="text-xl font-semibold">${sanitizedName}</h2>
+              <p class="text-gray-500">${sanitizedEmail}</p>
+            </div>
+          </div>
+          <div class="mt-4">
+            <p class="text-gray-700">Address: ${sanitizedAddress}</p>
+            <p class="text-gray-700">Phone: ${sanitizedPhone}</p>
+          </div>
+          <div class="mt-4">
+            <button id="edit-profile-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit Profile</button>
+          </div>
+        </div>
+      `;
+
+      profileContainer.innerHTML = profileHTML;
+
     } catch (error) {
       console.error("Error in displayUserProfile:", error);
       profileContainer.innerHTML = `<p class="text-red-500">Error loading profile. Please try again later.</p>`;
-      return;
     }
-
-
-    const { name, email, address, phone, profilePicture } = userData; // Destructure userData
-
-    // Sanitize data to prevent XSS vulnerabilities
-    const sanitizedName = DOMPurify.sanitize(name);
-    const sanitizedEmail = DOMPurify.sanitize(email);
-    const sanitizedAddress = DOMPurify.sanitize(address);
-    const sanitizedPhone = DOMPurify.sanitize(phone);
-    const sanitizedProfilePicture = DOMPurify.sanitize(profilePicture || defaultProfilePicture); // Use default if undefined
-
-    const profileHTML = `
-      <div class="bg-white shadow rounded-lg p-4">
-        <div class="flex items-center space-x-4">
-          <img class="h-12 w-12 rounded-full object-cover" src="${sanitizedProfilePicture}" alt="Profile Picture">
-          <div>
-            <h2 class="text-xl font-semibold">${sanitizedName}</h2>
-            <p class="text-gray-500">${sanitizedEmail}</p>
-          </div>
-        </div>
-        <div class="mt-4">
-          <p class="text-gray-700">Address: ${sanitizedAddress}</p>
-          <p class="text-gray-700">Phone: ${sanitizedPhone}</p>
-        </div>
-        <div class="mt-4">
-          <button id="edit-profile-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit Profile</button>
-        </div>
-      </div>
-    `;
-
-    profileContainer.innerHTML = profileHTML;
-
-    // Use event delegation to handle the click event
-    profileContainer.addEventListener('click', handleProfileClick);
   }
+
+  // Use event delegation to handle the click event
+  profileContainer.addEventListener('click', handleProfileClick);
 
   function handleProfileClick(event) {
     if (event.target.id === 'edit-profile-button') {

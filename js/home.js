@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const FEATURED_PRODUCTS_CONTAINER_ID = 'featured-products-container';
   const PAGE_SECTION_CLASS = 'page-section';
   const HOME_ID = 'home';
+  const PRODUCT_DESCRIPTION_LENGTH = 50; // Max length of product description
 
   // Function to fetch and display featured products.  This assumes an API endpoint
   // or a data source that provides product information.
@@ -65,10 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const productPrice = DOMPurify.sanitize(String(product.price)); // Ensure price is a string for sanitization
 
     // Construct the product HTML.  Customize based on your product data structure.
+    // Use template literals for better readability and maintainability
     productElement.innerHTML = `
       <img src="${productImageUrl}" alt="${productName}" class="w-full h-48 object-cover rounded-md mb-2">
       <h3 class="text-lg font-semibold">${productName}</h3>
-      <p class="text-gray-600">${productDescription ? productDescription.substring(0, 50) + '...' : ''}</p>
+      <p class="text-gray-600">${productDescription ? truncateString(productDescription, PRODUCT_DESCRIPTION_LENGTH) : ''}</p>
       <p class="text-blue-500 font-bold">$${productPrice}</p>
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Add to Cart</button>
     `;
@@ -109,10 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function navigateToHome() {
-    const homeSection = document.getElementById(HOME_ID);
-    if (homeSection) {
-      homeSection.classList.remove('hidden');
-    }
+    navigateToSection(`#${HOME_ID}`); // Use navigateToSection for consistency
   }
 
   // Function to navigate to a specific section
@@ -134,9 +133,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (contactButton) {
     contactButton.addEventListener('click', (event) => {
       event.preventDefault(); // Prevent default link behavior
-      navigateToSection('contact'); // Navigate to the contact section
+      navigateToSection('#contact'); // Navigate to the contact section
     });
   }
 
   // Add any other home page specific JavaScript functionality here.
+
+  // Helper function to truncate a string
+  function truncateString(str, maxLength) {
+    if (!str) return '';
+    if (str.length <= maxLength) return str;
+    return DOMPurify.sanitize(str.substring(0, maxLength) + '...');
+  }
 });

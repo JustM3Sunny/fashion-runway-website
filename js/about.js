@@ -21,14 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      return data;
 
     } catch (error) {
       console.error("Failed to fetch about content:", error);
-      displayErrorMessage("Failed to load about information. Please try again later.");
+      const errorMessage = "Failed to load about information. Please try again later.";
+      displayErrorMessage(errorMessage);
       return {
         title: "Error Loading Content",
-        description: "Failed to load about information. Please try again later.",
+        description: errorMessage,
         teamMembers: []
       };
     }
@@ -58,6 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     teamContainer.innerHTML = ''; // Clear existing content
+
+    if (!Array.isArray(teamMembers)) {
+      console.error("teamMembers is not an array:", teamMembers);
+      displayErrorMessage("Failed to load team members. Please try again later.");
+      return;
+    }
+
     const fragment = document.createDocumentFragment(); // Use a fragment for better performance
 
     teamMembers.forEach(member => {
@@ -74,15 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const nameElement = document.createElement('h3');
     nameElement.classList.add('text-lg', 'font-semibold'); // Tailwind classes
-    nameElement.textContent = member.name;
+    nameElement.textContent = member.name || 'Name not available';
 
     const roleElement = document.createElement('p');
     roleElement.classList.add('text-gray-600'); // Tailwind classes
-    roleElement.textContent = member.role;
+    roleElement.textContent = member.role || 'Role not available';
 
     const bioElement = document.createElement('p');
     bioElement.classList.add('text-sm'); // Tailwind classes
-    bioElement.textContent = member.bio;
+    bioElement.textContent = member.bio || 'Bio not available';
 
     memberDiv.appendChild(nameElement);
     memberDiv.appendChild(roleElement);
@@ -96,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateTextContent(elementId, text) {
     const element = document.getElementById(elementId);
     if (element) {
-      element.textContent = text;
+      element.textContent = text || ''; // Handle null/undefined text
     } else {
       console.warn(`Element with id "${elementId}" not found.`);
     }

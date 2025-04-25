@@ -43,11 +43,11 @@ async function fetchProductData() {
 async function displayProducts(filterCategory = "all", sortOption = "price-low-to-high") {
     try {
         const productData = await fetchProductData(); // Fetch the product data
-        let filteredProducts = productData; // Directly use the fetched data
+        let filteredProducts = [...productData]; // Create a copy to avoid modifying the original data
 
         // Filter products by category
         if (filterCategory !== "all") {
-            filteredProducts = productData.filter(product => product.category === filterCategory); // Filter from original data
+            filteredProducts = filteredProducts.filter(product => product.category === filterCategory);
         }
 
         // Sort products based on the selected option
@@ -79,19 +79,18 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
 
 // Function to sort products based on the selected option
 function sortProducts(products, sortOption) {
-    const productsCopy = [...products]; // Create a copy before sorting
     switch (sortOption) {
         case "price-low-to-high":
-            return productsCopy.sort((a, b) => a.price - b.price);
+            return [...products].sort((a, b) => a.price - b.price);
         case "price-high-to-low":
-            return productsCopy.sort((a, b) => b.price - a.price);
+            return [...products].sort((a, b) => b.price - a.price);
         case "name-a-to-z":
-            return productsCopy.sort((a, b) => a.name.localeCompare(b.name));
+            return [...products].sort((a, b) => a.name.localeCompare(b.name));
         case "name-z-to-a":
-            return productsCopy.sort((a, b) => b.name.localeCompare(a.name));
+            return [...products].sort((a, b) => b.name.localeCompare(a.name));
         default:
             // Default sorting (e.g., by ID)
-            return productsCopy.sort((a, b) => a.id - b.id);
+            return [...products].sort((a, b) => a.id - b.id);
     }
 }
 

@@ -17,7 +17,7 @@ const clothesData = [
   { id: 8, name: "Sweater", price: 50, image: "img/clothes/sweater.jpg", category: "Tops", sizes: ["S", "M", "L", "XL"], colors: ["gray", "navy", "green"] },
 ];
 
-const clothesContainer = document.getElementById("clothes-container"); // Moved outside for efficiency
+const clothesContainer = document.getElementById("clothes-container");
 
 // Function to render clothes items to the UI
 function renderClothes(clothes) {
@@ -26,18 +26,19 @@ function renderClothes(clothes) {
     return;
   }
 
-  clothesContainer.innerHTML = ""; // Clear existing content
+  clothesContainer.innerHTML = "";
 
-  const fragment = document.createDocumentFragment(); // Use a fragment for better performance
+  const fragment = document.createDocumentFragment();
 
   clothes.forEach(item => {
     const itemElement = document.createElement("div");
-    itemElement.classList.add("clothes-item", "p-4", "border", "rounded", "shadow-md", "hover:shadow-lg", "transition-shadow", "duration-300"); // Tailwind classes
+    itemElement.classList.add("clothes-item", "p-4", "border", "rounded", "shadow-md", "hover:shadow-lg", "transition-shadow", "duration-300");
 
     const imgElement = document.createElement("img");
     imgElement.src = item.image;
     imgElement.alt = item.name;
     imgElement.classList.add("w-full", "h-48", "object-cover", "rounded-md", "mb-2");
+    imgElement.onerror = () => { imgElement.src = 'placeholder_image.png'; }; // Add placeholder on error
 
     const nameElement = document.createElement("h3");
     nameElement.classList.add("text-lg", "font-semibold");
@@ -45,11 +46,15 @@ function renderClothes(clothes) {
 
     const priceElement = document.createElement("p");
     priceElement.classList.add("text-gray-600");
-    priceElement.textContent = `$${item.price}`;
+    priceElement.textContent = `$${item.price.toFixed(2)}`; // Format price to 2 decimal places
 
     const buttonElement = document.createElement("button");
     buttonElement.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded", "mt-2");
     buttonElement.textContent = "Add to Cart";
+    buttonElement.addEventListener("click", () => { // Example add to cart functionality
+        console.log(`Added ${item.name} to cart!`);
+        // Implement actual cart logic here (e.g., update local storage, send to server)
+    });
 
     itemElement.appendChild(imgElement);
     itemElement.appendChild(nameElement);
@@ -59,7 +64,7 @@ function renderClothes(clothes) {
     fragment.appendChild(itemElement);
   });
 
-  clothesContainer.appendChild(fragment); // Append the entire fragment at once
+  clothesContainer.appendChild(fragment);
 }
 
 // Function to filter clothes by category
@@ -70,7 +75,7 @@ function filterClothes(category) {
 
 // Function to sort clothes by price (ascending or descending)
 function sortClothes(sortBy) {
-  const sortedClothes = [...clothesData]; // Create a copy to avoid modifying the original data
+  const sortedClothes = [...clothesData];
 
   sortedClothes.sort((a, b) => {
     if (sortBy === "price-asc") {
@@ -78,40 +83,55 @@ function sortClothes(sortBy) {
     } else if (sortBy === "price-desc") {
       return b.price - a.price;
     }
-    return 0; // Add a default return in case sortBy is invalid.  Important for robustness.
+    return 0;
   });
 
   renderClothes(sortedClothes);
 }
 
-// Event listeners for filtering and sorting (example)
+// Function to search clothes by name
+function searchClothes(searchTerm) {
+    const searchTermLower = searchTerm.toLowerCase();
+    const searchedClothes = clothesData.filter(item => item.name.toLowerCase().includes(searchTermLower));
+    renderClothes(searchedClothes);
+}
+
+// Event listeners for filtering and sorting
 document.addEventListener("DOMContentLoaded", () => {
   // Initial render
   renderClothes(clothesData);
 
-  // Example filter button (assuming you have buttons with these IDs)
+  // Filter buttons
   const allButton = document.getElementById("filter-all");
   const topsButton = document.getElementById("filter-tops");
   const bottomsButton = document.getElementById("filter-bottoms");
 
-    if (allButton) {
-        allButton.addEventListener("click", () => filterClothes("All"));
-    }
-    if (topsButton) {
-        topsButton.addEventListener("click", () => filterClothes("Tops"));
-    }
-    if (bottomsButton) {
-        bottomsButton.addEventListener("click", () => filterClothes("Bottoms"));
-    }
+  if (allButton) {
+    allButton.addEventListener("click", () => filterClothes("All"));
+  }
+  if (topsButton) {
+    topsButton.addEventListener("click", () => filterClothes("Tops"));
+  }
+  if (bottomsButton) {
+    bottomsButton.addEventListener("click", () => filterClothes("Bottoms"));
+  }
 
-  // Example sort dropdown (assuming you have a select element with this ID)
+  // Sort dropdown
   const sortSelect = document.getElementById("sort-select");
   if (sortSelect) {
     sortSelect.addEventListener("change", (event) => {
       sortClothes(event.target.value);
     });
   }
+
+  // Search input
+  const searchInput = document.getElementById("search-input");
+  if (searchInput) {
+      searchInput.addEventListener("input", (event) => {
+          searchClothes(event.target.value);
+      });
+  }
 });
 
 // Export functions if needed for other modules
-export { renderClothes, filterClothes, sortClothes };
+export { renderClothes, filterClothes, sortClothes, searchClothes };

@@ -19,9 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const successMessage = document.getElementById('successMessage');
   const errorMessage = document.getElementById('errorMessage');
 
-  // Store the original button classes for toggling
-  const originalButtonClasses = submitButton ? submitButton.classList.value : ''; // Unused variable, consider removing
-
   // Function to validate the form inputs
   function validateForm() {
     let isValid = true;
@@ -32,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const nameValid = nameInput.value.trim() !== '';
-    const emailValid = nameInput.value.trim() !== '' && isValidEmail(emailInput.value.trim());
+    const emailValid = emailInput.value.trim() !== '' && isValidEmail(emailInput.value.trim());
     const messageValid = messageInput.value.trim() !== '';
 
     setError(nameInput, !nameValid);
@@ -84,10 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           errorData = await response.json();
         } catch (jsonError) {
-          errorData = { message: 'Failed to parse server error.' };
           console.error('Error parsing JSON error response:', jsonError);
+          errorData = { message: 'Failed to parse server error.' };
         }
-        throw new Error(errorData.message || 'Failed to submit form'); // Include server error message
+        const errorMessageText = errorData.message || 'Failed to submit form';
+        throw new Error(errorMessageText); // Include server error message
       }
 
       // Handle successful submission

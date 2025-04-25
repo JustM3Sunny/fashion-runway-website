@@ -16,6 +16,9 @@ const CART_UPDATED_EVENT = 'cartUpdated';
 
 // Helper function to parse JSON safely
 const parseJSON = (jsonString) => {
+  if (!jsonString) {
+    return null; // Handle empty or null string gracefully
+  }
   try {
     return JSON.parse(jsonString);
   } catch (error) {
@@ -27,8 +30,7 @@ const parseJSON = (jsonString) => {
 // Function to get the cart from local storage
 function getCart() {
   const cartData = localStorage.getItem(CART_STORAGE_KEY);
-  const parsedCart = parseJSON(cartData);
-  return parsedCart || [];
+  return parseJSON(cartData) || [];
 }
 
 // Function to save the cart to local storage
@@ -37,8 +39,8 @@ function saveCart(cart) {
     const cartString = JSON.stringify(cart);
     localStorage.setItem(CART_STORAGE_KEY, cartString);
     // Dispatch a custom event to notify other parts of the application
-    // that the cart has been updated.
-    document.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT));
+    // that the cart has been updated.  Consider using a more specific event target.
+    window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart } })); // Include cart data in the event
   } catch (error) {
     console.error("Error saving cart to local storage:", error);
   }
@@ -54,10 +56,18 @@ function addToCart(productId, quantity = 1, name, price, imageUrl) {
   const cart = getCart();
   const existingItemIndex = cart.findIndex(item => item.productId === productId);
 
+  const newItem = {
+    productId,
+    quantity,
+    name,
+    price: Number(price), // Ensure price is a number
+    imageUrl,
+  };
+
   if (existingItemIndex !== -1) {
     cart[existingItemIndex].quantity += quantity;
   } else {
-    cart.push({ productId, quantity, name, price: Number(price), imageUrl }); // Ensure price is a number
+    cart.push(newItem);
   }
 
   saveCart(cart);
@@ -69,9 +79,11 @@ function removeFromCart(productId) {
     console.warn("Product ID is required to remove an item from the cart.");
     return;
   }
+
   let cart = getCart();
   const initialLength = cart.length;
   cart = cart.filter(item => item.productId !== productId);
+
   if (cart.length !== initialLength) {
     saveCart(cart);
   }
@@ -100,7 +112,7 @@ function updateCartItemQuantity(productId, quantity) {
 // Function to clear the entire cart
 function clearCart() {
   localStorage.removeItem(CART_STORAGE_KEY);
-  document.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT));
+  window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart: [] } })); // Dispatch event with empty cart data
 }
 
 // Function to calculate the total price of the cart

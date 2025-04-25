@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const carouselImages = document.querySelectorAll('.showcase-carousel img');
   const prevButton = document.querySelector('.showcase-prev-button');
   const nextButton = document.querySelector('.showcase-next-button');
-  let carouselInterval; // Store the interval ID
-  const carouselIntervalTime = 5000; // Store interval time in a constant
+  let carouselInterval;
+  const carouselIntervalTime = 5000;
 
   if (carouselContainer && carouselImages.length > 0 && prevButton && nextButton) {
     let currentIndex = 0;
@@ -46,18 +46,19 @@ document.addEventListener('DOMContentLoaded', function() {
       startCarousel();
     };
 
+    // Use passive event listeners for improved performance
     prevButton.addEventListener('click', () => {
       prevImage();
       resetCarousel();
-    });
+    }, { passive: true });
 
     nextButton.addEventListener('click', () => {
       nextImage();
       resetCarousel();
-    });
+    }, { passive: true });
 
-    updateCarousel(); // Initial display
-    startCarousel(); // Auto-advance the carousel
+    updateCarousel();
+    startCarousel();
   } else {
     console.warn("Carousel elements not found. Carousel functionality will not be initialized.");
   }
@@ -67,13 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const highlightedProducts = document.querySelectorAll('.highlighted-product');
 
   highlightedProducts.forEach(product => {
+    // Use passive event listeners for improved performance
     product.addEventListener('mouseover', () => {
       product.classList.add('hovered');
-    });
+    }, { passive: true });
 
     product.addEventListener('mouseout', () => {
       product.classList.remove('hovered');
-    });
+    }, { passive: true });
   });
 
 
@@ -85,24 +87,25 @@ document.addEventListener('DOMContentLoaded', function() {
   if (showcaseModalButton && showcaseModal && showcaseModalCloseButton) {
     const openModal = () => {
       showcaseModal.classList.remove('hidden');
-      document.body.classList.add('modal-open'); // Prevent scrolling when modal is open
+      document.body.classList.add('modal-open');
     };
 
     const closeModal = () => {
       showcaseModal.classList.add('hidden');
-      document.body.classList.remove('modal-open'); // Re-enable scrolling
+      document.body.classList.remove('modal-open');
     };
 
-    showcaseModalButton.addEventListener('click', openModal);
+    // Use passive event listeners for improved performance
+    showcaseModalButton.addEventListener('click', openModal, { passive: true });
 
-    showcaseModalCloseButton.addEventListener('click', closeModal);
+    showcaseModalCloseButton.addEventListener('click', closeModal, { passive: true });
 
     // Close the modal if the user clicks outside of it
-    showcaseModal.addEventListener('click', (event) => { //Event delegation on the modal itself
+    showcaseModal.addEventListener('click', (event) => {
       if (event.target === showcaseModal) {
         closeModal();
       }
-    });
+    }, { passive: true });
 
     // Close the modal when the Escape key is pressed
     document.addEventListener('keydown', (event) => {
@@ -117,12 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   // --- Helper Functions (Example: Debounce) ---
-  // A debounce function to limit the rate at which a function can fire.
   const debounce = (func, delay) => {
-    let timeout;
+    let timeoutId; // Renamed timeout to timeoutId for clarity
     return (...args) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), delay);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
     };
   };
 
@@ -137,11 +141,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  const debouncedHandleResize = debounce(handleResize, 250); // Store the debounced function
+  const debouncedHandleResize = debounce(handleResize, 250);
 
-  window.addEventListener('resize', debouncedHandleResize); // Debounce to prevent excessive calls
+  // Use passive event listeners for improved performance
+  window.addEventListener('resize', debouncedHandleResize, { passive: true });
 
-  // Initial call to handleResize on page load
   handleResize();
 
 
