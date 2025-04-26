@@ -21,8 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
-      return data;
+      return await response.json();
 
     } catch (error) {
       console.error("Failed to fetch about content:", error);
@@ -67,14 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const fragment = document.createDocumentFragment(); // Use a fragment for better performance
-
     teamMembers.forEach(member => {
       const memberDiv = createTeamMemberElement(member);
-      fragment.appendChild(memberDiv);
+      teamContainer.appendChild(memberDiv);
     });
-
-    teamContainer.appendChild(fragment);
   }
 
   function createTeamMemberElement(member) {

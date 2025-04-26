@@ -6,14 +6,15 @@
 
 import DOMPurify from 'dompurify'; // Assuming DOMPurify is installed via npm
 
+// Constants for configuration
+const FEATURED_PRODUCTS_API_URL = '/api/featured-products';
+const FEATURED_PRODUCTS_CONTAINER_ID = 'featured-products-container';
+const PAGE_SECTION_CLASS = 'page-section';
+const HOME_ID = 'home';
+const PRODUCT_DESCRIPTION_LENGTH = 50; // Max length of product description
+
 // Document Ready Function - Ensures the DOM is fully loaded before executing JavaScript
 document.addEventListener('DOMContentLoaded', () => {
-
-  const FEATURED_PRODUCTS_API_URL = '/api/featured-products';
-  const FEATURED_PRODUCTS_CONTAINER_ID = 'featured-products-container';
-  const PAGE_SECTION_CLASS = 'page-section';
-  const HOME_ID = 'home';
-  const PRODUCT_DESCRIPTION_LENGTH = 50; // Max length of product description
 
   // Function to fetch and display featured products.  This assumes an API endpoint
   // or a data source that provides product information.

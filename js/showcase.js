@@ -46,16 +46,21 @@ document.addEventListener('DOMContentLoaded', function() {
       startCarousel();
     };
 
-    // Use passive event listeners for improved performance
-    prevButton.addEventListener('click', () => {
+    const handlePrevClick = (event) => {
+      event.preventDefault(); // Prevent default button behavior
       prevImage();
       resetCarousel();
-    }, { passive: true });
+    };
 
-    nextButton.addEventListener('click', () => {
+    const handleNextClick = (event) => {
+      event.preventDefault(); // Prevent default button behavior
       nextImage();
       resetCarousel();
-    }, { passive: true });
+    };
+
+    prevButton.addEventListener('click', handlePrevClick);
+
+    nextButton.addEventListener('click', handleNextClick);
 
     updateCarousel();
     startCarousel();
@@ -68,14 +73,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const highlightedProducts = document.querySelectorAll('.highlighted-product');
 
   highlightedProducts.forEach(product => {
-    // Use passive event listeners for improved performance
-    product.addEventListener('mouseover', () => {
+    const handleMouseOver = () => {
       product.classList.add('hovered');
-    }, { passive: true });
+    };
 
-    product.addEventListener('mouseout', () => {
+    const handleMouseOut = () => {
       product.classList.remove('hovered');
-    }, { passive: true });
+    };
+
+    product.addEventListener('mouseover', handleMouseOver);
+
+    product.addEventListener('mouseout', handleMouseOut);
   });
 
 
@@ -95,17 +103,26 @@ document.addEventListener('DOMContentLoaded', function() {
       document.body.classList.remove('modal-open');
     };
 
-    // Use passive event listeners for improved performance
-    showcaseModalButton.addEventListener('click', openModal, { passive: true });
+    const handleModalButtonClick = (event) => {
+      event.preventDefault(); // Prevent default button behavior
+      openModal();
+    };
 
-    showcaseModalCloseButton.addEventListener('click', closeModal, { passive: true });
+    const handleModalCloseButtonClick = (event) => {
+      event.preventDefault(); // Prevent default button behavior
+      closeModal();
+    };
+
+    showcaseModalButton.addEventListener('click', handleModalButtonClick);
+
+    showcaseModalCloseButton.addEventListener('click', handleModalCloseButtonClick);
 
     // Close the modal if the user clicks outside of it
     showcaseModal.addEventListener('click', (event) => {
       if (event.target === showcaseModal) {
         closeModal();
       }
-    }, { passive: true });
+    });
 
     // Close the modal when the Escape key is pressed
     document.addEventListener('keydown', (event) => {
@@ -121,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --- Helper Functions (Example: Debounce) ---
   const debounce = (func, delay) => {
-    let timeoutId; // Renamed timeout to timeoutId for clarity
+    let timeoutId;
     return (...args) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
@@ -143,8 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const debouncedHandleResize = debounce(handleResize, 250);
 
-  // Use passive event listeners for improved performance
-  window.addEventListener('resize', debouncedHandleResize, { passive: true });
+  window.addEventListener('resize', debouncedHandleResize);
 
   handleResize();
 

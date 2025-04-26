@@ -19,6 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const successMessage = document.getElementById('successMessage');
   const errorMessage = document.getElementById('errorMessage');
 
+  // Check if elements exist before proceeding
+  if (!nameInput || !emailInput || !messageInput || !submitButton || !successMessage || !errorMessage) {
+    console.error('One or more form elements are missing.');
+    return;
+  }
+
+
   // Function to validate the form inputs
   function validateForm() {
     let isValid = true;
@@ -28,9 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
       element.classList.toggle('border-red-500', hasError);
     };
 
-    const nameValid = nameInput.value.trim() !== '';
-    const emailValid = emailInput.value.trim() !== '' && isValidEmail(emailInput.value.trim());
-    const messageValid = messageInput.value.trim() !== '';
+    const nameValue = nameInput.value.trim();
+    const emailValue = emailInput.value.trim();
+    const messageValue = messageInput.value.trim();
+
+    const nameValid = nameValue !== '';
+    const emailValid = nameValue !== '' && isValidEmail(emailValue);
+    const messageValid = messageValue !== '';
 
     setError(nameInput, !nameValid);
     setError(emailInput, !emailValid);
@@ -56,10 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Disable the submit button to prevent multiple submissions
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.classList.add('opacity-50', 'cursor-not-allowed');
-    }
+    submitButton.disabled = true;
+    submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+
 
     try {
       const formData = {
@@ -103,10 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } finally {
       // Re-enable the submit button in either success or failure
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
-      }
+      submitButton.disabled = false;
+      submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
     }
   }
 

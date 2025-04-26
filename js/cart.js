@@ -40,7 +40,7 @@ function saveCart(cart) {
     localStorage.setItem(CART_STORAGE_KEY, cartString);
     // Dispatch a custom event to notify other parts of the application
     // that the cart has been updated.  Consider using a more specific event target.
-    window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart } })); // Include cart data in the event
+    window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart: structuredClone(cart) } })); // Include cart data in the event
   } catch (error) {
     console.error("Error saving cart to local storage:", error);
   }
@@ -80,12 +80,12 @@ function removeFromCart(productId) {
     return;
   }
 
-  let cart = getCart();
+  const cart = getCart();
   const initialLength = cart.length;
-  cart = cart.filter(item => item.productId !== productId);
+  const updatedCart = cart.filter(item => item.productId !== productId);
 
-  if (cart.length !== initialLength) {
-    saveCart(cart);
+  if (updatedCart.length !== initialLength) {
+    saveCart(updatedCart);
   }
 }
 
@@ -100,12 +100,13 @@ function updateCartItemQuantity(productId, quantity) {
   const itemIndex = cart.findIndex(item => item.productId === productId);
 
   if (itemIndex !== -1) {
+    const updatedCart = [...cart]; // Create a copy to avoid direct mutation
     if (quantity <= 0) {
-      cart.splice(itemIndex, 1); // Remove the item if quantity is zero or negative
+      updatedCart.splice(itemIndex, 1); // Remove the item if quantity is zero or negative
     } else {
-      cart[itemIndex].quantity = quantity;
+      updatedCart[itemIndex] = { ...updatedCart[itemIndex], quantity }; // Update quantity immutably
     }
-    saveCart(cart);
+    saveCart(updatedCart);
   }
 }
 

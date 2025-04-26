@@ -86,18 +86,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
       profileContainer.innerHTML = profileHTML;
 
+      // Add event listener to the edit button after it's rendered
+      const editProfileButton = document.getElementById('edit-profile-button');
+      if (editProfileButton) {
+        editProfileButton.addEventListener('click', () => {
+          window.location.href = 'edit-profile.html';
+        });
+      } else {
+        console.warn("Edit profile button not found after rendering.");
+      }
+
     } catch (error) {
       console.error("Error in displayUserProfile:", error);
       profileContainer.innerHTML = `<p class="text-red-500">Error loading profile. Please try again later.</p>`;
-    }
-  }
-
-  // Use event delegation to handle the click event
-  profileContainer.addEventListener('click', handleProfileClick);
-
-  function handleProfileClick(event) {
-    if (event.target.id === 'edit-profile-button') {
-      window.location.href = 'edit-profile.html';
     }
   }
 

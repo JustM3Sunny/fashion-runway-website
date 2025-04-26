@@ -10,11 +10,20 @@
 const Products = {
 
   /**
+   * Configuration options for the Products module.
+   */
+  config: {
+    productsDataUrl: './data/products.json', // Default URL for product data
+    placeholderImageUrl: 'path/to/placeholder-image.png', // Default placeholder image
+    productListContainerId: 'product-list', // ID of the product list container
+  },
+
+  /**
    * Fetches product data from a JSON file or API endpoint.
-   * @param {string} url - The URL to fetch product data from. Defaults to './data/products.json'.
+   * @param {string} url - The URL to fetch product data from. Defaults to config.productsDataUrl.
    * @returns {Promise<Array>} A promise that resolves to an array of product objects.
    */
-  fetchProducts: async function(url = './data/products.json') {
+  fetchProducts: async function(url = this.config.productsDataUrl) {
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -24,13 +33,11 @@ const Products = {
       if (!contentType || !contentType.includes("application/json")) {
         throw new TypeError("Oops, we haven't got JSON!");
       }
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
       console.error('Error fetching products:', error);
-      // Consider a more user-friendly error handling strategy, like displaying a message on the page.
-      this.displayError("Failed to load products. Please try again later."); // Use displayError function
-      return []; // Return an empty array to prevent errors in displayProducts
+      this.displayError("Failed to load products. Please try again later.");
+      return [];
     }
   },
 
@@ -39,23 +46,20 @@ const Products = {
    * @param {Array} products An array of product objects to display.
    */
   displayProducts: function(products) {
-    const productListContainer = document.getElementById('product-list');
+    const productListContainer = document.getElementById(this.config.productListContainerId);
     if (!productListContainer) {
       console.error("Product list container not found!");
       return;
     }
 
-    // Use a document fragment for better performance
     const fragment = document.createDocumentFragment();
 
     products.forEach(product => {
-      const productCard = this.createProductCard(product);
-      fragment.appendChild(productCard);
+      fragment.appendChild(this.createProductCard(product));
     });
 
-    // Clear existing content more efficiently
-    productListContainer.innerHTML = ''; // More efficient way to clear the container
-    productListContainer.appendChild(fragment); // Append the fragment to the container
+    productListContainer.innerHTML = '';
+    productListContainer.appendChild(fragment);
   },
 
   /**
@@ -68,11 +72,11 @@ const Products = {
     card.classList.add('product-card', 'bg-white', 'rounded-lg', 'shadow-md', 'p-4', 'flex', 'flex-col', 'justify-between');
 
     const image = document.createElement('img');
-    image.src = product.image || 'path/to/placeholder-image.png'; // Use placeholder if image is missing
+    image.src = product.image || this.config.placeholderImageUrl;
     image.alt = product.name;
     image.classList.add('w-full', 'h-48', 'object-cover', 'rounded-md', 'mb-2');
     image.onerror = () => {
-      image.src = 'path/to/placeholder-image.png'; // Provide a fallback image
+      image.src = this.config.placeholderImageUrl;
       console.warn(`Failed to load image for product: ${product.name}`);
     };
     card.appendChild(image);
@@ -83,7 +87,7 @@ const Products = {
     card.appendChild(name);
 
     const price = document.createElement('p');
-    price.textContent = `$${product.price?.toFixed(2) ?? '0.00'}`; // Use optional chaining and nullish coalescing
+    price.textContent = `$${product.price?.toFixed(2) ?? '0.00'}`;
     price.classList.add('text-gray-700', 'mb-2');
     card.appendChild(price);
 
@@ -95,8 +99,8 @@ const Products = {
     const addToCartButton = document.createElement('button');
     addToCartButton.textContent = 'Add to Cart';
     addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'focus:outline-none', 'focus:shadow-outline');
-    addToCartButton.addEventListener('click', (event) => { // Added event parameter
-      event.preventDefault(); // Prevent default form submission or page reload
+    addToCartButton.addEventListener('click', (event) => {
+      event.preventDefault();
       this.handleAddToCart(product);
     });
     card.appendChild(addToCartButton);
@@ -113,7 +117,7 @@ const Products = {
       Cart.addToCart(product);
     } else {
       console.error('Cart object or addToCart function is not defined.');
-      this.displayError("Failed to add product to cart. Cart functionality is unavailable."); // Use displayError
+      this.displayError("Failed to add product to cart. Cart functionality is unavailable.");
     }
   },
 
@@ -122,7 +126,7 @@ const Products = {
    * @param {string} message The error message to display.
    */
   displayError: function(message) {
-    const productListContainer = document.getElementById('product-list');
+    const productListContainer = document.getElementById(this.config.productListContainerId);
     if (productListContainer) {
       productListContainer.innerHTML = `<p class="text-red-500">${message}</p>`;
     } else {
@@ -139,7 +143,7 @@ const Products = {
       this.displayProducts(products);
     } catch (error) {
       console.error("Failed to initialize products:", error);
-      this.displayError("Failed to load products. Please try again later."); // Use displayError function
+      this.displayError("Failed to load products. Please try again later.");
     }
   }
 };

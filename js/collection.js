@@ -19,7 +19,6 @@ const productDisplayConfig = {
     addToCartButtonClass: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 block w-full text-center' // Added block and width for better button styling
 };
 
-
 // Function to fetch product data (replace with your actual data fetching logic)
 async function fetchProductData() {
     // Simulate fetching data from an API
@@ -38,20 +37,12 @@ async function fetchProductData() {
     });
 }
 
-
 // Function to display products based on filter and sort criteria
 async function displayProducts(filterCategory = "all", sortOption = "price-low-to-high") {
     try {
         const productData = await fetchProductData(); // Fetch the product data
-        let filteredProducts = [...productData]; // Create a copy to avoid modifying the original data
-
-        // Filter products by category
-        if (filterCategory !== "all") {
-            filteredProducts = filteredProducts.filter(product => product.category === filterCategory);
-        }
-
-        // Sort products based on the selected option
-        filteredProducts = sortProducts(filteredProducts, sortOption);
+        const filteredProducts = filterProducts(productData, filterCategory);
+        const sortedProducts = sortProducts(filteredProducts, sortOption);
 
         // Get the product container element
         const productContainer = document.getElementById(productDisplayConfig.productContainerId);
@@ -66,7 +57,7 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
 
         // Create and append product elements to the container
         const fragment = document.createDocumentFragment(); // Use a document fragment for performance
-        filteredProducts.forEach(product => {
+        sortedProducts.forEach(product => {
             const productElement = createProductElement(product);
             fragment.appendChild(productElement);
         });
@@ -77,20 +68,29 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
     }
 }
 
+// Function to filter products by category
+function filterProducts(products, filterCategory) {
+    if (filterCategory === "all") {
+        return products;
+    }
+    return products.filter(product => product.category === filterCategory);
+}
+
 // Function to sort products based on the selected option
 function sortProducts(products, sortOption) {
+    const productsCopy = [...products]; // Create a copy to avoid modifying the original data
     switch (sortOption) {
         case "price-low-to-high":
-            return [...products].sort((a, b) => a.price - b.price);
+            return productsCopy.sort((a, b) => a.price - b.price);
         case "price-high-to-low":
-            return [...products].sort((a, b) => b.price - a.price);
+            return productsCopy.sort((a, b) => b.price - a.price);
         case "name-a-to-z":
-            return [...products].sort((a, b) => a.name.localeCompare(b.name));
+            return productsCopy.sort((a, b) => a.name.localeCompare(b.name));
         case "name-z-to-a":
-            return [...products].sort((a, b) => b.name.localeCompare(a.name));
+            return productsCopy.sort((a, b) => b.name.localeCompare(a.name));
         default:
             // Default sorting (e.g., by ID)
-            return [...products].sort((a, b) => a.id - b.id);
+            return productsCopy.sort((a, b) => a.id - b.id);
     }
 }
 
@@ -107,6 +107,7 @@ function createProductElement(product) {
     imageElement.style.width = productDisplayConfig.imageWidth;
     imageElement.style.height = productDisplayConfig.imageHeight;
     imageElement.style.objectFit = productDisplayConfig.imageObjectFit;
+    imageElement.loading = 'lazy'; // Add lazy loading
     productElement.appendChild(imageElement);
 
     // Product name
@@ -140,7 +141,6 @@ function createProductElement(product) {
     return productElement;
 }
 
-
 // Function to handle category filtering
 function handleCategoryFilter() {
     const categorySelect = document.getElementById("category-filter");
@@ -148,8 +148,7 @@ function handleCategoryFilter() {
         console.error("Category filter element not found.");
         return;
     }
-    const selectedCategory = categorySelect.value;
-    displayProducts(selectedCategory);
+    displayProducts(categorySelect.value);
 }
 
 // Function to handle sorting
@@ -159,12 +158,10 @@ function handleSort() {
         console.error("Sort by element not found.");
         return;
     }
-    const selectedSortOption = sortSelect.value;
     const categorySelect = document.getElementById("category-filter");
     const selectedCategory = categorySelect ? categorySelect.value : 'all'; // Default to 'all' if category filter is missing
-    displayProducts(selectedCategory, selectedSortOption);
+    displayProducts(selectedCategory, sortSelect.value);
 }
-
 
 // Event listeners
 document.addEventListener("DOMContentLoaded", () => {

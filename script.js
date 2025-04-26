@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Functionality for product search (clothes)
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
-        searchInput.addEventListener('input', (event) => {
+        searchInput.addEventListener('input', debounce((event) => { // Use debounce to improve performance
             const searchTerm = event.target.value.toLowerCase();
             filterProducts(searchTerm);
-        });
+        }, 250)); // Adjust debounce delay as needed
     } else {
         console.warn('Search input field not found. Ensure an element with id "search-input" exists in the HTML.');
     }
@@ -44,6 +44,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const shouldDisplay = productName.includes(searchTerm);
             item.style.display = shouldDisplay ? 'block' : 'none';
         });
+    }
+
+    // Debounce function to limit the rate at which a function can fire
+    function debounce(func, delay) {
+        let timeout;
+        return function(...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), delay);
+        };
     }
 
 
