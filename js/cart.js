@@ -16,11 +16,8 @@ const CART_UPDATED_EVENT = 'cartUpdated';
 
 // Helper function to parse JSON safely
 const parseJSON = (jsonString) => {
-  if (!jsonString) {
-    return null; // Handle empty or null string gracefully
-  }
   try {
-    return JSON.parse(jsonString);
+    return jsonString ? JSON.parse(jsonString) : null;
   } catch (error) {
     console.error("Error parsing JSON:", error);
     return null;
@@ -40,7 +37,7 @@ function saveCart(cart) {
     localStorage.setItem(CART_STORAGE_KEY, cartString);
     // Dispatch a custom event to notify other parts of the application
     // that the cart has been updated.  Consider using a more specific event target.
-    window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart: structuredClone(cart) } })); // Include cart data in the event
+    window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart } })); // Include cart data in the event
   } catch (error) {
     console.error("Error saving cart to local storage:", error);
   }
@@ -80,12 +77,12 @@ function removeFromCart(productId) {
     return;
   }
 
-  const cart = getCart();
+  let cart = getCart();
   const initialLength = cart.length;
-  const updatedCart = cart.filter(item => item.productId !== productId);
+  cart = cart.filter(item => item.productId !== productId);
 
-  if (updatedCart.length !== initialLength) {
-    saveCart(updatedCart);
+  if (cart.length !== initialLength) {
+    saveCart(cart);
   }
 }
 
@@ -100,13 +97,12 @@ function updateCartItemQuantity(productId, quantity) {
   const itemIndex = cart.findIndex(item => item.productId === productId);
 
   if (itemIndex !== -1) {
-    const updatedCart = [...cart]; // Create a copy to avoid direct mutation
     if (quantity <= 0) {
-      updatedCart.splice(itemIndex, 1); // Remove the item if quantity is zero or negative
+      cart.splice(itemIndex, 1); // Remove the item if quantity is zero or negative
     } else {
-      updatedCart[itemIndex] = { ...updatedCart[itemIndex], quantity }; // Update quantity immutably
+      cart[itemIndex].quantity = quantity; // Update quantity
     }
-    saveCart(updatedCart);
+    saveCart(cart);
   }
 }
 

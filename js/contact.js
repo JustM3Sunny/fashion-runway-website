@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
+  // Store original button text
+  const originalButtonText = submitButton.textContent;
 
   // Function to validate the form inputs
   function validateForm() {
@@ -40,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageValue = messageInput.value.trim();
 
     const nameValid = nameValue !== '';
-    const emailValid = nameValue !== '' && isValidEmail(emailValue);
+    const emailValid = emailValue !== '' && isValidEmail(emailValue); // Corrected: Check emailValue, not nameValue
     const messageValid = messageValue !== '';
 
     setError(nameInput, !nameValid);
@@ -69,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Disable the submit button to prevent multiple submissions
     submitButton.disabled = true;
     submitButton.classList.add('opacity-50', 'cursor-not-allowed');
-
+    submitButton.textContent = 'Submitting...'; // Provide visual feedback
 
     try {
       const formData = {
@@ -94,8 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
           console.error('Error parsing JSON error response:', jsonError);
           errorData = { message: 'Failed to parse server error.' };
         }
-        const errorMessageText = errorData.message || 'Failed to submit form';
-        throw new Error(errorMessageText); // Include server error message
+        const errorMessageText = errorData.message || `Failed to submit form. Status: ${response.status}`;
+        throw new Error(errorMessageText); // Include server error message and status code
       }
 
       // Handle successful submission
@@ -115,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Re-enable the submit button in either success or failure
       submitButton.disabled = false;
       submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+      submitButton.textContent = originalButtonText; // Restore original text
     }
   }
 

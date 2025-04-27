@@ -7,6 +7,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const profileContainer = document.getElementById('profile-container');
+  const logoutButton = document.getElementById('logout-button'); // Get logout button here
 
   if (!profileContainer) {
     console.error("Profile container element not found.");
@@ -106,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
   displayUserProfile();
 
   // Moved logout button logic outside displayUserProfile to ensure it always runs
-  const logoutButton = document.getElementById('logout-button');
+  // and moved the querySelector outside the function to prevent multiple DOM queries
   if (logoutButton) {
     logoutButton.addEventListener('click', () => {
       localStorage.removeItem('authToken');

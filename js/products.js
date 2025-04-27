@@ -58,7 +58,10 @@ const Products = {
       fragment.appendChild(this.createProductCard(product));
     });
 
-    productListContainer.innerHTML = '';
+    // Clear existing content before appending new products.  Prevents potential duplicates.
+    while (productListContainer.firstChild) {
+        productListContainer.removeChild(productListContainer.firstChild);
+    }
     productListContainer.appendChild(fragment);
   },
 
@@ -92,7 +95,8 @@ const Products = {
     card.appendChild(price);
 
     const description = document.createElement('p');
-    description.textContent = product.description;
+    // Sanitize the description to prevent XSS attacks
+    description.textContent = this.sanitizeHTML(product.description);
     description.classList.add('text-gray-600', 'text-sm', 'mb-4');
     card.appendChild(description);
 
@@ -128,7 +132,7 @@ const Products = {
   displayError: function(message) {
     const productListContainer = document.getElementById(this.config.productListContainerId);
     if (productListContainer) {
-      productListContainer.innerHTML = `<p class="text-red-500">${message}</p>`;
+      productListContainer.innerHTML = `<p class="text-red-500">${this.sanitizeHTML(message)}</p>`;
     } else {
       console.error("Product list container not found!");
     }
@@ -145,6 +149,17 @@ const Products = {
       console.error("Failed to initialize products:", error);
       this.displayError("Failed to load products. Please try again later.");
     }
+  },
+
+  /**
+   * Sanitize HTML to prevent XSS attacks.
+   * @param {string} html The HTML string to sanitize.
+   * @returns {string} The sanitized HTML string.
+   */
+  sanitizeHTML: function(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.textContent = html;
+    return tempDiv.innerHTML;
   }
 };
 

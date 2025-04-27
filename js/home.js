@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <h3 class="text-lg font-semibold">${productName}</h3>
       <p class="text-gray-600">${productDescription ? truncateString(productDescription, PRODUCT_DESCRIPTION_LENGTH) : ''}</p>
       <p class="text-blue-500 font-bold">$${productPrice}</p>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Add to Cart</button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 add-to-cart-button" data-product-id="${product.id}">Add to Cart</button>
     `;
 
     return productElement;
@@ -138,7 +138,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Add any other home page specific JavaScript functionality here.
+  // Add event listener for "Add to Cart" buttons using event delegation
+  document.getElementById(FEATURED_PRODUCTS_CONTAINER_ID).addEventListener('click', (event) => {
+    if (event.target.classList.contains('add-to-cart-button')) {
+      const productId = event.target.dataset.productId;
+      if (productId) {
+        handleAddToCart(productId);
+      } else {
+        console.warn('Product ID not found on button.');
+      }
+    }
+  });
+
+  function handleAddToCart(productId) {
+    // Implement your add to cart logic here.
+    console.log(`Adding product with ID ${productId} to cart.`);
+    // You might want to make an API call to add the product to the cart.
+    // Example:
+    // addToCartAPI(productId)
+    //   .then(response => {
+    //     // Handle success
+    //   })
+    //   .catch(error => {
+    //     // Handle error
+    //   });
+  }
 
   // Helper function to truncate a string
   function truncateString(str, maxLength) {

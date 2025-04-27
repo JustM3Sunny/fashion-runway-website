@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      return data;
 
     } catch (error) {
       console.error("Failed to fetch about content:", error);
@@ -66,10 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    const fragment = document.createDocumentFragment(); // Use a fragment for better performance
+
     teamMembers.forEach(member => {
       const memberDiv = createTeamMemberElement(member);
-      teamContainer.appendChild(memberDiv);
+      fragment.appendChild(memberDiv);
     });
+
+    teamContainer.appendChild(fragment); // Append the entire fragment at once
   }
 
   function createTeamMemberElement(member) {
@@ -124,7 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Example of a simple UI interaction (replace with actual functionality)
   const learnMoreButton = document.getElementById(LEARN_MORE_BUTTON_ID);
   if (learnMoreButton) {
-    learnMoreButton.addEventListener('click', () => {
+    learnMoreButton.addEventListener('click', (event) => {
+      event.preventDefault(); // Prevent default link behavior
       window.location.href = "/learn-more";
     });
   }

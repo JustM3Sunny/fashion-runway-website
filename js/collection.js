@@ -81,17 +81,22 @@ function sortProducts(products, sortOption) {
     const productsCopy = [...products]; // Create a copy to avoid modifying the original data
     switch (sortOption) {
         case "price-low-to-high":
-            return productsCopy.sort((a, b) => a.price - b.price);
+            productsCopy.sort((a, b) => a.price - b.price);
+            break;
         case "price-high-to-low":
-            return productsCopy.sort((a, b) => b.price - a.price);
+            productsCopy.sort((a, b) => b.price - a.price);
+            break;
         case "name-a-to-z":
-            return productsCopy.sort((a, b) => a.name.localeCompare(b.name));
+            productsCopy.sort((a, b) => a.name.localeCompare(b.name));
+            break;
         case "name-z-to-a":
-            return productsCopy.sort((a, b) => b.name.localeCompare(a.name));
+            productsCopy.sort((a, b) => b.name.localeCompare(a.name));
+            break;
         default:
             // Default sorting (e.g., by ID)
-            return productsCopy.sort((a, b) => a.id - b.id);
+            productsCopy.sort((a, b) => a.id - b.id);
     }
+    return productsCopy;
 }
 
 // Function to create a product element
@@ -170,17 +175,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Category filter change listener
     const categoryFilter = document.getElementById("category-filter");
-    if (categoryFilter) {
-        categoryFilter.addEventListener("change", handleCategoryFilter);
-    } else {
+    if (!categoryFilter) {
         console.warn("Category filter element not found.  Filtering will not work.");
+        return;
     }
+    categoryFilter.addEventListener("change", handleCategoryFilter);
+
 
     // Sort change listener
     const sortBy = document.getElementById("sort-by");
-    if (sortBy) {
-        sortBy.addEventListener("change", handleSort);
-    } else {
+    if (!sortBy) {
         console.warn("Sort by element not found.  Sorting will not work.");
+        return;
     }
+    sortBy.addEventListener("change", handleSort);
 });
