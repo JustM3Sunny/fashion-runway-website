@@ -52,16 +52,15 @@ const Products = {
       return;
     }
 
+    // Clear existing content before setting new products. Prevents potential duplicates.
+    productListContainer.innerHTML = '';
+
     const fragment = document.createDocumentFragment();
 
     products.forEach(product => {
       fragment.appendChild(this.createProductCard(product));
     });
 
-    // Clear existing content before appending new products.  Prevents potential duplicates.
-    while (productListContainer.firstChild) {
-        productListContainer.removeChild(productListContainer.firstChild);
-    }
     productListContainer.appendChild(fragment);
   },
 
@@ -95,7 +94,6 @@ const Products = {
     card.appendChild(price);
 
     const description = document.createElement('p');
-    // Sanitize the description to prevent XSS attacks
     description.textContent = this.sanitizeHTML(product.description);
     description.classList.add('text-gray-600', 'text-sm', 'mb-4');
     card.appendChild(description);

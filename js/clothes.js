@@ -14,13 +14,16 @@ const clothesData = [
     { id: 5, name: "Leather Jacket", price: 120, image: "img/clothes/jacket.jpg", category: "Outerwear", sizes: ["S", "M", "L", "XL"], colors: ["black", "brown"] },
     { id: 6, name: "Chino Pants", price: 55, image: "img/clothes/chino.jpg", category: "Bottoms", sizes: ["28", "30", "32", "34", "36"], colors: ["beige", "navy"] },
     { id: 7, name: "Button-Down Shirt", price: 40, image: "img/clothes/shirt.jpg", category: "Tops", sizes: ["S", "M", "L", "XL"], colors: ["white", "blue", "striped"] },
-    { id: 8, name: "Sweater", price: 50, image: "img/clothes/sweater.jpg", category: "Tops", sizes: ["S", "M", "L", "XL"], colors: ["gray", "navy", "green"] },
+    { id: 8, name: "Sweater", price: 50, "image": "img/clothes/sweater.jpg", category: "Tops", sizes: ["S", "M", "L", "XL"], colors: ["gray", "navy", "green"] },
 ];
 
 const clothesContainer = document.getElementById("clothes-container");
 const DEFAULT_IMAGE = 'placeholder_image.png'; // Define default image
 
-// Function to render clothes items to the UI
+/**
+ * Renders clothes items to the UI.
+ * @param {Array<Object>} clothes - An array of clothes objects to render.
+ */
 function renderClothes(clothes) {
     if (!clothesContainer) {
         console.error("Clothes container not found in the HTML.");
@@ -29,6 +32,11 @@ function renderClothes(clothes) {
 
     clothesContainer.innerHTML = ""; // Clear existing content
 
+    if (!clothes || clothes.length === 0) {
+        clothesContainer.textContent = "No items found.";
+        return;
+    }
+
     const fragment = document.createDocumentFragment();
 
     clothes.forEach(item => {
@@ -36,7 +44,7 @@ function renderClothes(clothes) {
         itemElement.classList.add("clothes-item", "p-4", "border", "rounded", "shadow-md", "hover:shadow-lg", "transition-shadow", "duration-300");
 
         const imgElement = document.createElement("img");
-        imgElement.src = item.image;
+        imgElement.src = item.image || DEFAULT_IMAGE; // Use default image if item.image is missing
         imgElement.alt = item.name;
         imgElement.classList.add("w-full", "h-48", "object-cover", "rounded-md", "mb-2");
         imgElement.onerror = () => { imgElement.src = DEFAULT_IMAGE; }; // Use defined constant
@@ -47,7 +55,7 @@ function renderClothes(clothes) {
 
         const priceElement = document.createElement("p");
         priceElement.classList.add("text-gray-600");
-        priceElement.textContent = `$${item.price.toFixed(2)}`; // Format price to 2 decimal places
+        priceElement.textContent = `$${item.price ? item.price.toFixed(2) : '0.00'}`; // Format price to 2 decimal places, handle missing price
 
         const buttonElement = document.createElement("button");
         buttonElement.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded", "mt-2");
@@ -67,15 +75,21 @@ function renderClothes(clothes) {
     clothesContainer.appendChild(fragment);
 }
 
-// Function to filter clothes by category
+/**
+ * Filters clothes by category.
+ * @param {string} category - The category to filter by. "All" for all items.
+ */
 function filterClothes(category) {
     const filteredClothes = category === "All" ? clothesData : clothesData.filter(item => item.category === category);
     renderClothes(filteredClothes);
 }
 
-// Function to sort clothes by price (ascending or descending)
+/**
+ * Sorts clothes by price.
+ * @param {string} sortBy - "price-asc" for ascending, "price-desc" for descending.
+ */
 function sortClothes(sortBy) {
-    const sortedClothes = [...clothesData];
+    const sortedClothes = [...clothesData]; // Create a copy to avoid modifying the original array
 
     sortedClothes.sort((a, b) => {
         if (sortBy === "price-asc") {
@@ -83,20 +97,26 @@ function sortClothes(sortBy) {
         } else if (sortBy === "price-desc") {
             return b.price - a.price;
         }
-        return 0;
+        return 0; // Default: no sorting
     });
 
     renderClothes(sortedClothes);
 }
 
-// Function to search clothes by name
+/**
+ * Searches clothes by name.
+ * @param {string} searchTerm - The search term.
+ */
 function searchClothes(searchTerm) {
     const searchTermLower = searchTerm.toLowerCase();
     const searchedClothes = clothesData.filter(item => item.name.toLowerCase().includes(searchTermLower));
     renderClothes(searchedClothes);
 }
 
-// Function to handle adding items to the cart (example)
+/**
+ * Handles adding items to the cart (example).
+ * @param {Object} item - The item to add to the cart.
+ */
 function addToCart(item) {
     console.log(`Added ${item.name} to cart!`);
     // Implement actual cart logic here (e.g., update local storage, send to server)
@@ -132,7 +152,8 @@ document.addEventListener("DOMContentLoaded", () => {
         searchInput.addEventListener("input", (event) => {
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
-                searchClothes(event.target.value);
+                const searchTerm = event.target.value;
+                searchClothes(searchTerm);
             }, 200);
         });
     }

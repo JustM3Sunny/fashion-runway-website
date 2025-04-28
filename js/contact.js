@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageValue = messageInput.value.trim();
 
     const nameValid = nameValue !== '';
-    const emailValid = emailValue !== '' && isValidEmail(emailValue); // Corrected: Check emailValue, not nameValue
+    const emailValid = emailValue !== '' && isValidEmail(emailValue);
     const messageValid = messageValue !== '';
 
     setError(nameInput, !nameValid);
@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(formData),
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json' // Add accept header
         },
       });
 
@@ -107,6 +108,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Reset the form
       contactForm.reset();
 
+      // Optional: Clear input fields manually for better UX, especially on older browsers
+      // nameInput.value = '';
+      // emailInput.value = '';
+      // messageInput.value = '';
+
     } catch (error) {
       console.error('Error submitting form:', error);
       errorMessage.textContent = error.message; // Display the error message
@@ -123,4 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Attach event listener to the form
   contactForm.addEventListener('submit', handleSubmit);
+
+  // Optional: Add input event listeners for real-time validation
+  nameInput.addEventListener('input', validateForm);
+  emailInput.addEventListener('input', validateForm);
+  messageInput.addEventListener('input', validateForm);
 });

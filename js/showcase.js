@@ -64,6 +64,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateCarousel();
     startCarousel();
+
+    // Accessibility: Pause carousel on hover
+    carouselContainer.addEventListener('mouseover', stopCarousel);
+    carouselContainer.addEventListener('mouseout', startCarousel);
+
   } else {
     console.warn("Carousel elements not found. Carousel functionality will not be initialized.");
   }
@@ -73,17 +78,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const highlightedProducts = document.querySelectorAll('.highlighted-product');
 
   highlightedProducts.forEach(product => {
-    const handleMouseOver = () => {
+    const handleMouseEnter = () => {
       product.classList.add('hovered');
     };
 
-    const handleMouseOut = () => {
+    const handleMouseLeave = () => {
       product.classList.remove('hovered');
     };
 
-    product.addEventListener('mouseover', handleMouseOver);
-
-    product.addEventListener('mouseout', handleMouseOut);
+    product.addEventListener('mouseenter', handleMouseEnter);
+    product.addEventListener('mouseleave', handleMouseLeave);
   });
 
 
@@ -96,11 +100,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const openModal = () => {
       showcaseModal.classList.remove('hidden');
       document.body.classList.add('modal-open');
+      document.addEventListener('keydown', handleEscapeKey); // Add listener when modal is open
     };
 
     const closeModal = () => {
       showcaseModal.classList.add('hidden');
       document.body.classList.remove('modal-open');
+      document.removeEventListener('keydown', handleEscapeKey); // Remove listener when modal is closed
     };
 
     const handleModalButtonClick = (event) => {
@@ -113,6 +119,12 @@ document.addEventListener('DOMContentLoaded', function() {
       closeModal();
     };
 
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    };
+
     showcaseModalButton.addEventListener('click', handleModalButtonClick);
 
     showcaseModalCloseButton.addEventListener('click', handleModalCloseButtonClick);
@@ -120,13 +132,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close the modal if the user clicks outside of it
     showcaseModal.addEventListener('click', (event) => {
       if (event.target === showcaseModal) {
-        closeModal();
-      }
-    });
-
-    // Close the modal when the Escape key is pressed
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
         closeModal();
       }
     });
@@ -142,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return (...args) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        func(...args);
+        func.apply(this, args); // Use apply to maintain context
       }, delay);
     };
   };

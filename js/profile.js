@@ -7,14 +7,14 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const profileContainer = document.getElementById('profile-container');
-  const logoutButton = document.getElementById('logout-button'); // Get logout button here
+  const logoutButton = document.getElementById('logout-button');
 
   if (!profileContainer) {
     console.error("Profile container element not found.");
     return;
   }
 
-  const defaultProfilePicture = "images/default-profile.jpg"; // Define default profile picture
+  const defaultProfilePicture = "images/default-profile.jpg";
 
   // Function to fetch user profile data from an API (replace with your actual API endpoint)
   async function fetchUserProfile() {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const { name, email, address, phone, profilePicture } = userData; // Destructure userData
+      const { name, email, address, phone, profilePicture } = userData;
 
       // Sanitize data to prevent XSS vulnerabilities
       const sanitizedName = DOMPurify.sanitize(name);
@@ -80,22 +80,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="text-gray-700">Phone: ${sanitizedPhone}</p>
           </div>
           <div class="mt-4">
-            <button id="edit-profile-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit Profile</button>
+            <a href="edit-profile.html" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit Profile</a>
           </div>
         </div>
       `;
 
       profileContainer.innerHTML = profileHTML;
-
-      // Add event listener to the edit button after it's rendered
-      const editProfileButton = document.getElementById('edit-profile-button');
-      if (editProfileButton) {
-        editProfileButton.addEventListener('click', () => {
-          window.location.href = 'edit-profile.html';
-        });
-      } else {
-        console.warn("Edit profile button not found after rendering.");
-      }
 
     } catch (error) {
       console.error("Error in displayUserProfile:", error);
@@ -106,8 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Call the function to display the user profile
   displayUserProfile();
 
-  // Moved logout button logic outside displayUserProfile to ensure it always runs
-  // and moved the querySelector outside the function to prevent multiple DOM queries
   if (logoutButton) {
     logoutButton.addEventListener('click', () => {
       localStorage.removeItem('authToken');

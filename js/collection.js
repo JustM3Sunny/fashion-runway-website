@@ -65,6 +65,7 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
     } catch (error) {
         console.error("Error displaying products:", error);
         // Optionally display an error message to the user.
+        productContainer.innerHTML = "<p>Error loading products. Please try again later.</p>"; // Display error to user
     }
 }
 
@@ -93,7 +94,7 @@ function sortProducts(products, sortOption) {
             productsCopy.sort((a, b) => b.name.localeCompare(a.name));
             break;
         default:
-            // Default sorting (e.g., by ID)
+            console.warn(`Unknown sort option: ${sortOption}.  Sorting by ID.`);
             productsCopy.sort((a, b) => a.id - b.id);
     }
     return productsCopy;
@@ -113,6 +114,9 @@ function createProductElement(product) {
     imageElement.style.height = productDisplayConfig.imageHeight;
     imageElement.style.objectFit = productDisplayConfig.imageObjectFit;
     imageElement.loading = 'lazy'; // Add lazy loading
+    imageElement.onerror = () => {
+        imageElement.src = 'placeholder.jpg'; // Use a placeholder image on error
+    };
     productElement.appendChild(imageElement);
 
     // Product name
@@ -140,6 +144,11 @@ function createProductElement(product) {
     addToCartButton.addEventListener("click", () => {
         // Implement add to cart functionality here
         console.log(`Added ${product.name} to cart`);
+        // Dispatch a custom event for add to cart
+        const addToCartEvent = new CustomEvent('addToCart', {
+            detail: { productId: product.id, productName: product.name }
+        });
+        document.dispatchEvent(addToCartEvent);
     });
     productElement.appendChild(addToCartButton);
 
@@ -168,25 +177,28 @@ function handleSort() {
     displayProducts(selectedCategory, sortSelect.value);
 }
 
-// Event listeners
-document.addEventListener("DOMContentLoaded", () => {
+// Function to initialize the page
+function initializePage() {
     // Initial display of products (all categories, default sorting)
     displayProducts();
 
     // Category filter change listener
     const categoryFilter = document.getElementById("category-filter");
-    if (!categoryFilter) {
+    if (categoryFilter) {
+        categoryFilter.addEventListener("change", handleCategoryFilter);
+    } else {
         console.warn("Category filter element not found.  Filtering will not work.");
-        return;
     }
-    categoryFilter.addEventListener("change", handleCategoryFilter);
 
 
     // Sort change listener
     const sortBy = document.getElementById("sort-by");
-    if (!sortBy) {
+    if (sortBy) {
+        sortBy.addEventListener("change", handleSort);
+    } else {
         console.warn("Sort by element not found.  Sorting will not work.");
-        return;
     }
-    sortBy.addEventListener("change", handleSort);
-});
+}
+
+// Event listeners
+document.addEventListener("DOMContentLoaded", initializePage);

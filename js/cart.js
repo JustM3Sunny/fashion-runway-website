@@ -14,6 +14,9 @@
 const CART_STORAGE_KEY = 'shoppingCart';
 const CART_UPDATED_EVENT = 'cartUpdated';
 
+// Create a custom event target for cart updates
+const cartEventTarget = new EventTarget();
+
 // Helper function to parse JSON safely
 const parseJSON = (jsonString) => {
   try {
@@ -36,8 +39,8 @@ function saveCart(cart) {
     const cartString = JSON.stringify(cart);
     localStorage.setItem(CART_STORAGE_KEY, cartString);
     // Dispatch a custom event to notify other parts of the application
-    // that the cart has been updated.  Consider using a more specific event target.
-    window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart } })); // Include cart data in the event
+    // that the cart has been updated.
+    cartEventTarget.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart } })); // Include cart data in the event
   } catch (error) {
     console.error("Error saving cart to local storage:", error);
   }
@@ -77,12 +80,12 @@ function removeFromCart(productId) {
     return;
   }
 
-  let cart = getCart();
+  const cart = getCart();
   const initialLength = cart.length;
-  cart = cart.filter(item => item.productId !== productId);
+  const updatedCart = cart.filter(item => item.productId !== productId);
 
-  if (cart.length !== initialLength) {
-    saveCart(cart);
+  if (updatedCart.length !== initialLength) {
+    saveCart(updatedCart);
   }
 }
 
@@ -97,19 +100,20 @@ function updateCartItemQuantity(productId, quantity) {
   const itemIndex = cart.findIndex(item => item.productId === productId);
 
   if (itemIndex !== -1) {
+    const updatedCart = [...cart]; // Create a copy to avoid direct mutation
     if (quantity <= 0) {
-      cart.splice(itemIndex, 1); // Remove the item if quantity is zero or negative
+      updatedCart.splice(itemIndex, 1); // Remove the item if quantity is zero or negative
     } else {
-      cart[itemIndex].quantity = quantity; // Update quantity
+      updatedCart[itemIndex] = { ...updatedCart[itemIndex], quantity }; // Update quantity using spread operator
     }
-    saveCart(cart);
+    saveCart(updatedCart);
   }
 }
 
 // Function to clear the entire cart
 function clearCart() {
   localStorage.removeItem(CART_STORAGE_KEY);
-  window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart: [] } })); // Dispatch event with empty cart data
+  cartEventTarget.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { cart: [] } })); // Dispatch event with empty cart data
 }
 
 // Function to calculate the total price of the cart
@@ -133,5 +137,6 @@ export {
   clearCart,
   calculateCartTotal,
   getCartItemCount,
-  CART_UPDATED_EVENT // Export the event name so other modules can listen for it.
+  CART_UPDATED_EVENT, // Export the event name so other modules can listen for it.
+  cartEventTarget, // Export the event target
 };
