@@ -23,22 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Functionality for product search (clothes)
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
-        searchInput.addEventListener('input', debounce((event) => { // Use debounce to improve performance
+        searchInput.addEventListener('input', debounce((event) => {
             const searchTerm = event.target.value.toLowerCase();
             filterProducts(searchTerm);
-        }, 250)); // Adjust debounce delay as needed
+        }, 250));
     } else {
         console.warn('Search input field not found. Ensure an element with id "search-input" exists in the HTML.');
     }
 
-    // Function to simulate filtering products based on search term
     function filterProducts(searchTerm) {
         const productItems = document.querySelectorAll('.product-item');
         productItems.forEach(item => {
             const productNameElement = item.querySelector('h3');
             if (!productNameElement) {
                 console.warn('Product item missing h3 element.');
-                return; // Skip this item if h3 is missing
+                return;
             }
             const productName = productNameElement.textContent.toLowerCase();
             const shouldDisplay = productName.includes(searchTerm);
@@ -46,16 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Debounce function to limit the rate at which a function can fire
     function debounce(func, delay) {
         let timeout;
         return function(...args) {
-            const context = this;
             clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), delay);
+            timeout = setTimeout(() => func.apply(this, args), delay); // Corrected context binding
         };
     }
-
 
     // Product page functionality
     if (window.location.pathname.includes('products.html')) {
@@ -71,47 +67,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to load and display product data
     async function loadProducts() {
         console.log('Loading product data for the fashion clothing website...');
 
         try {
-            // Simulate fetching product data (replace with actual API call)
-            // const response = await fetch('/api/products'); // Example API endpoint
-            // const products = await response.json();
-
-            // Mock product data - Moved to a separate file (products.js)
-            const products = await getProducts();
+            const products = await getProducts(); // Assuming getProducts is defined in products.js
 
             displayProducts(products);
 
         } catch (error) {
             console.error('Error loading products:', error);
-            // Display an error message to the user
             displayErrorMessage('product-container', 'Failed to load products. Please try again later.');
-            throw error; // Re-throw the error to be caught by initProductsPage
+            throw error;
         }
     }
 
-    // Function to dynamically create and display product elements
     function displayProducts(products) {
         const productContainer = document.getElementById('product-container');
         if (productContainer) {
-            productContainer.innerHTML = ''; // Clear existing products before adding new ones
+            productContainer.innerHTML = '';
 
             if (products.length === 0) {
                 displayErrorMessage('product-container', 'No products found.');
                 return;
             }
 
-            const fragment = document.createDocumentFragment(); // Use a document fragment for performance
+            const fragment = document.createDocumentFragment();
 
             products.forEach(product => {
                 const productDiv = createProductElement(product);
-                fragment.appendChild(productDiv); // Append to the fragment
+                fragment.appendChild(productDiv);
             });
 
-            productContainer.appendChild(fragment); // Append the fragment to the container
+            productContainer.appendChild(fragment);
         } else {
             console.warn('Product container not found. Ensure an element with id "product-container" exists in the HTML.');
         }
@@ -119,30 +107,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createProductElement(product) {
         const productDiv = document.createElement('div');
-        productDiv.classList.add('product-item', 'p-4', 'border', 'rounded', 'shadow-md', 'bg-white'); // Added Tailwind classes
+        productDiv.classList.add('product-item', 'p-4', 'border', 'rounded', 'shadow-md', 'bg-white');
 
         const productImage = document.createElement('img');
         productImage.src = product.image;
         productImage.alt = product.name;
-        productImage.classList.add('w-full', 'h-48', 'object-cover', 'mb-2'); // Added Tailwind classes
-        productImage.onerror = () => { // Handle image loading errors
-            productImage.src = 'placeholder.jpg'; // Use a placeholder image
+        productImage.classList.add('w-full', 'h-48', 'object-cover', 'mb-2');
+        productImage.onerror = () => {
+            productImage.src = 'placeholder.jpg';
             console.warn(`Failed to load image for product: ${product.name}`);
         };
 
         const productName = document.createElement('h3');
         productName.textContent = product.name;
-        productName.classList.add('text-xl', 'font-semibold', 'mb-1'); // Added Tailwind classes
+        productName.classList.add('text-xl', 'font-semibold', 'mb-1');
 
         const productPrice = document.createElement('p');
         productPrice.textContent = `$${product.price.toFixed(2)}`;
-        productPrice.classList.add('text-gray-700', 'mb-2'); // Added Tailwind classes
+        productPrice.classList.add('text-gray-700', 'mb-2');
 
         const addToCartButton = document.createElement('button');
         addToCartButton.textContent = 'Add to Cart';
-        addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded'); // Added Tailwind classes
+        addToCartButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded');
         addToCartButton.addEventListener('click', () => {
-            addToCart(product); // Use the addToCart function from cart.js
+            addToCart(product); // Assuming addToCart is defined in cart.js
         });
 
         productDiv.appendChild(productImage);
@@ -168,21 +156,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function loadCart() {
-        // Load cart items from local storage and display them
         try {
-            const cartItems = getCartItems(); // Use the getCartItems function from cart.js
+            const cartItems = getCartItems(); // Assuming getCartItems is defined in cart.js
             displayCartItems(cartItems);
         } catch (error) {
             console.error('Error loading cart:', error);
             displayErrorMessage('cart-container', 'Failed to load cart. Please try again later.');
-            throw error; // Re-throw the error to be caught by initCartPage
+            throw error;
         }
     }
 
     function displayCartItems(cartItems) {
         const cartContainer = document.getElementById('cart-container');
         if (cartContainer) {
-            cartContainer.innerHTML = ''; // Clear existing cart items
+            cartContainer.innerHTML = '';
 
             if (cartItems.length === 0) {
                 displayErrorMessage('cart-container', 'Your cart is empty.', 'text-center', 'py-4');
@@ -204,15 +191,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createCartItemElement(item) {
         const cartItemDiv = document.createElement('div');
-        cartItemDiv.classList.add('cart-item', 'flex', 'items-center', 'justify-between', 'py-2', 'border-b'); // Added Tailwind classes
+        cartItemDiv.classList.add('cart-item', 'flex', 'items-center', 'justify-between', 'py-2', 'border-b');
 
         const itemName = document.createElement('h4');
         itemName.textContent = item.name;
-        itemName.classList.add('text-lg', 'font-medium'); // Added Tailwind classes
+        itemName.classList.add('text-lg', 'font-medium');
 
         const itemPrice = document.createElement('p');
         itemPrice.textContent = `$${item.price.toFixed(2)}`;
-        itemPrice.classList.add('text-gray-700'); // Added Tailwind classes
+        itemPrice.classList.add('text-gray-700');
 
         cartItemDiv.appendChild(itemName);
         cartItemDiv.appendChild(itemPrice);
@@ -220,22 +207,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return cartItemDiv;
     }
 
-    // Helper function to display error messages
     function displayErrorMessage(containerId, message, ...classes) {
         const container = document.getElementById(containerId);
         if (container) {
             container.textContent = message;
-            container.className = ''; // Clear existing classes
-            classes.forEach(cls => container.classList.add(cls)); // Add new classes
+            container.className = '';
+            classes.forEach(cls => container.classList.add(cls));
         } else {
             console.warn(`Container with id "${containerId}" not found.`);
         }
     }
 
-    // Add a simple message to the console to indicate the script is running
     console.log('Fashion clothing website script loaded.');
 });
-
-// Moved product data and cart functionality to separate files for better organization
-// products.js: Contains product data and related functions (getProducts)
-// cart.js: Contains cart related functions (addToCart, getCartItems)

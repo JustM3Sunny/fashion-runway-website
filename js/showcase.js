@@ -4,15 +4,15 @@
 // It includes functionalities like image carousel, product highlighting, and interactive elements.
 
 // DOMContentLoaded ensures the script runs after the HTML is fully loaded.
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
 
   // --- Image Carousel Functionality ---
   const carouselContainer = document.querySelector('.showcase-carousel');
   const carouselImages = document.querySelectorAll('.showcase-carousel img');
   const prevButton = document.querySelector('.showcase-prev-button');
   const nextButton = document.querySelector('.showcase-next-button');
-  let carouselInterval;
   const carouselIntervalTime = 5000;
+  let carouselInterval;
 
   if (carouselContainer && carouselImages.length > 0 && prevButton && nextButton) {
     let currentIndex = 0;
@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const updateCarousel = () => {
       carouselImages.forEach((img, index) => {
         img.classList.toggle('hidden', index !== currentIndex);
+        img.setAttribute('aria-hidden', index !== currentIndex); // Accessibility
       });
     };
 
@@ -47,27 +48,30 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const handlePrevClick = (event) => {
-      event.preventDefault(); // Prevent default button behavior
+      event.preventDefault();
       prevImage();
       resetCarousel();
     };
 
     const handleNextClick = (event) => {
-      event.preventDefault(); // Prevent default button behavior
+      event.preventDefault();
       nextImage();
       resetCarousel();
     };
 
     prevButton.addEventListener('click', handlePrevClick);
-
     nextButton.addEventListener('click', handleNextClick);
 
     updateCarousel();
     startCarousel();
 
     // Accessibility: Pause carousel on hover
-    carouselContainer.addEventListener('mouseover', stopCarousel);
-    carouselContainer.addEventListener('mouseout', startCarousel);
+    carouselContainer.addEventListener('mouseenter', stopCarousel); // Use mouseenter for better UX
+    carouselContainer.addEventListener('mouseleave', startCarousel); // Use mouseleave for better UX
+
+    // Accessibility: Pause carousel on focus
+    carouselContainer.addEventListener('focusin', stopCarousel);
+    carouselContainer.addEventListener('focusout', startCarousel);
 
   } else {
     console.warn("Carousel elements not found. Carousel functionality will not be initialized.");
@@ -99,23 +103,27 @@ document.addEventListener('DOMContentLoaded', function() {
   if (showcaseModalButton && showcaseModal && showcaseModalCloseButton) {
     const openModal = () => {
       showcaseModal.classList.remove('hidden');
+      showcaseModal.setAttribute('aria-hidden', 'false'); // Accessibility
       document.body.classList.add('modal-open');
-      document.addEventListener('keydown', handleEscapeKey); // Add listener when modal is open
+      document.addEventListener('keydown', handleEscapeKey);
+      showcaseModalButton.setAttribute('aria-expanded', 'true'); // Accessibility
     };
 
     const closeModal = () => {
       showcaseModal.classList.add('hidden');
+      showcaseModal.setAttribute('aria-hidden', 'true'); // Accessibility
       document.body.classList.remove('modal-open');
-      document.removeEventListener('keydown', handleEscapeKey); // Remove listener when modal is closed
+      document.removeEventListener('keydown', handleEscapeKey);
+      showcaseModalButton.setAttribute('aria-expanded', 'false'); // Accessibility
     };
 
     const handleModalButtonClick = (event) => {
-      event.preventDefault(); // Prevent default button behavior
+      event.preventDefault();
       openModal();
     };
 
     const handleModalCloseButtonClick = (event) => {
-      event.preventDefault(); // Prevent default button behavior
+      event.preventDefault();
       closeModal();
     };
 
@@ -126,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     showcaseModalButton.addEventListener('click', handleModalButtonClick);
-
     showcaseModalCloseButton.addEventListener('click', handleModalCloseButtonClick);
 
     // Close the modal if the user clicks outside of it
@@ -147,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return (...args) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        func.apply(this, args); // Use apply to maintain context
+        func(...args); // Simplified apply
       }, delay);
     };
   };

@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      return data;
 
     } catch (error) {
       console.error("Failed to fetch about content:", error);
@@ -103,11 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Helper function to update text content of an element
   function updateTextContent(elementId, text) {
     const element = document.getElementById(elementId);
-    if (element) {
-      element.textContent = text || ''; // Handle null/undefined text
-    } else {
+    if (!element) {
       console.warn(`Element with id "${elementId}" not found.`);
+      return;
     }
+    element.textContent = text || ''; // Handle null/undefined text
   }
 
   // Helper function to display error messages

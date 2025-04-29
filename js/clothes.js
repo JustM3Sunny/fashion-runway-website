@@ -14,7 +14,7 @@ const clothesData = [
     { id: 5, name: "Leather Jacket", price: 120, image: "img/clothes/jacket.jpg", category: "Outerwear", sizes: ["S", "M", "L", "XL"], colors: ["black", "brown"] },
     { id: 6, name: "Chino Pants", price: 55, image: "img/clothes/chino.jpg", category: "Bottoms", sizes: ["28", "30", "32", "34", "36"], colors: ["beige", "navy"] },
     { id: 7, name: "Button-Down Shirt", price: 40, image: "img/clothes/shirt.jpg", category: "Tops", sizes: ["S", "M", "L", "XL"], colors: ["white", "blue", "striped"] },
-    { id: 8, name: "Sweater", price: 50, "image": "img/clothes/sweater.jpg", category: "Tops", sizes: ["S", "M", "L", "XL"], colors: ["gray", "navy", "green"] },
+    { id: 8, name: "Sweater", price: 50, image: "img/clothes/sweater.jpg", category: "Tops", sizes: ["S", "M", "L", "XL"], colors: ["gray", "navy", "green"] },
 ];
 
 const clothesContainer = document.getElementById("clothes-container");
@@ -78,15 +78,16 @@ function renderClothes(clothes) {
 /**
  * Filters clothes by category.
  * @param {string} category - The category to filter by. "All" for all items.
+ * @returns {Array<Object>} - The filtered clothes data.
  */
 function filterClothes(category) {
-    const filteredClothes = category === "All" ? clothesData : clothesData.filter(item => item.category === category);
-    renderClothes(filteredClothes);
+    return category === "All" ? clothesData : clothesData.filter(item => item.category === category);
 }
 
 /**
  * Sorts clothes by price.
  * @param {string} sortBy - "price-asc" for ascending, "price-desc" for descending.
+ * @returns {Array<Object>} - The sorted clothes data.
  */
 function sortClothes(sortBy) {
     const sortedClothes = [...clothesData]; // Create a copy to avoid modifying the original array
@@ -100,17 +101,17 @@ function sortClothes(sortBy) {
         return 0; // Default: no sorting
     });
 
-    renderClothes(sortedClothes);
+    return sortedClothes;
 }
 
 /**
  * Searches clothes by name.
  * @param {string} searchTerm - The search term.
+ * @returns {Array<Object>} - The searched clothes data.
  */
 function searchClothes(searchTerm) {
     const searchTermLower = searchTerm.toLowerCase();
-    const searchedClothes = clothesData.filter(item => item.name.toLowerCase().includes(searchTermLower));
-    renderClothes(searchedClothes);
+    return clothesData.filter(item => item.name.toLowerCase().includes(searchTermLower));
 }
 
 /**
@@ -135,14 +136,18 @@ document.addEventListener("DOMContentLoaded", () => {
     Object.entries(filterButtons).forEach(([buttonId, category]) => {
         const button = document.getElementById(buttonId);
         if (button) {
-            button.addEventListener("click", () => filterClothes(category));
+            button.addEventListener("click", () => {
+                const filteredData = filterClothes(category);
+                renderClothes(filteredData);
+            });
         }
     });
 
     const sortSelect = document.getElementById("sort-select");
     if (sortSelect) {
         sortSelect.addEventListener("change", (event) => {
-            sortClothes(event.target.value);
+            const sortedData = sortClothes(event.target.value);
+            renderClothes(sortedData);
         });
     }
 
@@ -153,7 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
                 const searchTerm = event.target.value;
-                searchClothes(searchTerm);
+                const searchedData = searchClothes(searchTerm);
+                renderClothes(searchedData);
             }, 200);
         });
     }

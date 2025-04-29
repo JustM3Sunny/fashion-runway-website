@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const userData = await response.json();
+      const userData = await await response.json();
       return userData;
 
     } catch (error) {
@@ -64,7 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const sanitizedEmail = DOMPurify.sanitize(email);
       const sanitizedAddress = DOMPurify.sanitize(address);
       const sanitizedPhone = DOMPurify.sanitize(phone);
-      const sanitizedProfilePicture = DOMPurify.sanitize(profilePicture || defaultProfilePicture); // Use default if undefined
+      let sanitizedProfilePicture = DOMPurify.sanitize(profilePicture || defaultProfilePicture); // Use default if undefined
+
+      // Validate profile picture URL
+      try {
+          new URL(sanitizedProfilePicture);
+      } catch (error) {
+          console.warn("Invalid profile picture URL. Using default.");
+          sanitizedProfilePicture = defaultProfilePicture;
+      }
+
 
       const profileHTML = `
         <div class="bg-white shadow rounded-lg p-4">

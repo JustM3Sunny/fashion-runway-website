@@ -108,11 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Reset the form
       contactForm.reset();
 
-      // Optional: Clear input fields manually for better UX, especially on older browsers
-      // nameInput.value = '';
-      // emailInput.value = '';
-      // messageInput.value = '';
-
     } catch (error) {
       console.error('Error submitting form:', error);
       errorMessage.textContent = error.message; // Display the error message
@@ -131,7 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
   contactForm.addEventListener('submit', handleSubmit);
 
   // Optional: Add input event listeners for real-time validation
-  nameInput.addEventListener('input', validateForm);
-  emailInput.addEventListener('input', validateForm);
-  messageInput.addEventListener('input', validateForm);
+  nameInput.addEventListener('input', () => {
+      validateForm();
+  });
+  emailInput.addEventListener('input', () => {
+      validateForm();
+  });
+  messageInput.addEventListener('input', () => {
+      validateForm();
+  });
 });

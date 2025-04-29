@@ -16,7 +16,8 @@ const productDisplayConfig = {
     nameClass: 'text-lg font-semibold mt-2',
     priceClass: 'text-gray-600 mt-1',
     descriptionClass: 'text-sm text-gray-700 mt-1',
-    addToCartButtonClass: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 block w-full text-center' // Added block and width for better button styling
+    addToCartButtonClass: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 block w-full text-center', // Added block and width for better button styling
+    placeholderImageUrl: 'placeholder.jpg' // Added placeholder image URL
 };
 
 // Function to fetch product data (replace with your actual data fetching logic)
@@ -55,6 +56,11 @@ async function displayProducts(filterCategory = "all", sortOption = "price-low-t
         // Clear the existing product list
         productContainer.innerHTML = "";
 
+        if (sortedProducts.length === 0) {
+            productContainer.innerHTML = "<p>No products found matching your criteria.</p>";
+            return;
+        }
+
         // Create and append product elements to the container
         const fragment = document.createDocumentFragment(); // Use a document fragment for performance
         sortedProducts.forEach(product => {
@@ -80,23 +86,22 @@ function filterProducts(products, filterCategory) {
 // Function to sort products based on the selected option
 function sortProducts(products, sortOption) {
     const productsCopy = [...products]; // Create a copy to avoid modifying the original data
-    switch (sortOption) {
-        case "price-low-to-high":
-            productsCopy.sort((a, b) => a.price - b.price);
-            break;
-        case "price-high-to-low":
-            productsCopy.sort((a, b) => b.price - a.price);
-            break;
-        case "name-a-to-z":
-            productsCopy.sort((a, b) => a.name.localeCompare(b.name));
-            break;
-        case "name-z-to-a":
-            productsCopy.sort((a, b) => b.name.localeCompare(a.name));
-            break;
-        default:
-            console.warn(`Unknown sort option: ${sortOption}.  Sorting by ID.`);
-            productsCopy.sort((a, b) => a.id - b.id);
+    const sortFunctions = {
+        "price-low-to-high": (a, b) => a.price - b.price,
+        "price-high-to-low": (a, b) => b.price - a.price,
+        "name-a-to-z": (a, b) => a.name.localeCompare(b.name),
+        "name-z-to-a": (a, b) => b.name.localeCompare(a.name),
+    };
+
+    const sortFunction = sortFunctions[sortOption];
+
+    if (sortFunction) {
+        productsCopy.sort(sortFunction);
+    } else {
+        console.warn(`Unknown sort option: ${sortOption}.  Sorting by ID.`);
+        productsCopy.sort((a, b) => a.id - b.id);
     }
+
     return productsCopy;
 }
 
@@ -115,7 +120,7 @@ function createProductElement(product) {
     imageElement.style.objectFit = productDisplayConfig.imageObjectFit;
     imageElement.loading = 'lazy'; // Add lazy loading
     imageElement.onerror = () => {
-        imageElement.src = 'placeholder.jpg'; // Use a placeholder image on error
+        imageElement.src = productDisplayConfig.placeholderImageUrl; // Use a placeholder image on error
     };
     productElement.appendChild(imageElement);
 

@@ -76,6 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 add-to-cart-button" data-product-id="${product.id}">Add to Cart</button>
     `;
 
+    // Add event listener directly to the button for improved performance and clarity
+    const addToCartButton = productElement.querySelector('.add-to-cart-button');
+    if (addToCartButton) {
+      addToCartButton.addEventListener('click', () => {
+        handleAddToCart(product.id);
+      });
+    }
+
     return productElement;
   }
 
@@ -138,17 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Add event listener for "Add to Cart" buttons using event delegation
-  document.getElementById(FEATURED_PRODUCTS_CONTAINER_ID).addEventListener('click', (event) => {
-    if (event.target.classList.contains('add-to-cart-button')) {
-      const productId = event.target.dataset.productId;
-      if (productId) {
-        handleAddToCart(productId);
-      } else {
-        console.warn('Product ID not found on button.');
-      }
-    }
-  });
+  // Remove the event delegation from the container.  The event listener is now added directly to the button.
+  // document.getElementById(FEATURED_PRODUCTS_CONTAINER_ID).addEventListener('click', (event) => {
+  //   if (event.target.classList.contains('add-to-cart-button')) {
+  //     const productId = event.target.dataset.productId;
+  //     if (productId) {
+  //       handleAddToCart(productId);
+  //     } else {
+  //       console.warn('Product ID not found on button.');
+  //     }
+  //   }
+  // });
 
   function handleAddToCart(productId) {
     // Implement your add to cart logic here.
