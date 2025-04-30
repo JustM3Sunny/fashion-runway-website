@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const userData = await await response.json();
+      const userData = await response.json(); // Removed unnecessary await
       return userData;
 
     } catch (error) {
@@ -57,36 +57,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const { name, email, address, phone, profilePicture } = userData;
+      let { name, email, address, phone, profilePicture } = userData;
 
       // Sanitize data to prevent XSS vulnerabilities
-      const sanitizedName = DOMPurify.sanitize(name);
-      const sanitizedEmail = DOMPurify.sanitize(email);
-      const sanitizedAddress = DOMPurify.sanitize(address);
-      const sanitizedPhone = DOMPurify.sanitize(phone);
-      let sanitizedProfilePicture = DOMPurify.sanitize(profilePicture || defaultProfilePicture); // Use default if undefined
+      name = DOMPurify.sanitize(name);
+      email = DOMPurify.sanitize(email);
+      address = DOMPurify.sanitize(address);
+      phone = DOMPurify.sanitize(phone);
+      let profilePictureURL = profilePicture || defaultProfilePicture;
 
       // Validate profile picture URL
       try {
-          new URL(sanitizedProfilePicture);
+          new URL(profilePictureURL);
       } catch (error) {
           console.warn("Invalid profile picture URL. Using default.");
-          sanitizedProfilePicture = defaultProfilePicture;
+          profilePictureURL = defaultProfilePicture;
       }
+
+      profilePictureURL = DOMPurify.sanitize(profilePictureURL);
 
 
       const profileHTML = `
         <div class="bg-white shadow rounded-lg p-4">
           <div class="flex items-center space-x-4">
-            <img class="h-12 w-12 rounded-full object-cover" src="${sanitizedProfilePicture}" alt="Profile Picture">
+            <img class="h-12 w-12 rounded-full object-cover" src="${profilePictureURL}" alt="Profile Picture">
             <div>
-              <h2 class="text-xl font-semibold">${sanitizedName}</h2>
-              <p class="text-gray-500">${sanitizedEmail}</p>
+              <h2 class="text-xl font-semibold">${name}</h2>
+              <p class="text-gray-500">${email}</p>
             </div>
           </div>
           <div class="mt-4">
-            <p class="text-gray-700">Address: ${sanitizedAddress}</p>
-            <p class="text-gray-700">Phone: ${sanitizedPhone}</p>
+            <p class="text-gray-700">Address: ${address}</p>
+            <p class="text-gray-700">Phone: ${phone}</p>
           </div>
           <div class="mt-4">
             <a href="edit-profile.html" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit Profile</a>

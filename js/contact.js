@@ -126,13 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
   contactForm.addEventListener('submit', handleSubmit);
 
   // Optional: Add input event listeners for real-time validation
-  nameInput.addEventListener('input', () => {
+  const inputElements = [nameInput, emailInput, messageInput];
+
+  inputElements.forEach(inputElement => {
+    inputElement.addEventListener('input', () => {
       validateForm();
-  });
-  emailInput.addEventListener('input', () => {
-      validateForm();
-  });
-  messageInput.addEventListener('input', () => {
-      validateForm();
+    });
   });
 });

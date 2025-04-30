@@ -167,7 +167,10 @@ function handleCategoryFilter() {
         console.error("Category filter element not found.");
         return;
     }
-    displayProducts(categorySelect.value);
+    // Call displayProducts with the selected category and the current sort option
+    const sortSelect = document.getElementById("sort-by");
+    const selectedSort = sortSelect ? sortSelect.value : "price-low-to-high"; // Default sort option
+    displayProducts(categorySelect.value, selectedSort);
 }
 
 // Function to handle sorting
@@ -177,6 +180,7 @@ function handleSort() {
         console.error("Sort by element not found.");
         return;
     }
+    // Call displayProducts with the selected sort option and the current category
     const categorySelect = document.getElementById("category-filter");
     const selectedCategory = categorySelect ? categorySelect.value : 'all'; // Default to 'all' if category filter is missing
     displayProducts(selectedCategory, sortSelect.value);

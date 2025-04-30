@@ -81,7 +81,10 @@ function renderClothes(clothes) {
  * @returns {Array<Object>} - The filtered clothes data.
  */
 function filterClothes(category) {
-    return category === "All" ? clothesData : clothesData.filter(item => item.category === category);
+    if (category === "All") {
+        return [...clothesData]; // Return a copy to prevent accidental modification
+    }
+    return clothesData.filter(item => item.category === category);
 }
 
 /**

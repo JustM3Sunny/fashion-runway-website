@@ -146,18 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Remove the event delegation from the container.  The event listener is now added directly to the button.
-  // document.getElementById(FEATURED_PRODUCTS_CONTAINER_ID).addEventListener('click', (event) => {
-  //   if (event.target.classList.contains('add-to-cart-button')) {
-  //     const productId = event.target.dataset.productId;
-  //     if (productId) {
-  //       handleAddToCart(productId);
-  //     } else {
-  //       console.warn('Product ID not found on button.');
-  //     }
-  //   }
-  // });
-
   function handleAddToCart(productId) {
     // Implement your add to cart logic here.
     console.log(`Adding product with ID ${productId} to cart.`);

@@ -49,18 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let timeout;
         return function(...args) {
             clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), delay); // Corrected context binding
+            timeout = setTimeout(() => func.apply(this, args), delay);
         };
     }
 
-    // Product page functionality
-    if (window.location.pathname.includes('products.html')) {
-        initProductsPage();
-    }
-
+    // --- Product Page Functionality ---
     async function initProductsPage() {
         try {
-            await loadProducts();
+            const products = await loadProducts();
+            displayProducts(products);
         } catch (error) {
             console.error('Error initializing products page:', error);
             displayErrorMessage('product-container', 'Failed to load products. Please try again later.');
@@ -69,12 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadProducts() {
         console.log('Loading product data for the fashion clothing website...');
-
         try {
             const products = await getProducts(); // Assuming getProducts is defined in products.js
-
-            displayProducts(products);
-
+            return products;
         } catch (error) {
             console.error('Error loading products:', error);
             displayErrorMessage('product-container', 'Failed to load products. Please try again later.');
@@ -84,25 +78,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function displayProducts(products) {
         const productContainer = document.getElementById('product-container');
-        if (productContainer) {
-            productContainer.innerHTML = '';
-
-            if (products.length === 0) {
-                displayErrorMessage('product-container', 'No products found.');
-                return;
-            }
-
-            const fragment = document.createDocumentFragment();
-
-            products.forEach(product => {
-                const productDiv = createProductElement(product);
-                fragment.appendChild(productDiv);
-            });
-
-            productContainer.appendChild(fragment);
-        } else {
+        if (!productContainer) {
             console.warn('Product container not found. Ensure an element with id "product-container" exists in the HTML.');
+            return;
         }
+
+        productContainer.innerHTML = '';
+
+        if (products.length === 0) {
+            displayErrorMessage('product-container', 'No products found.');
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        products.forEach(product => {
+            const productDiv = createProductElement(product);
+            fragment.appendChild(productDiv);
+        });
+
+        productContainer.appendChild(fragment);
     }
 
     function createProductElement(product) {
@@ -111,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const productImage = document.createElement('img');
         productImage.src = product.image;
-        productImage.alt = product.name;
+        productImage.alt = `Image of ${product.name}`; // Improved alt text
         productImage.classList.add('w-full', 'h-48', 'object-cover', 'mb-2');
         productImage.onerror = () => {
             productImage.src = 'placeholder.jpg';
@@ -141,14 +136,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return productDiv;
     }
 
-    // Cart page functionality
-    if (window.location.pathname.includes('cart.html')) {
-        initCartPage();
-    }
-
+    // --- Cart Page Functionality ---
     async function initCartPage() {
         try {
-            await loadCart();
+            const cartItems = await loadCart();
+            displayCartItems(cartItems);
         } catch (error) {
             console.error('Error initializing cart page:', error);
             displayErrorMessage('cart-container', 'Failed to load cart. Please try again later.');
@@ -158,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadCart() {
         try {
             const cartItems = getCartItems(); // Assuming getCartItems is defined in cart.js
-            displayCartItems(cartItems);
+            return cartItems;
         } catch (error) {
             console.error('Error loading cart:', error);
             displayErrorMessage('cart-container', 'Failed to load cart. Please try again later.');
@@ -168,25 +160,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function displayCartItems(cartItems) {
         const cartContainer = document.getElementById('cart-container');
-        if (cartContainer) {
-            cartContainer.innerHTML = '';
-
-            if (cartItems.length === 0) {
-                displayErrorMessage('cart-container', 'Your cart is empty.', 'text-center', 'py-4');
-                return;
-            }
-
-            const fragment = document.createDocumentFragment();
-
-            cartItems.forEach(item => {
-                const cartItemDiv = createCartItemElement(item);
-                fragment.appendChild(cartItemDiv);
-            });
-
-            cartContainer.appendChild(fragment);
-        } else {
+        if (!cartContainer) {
             console.warn('Cart container not found. Ensure an element with id "cart-container" exists in the HTML.');
+            return;
         }
+
+        cartContainer.innerHTML = '';
+
+        if (cartItems.length === 0) {
+            displayErrorMessage('cart-container', 'Your cart is empty.', 'text-center', 'py-4');
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        cartItems.forEach(item => {
+            const cartItemDiv = createCartItemElement(item);
+            fragment.appendChild(cartItemDiv);
+        });
+
+        cartContainer.appendChild(fragment);
     }
 
     function createCartItemElement(item) {
@@ -217,6 +210,19 @@ document.addEventListener('DOMContentLoaded', () => {
             console.warn(`Container with id "${containerId}" not found.`);
         }
     }
+
+    // Centralized page initialization
+    function initPage() {
+        const pathname = window.location.pathname;
+
+        if (pathname.includes('products.html')) {
+            initProductsPage();
+        } else if (pathname.includes('cart.html')) {
+            initCartPage();
+        }
+    }
+
+    initPage(); // Call the centralized initialization function
 
     console.log('Fashion clothing website script loaded.');
 });

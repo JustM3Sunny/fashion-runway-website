@@ -13,14 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextButton = document.querySelector('.showcase-next-button');
   const carouselIntervalTime = 5000;
   let carouselInterval;
+  let currentIndex = 0; // Initialize currentIndex outside the if block
 
   if (carouselContainer && carouselImages.length > 0 && prevButton && nextButton) {
-    let currentIndex = 0;
 
     const updateCarousel = () => {
       carouselImages.forEach((img, index) => {
-        img.classList.toggle('hidden', index !== currentIndex);
-        img.setAttribute('aria-hidden', index !== currentIndex); // Accessibility
+        const isVisible = index === currentIndex;
+        img.classList.toggle('hidden', !isVisible);
+        img.setAttribute('aria-hidden', !isVisible); // Accessibility
       });
     };
 
@@ -35,11 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const startCarousel = () => {
-      carouselInterval = setInterval(nextImage, carouselIntervalTime);
+      if (!carouselInterval) { // Prevent multiple intervals
+        carouselInterval = setInterval(nextImage, carouselIntervalTime);
+      }
     };
 
     const stopCarousel = () => {
       clearInterval(carouselInterval);
+      carouselInterval = null; // Reset carouselInterval
     };
 
     const resetCarousel = () => {
@@ -107,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.add('modal-open');
       document.addEventListener('keydown', handleEscapeKey);
       showcaseModalButton.setAttribute('aria-expanded', 'true'); // Accessibility
+      showcaseModal.focus(); // Set focus to the modal for accessibility
     };
 
     const closeModal = () => {
@@ -115,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.remove('modal-open');
       document.removeEventListener('keydown', handleEscapeKey);
       showcaseModalButton.setAttribute('aria-expanded', 'false'); // Accessibility
+      showcaseModalButton.focus(); // Return focus to the button that opened the modal
     };
 
     const handleModalButtonClick = (event) => {
