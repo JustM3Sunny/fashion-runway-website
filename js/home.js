@@ -79,7 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listener directly to the button for improved performance and clarity
     const addToCartButton = productElement.querySelector('.add-to-cart-button');
     if (addToCartButton) {
-      addToCartButton.addEventListener('click', () => {
+      addToCartButton.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent form submission if inside a form
         handleAddToCart(product.id);
       });
     }

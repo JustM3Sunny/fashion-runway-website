@@ -82,7 +82,7 @@ function renderClothes(clothes) {
  */
 function filterClothes(category) {
     if (category === "All") {
-        return [...clothesData]; // Return a copy to prevent accidental modification
+        return clothesData; // Return original array since it's not modified
     }
     return clothesData.filter(item => item.category === category);
 }

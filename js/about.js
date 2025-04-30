@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      return data;
 
     } catch (error) {
       console.error("Failed to fetch about content:", error);

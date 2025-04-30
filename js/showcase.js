@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextButton = document.querySelector('.showcase-next-button');
   const carouselIntervalTime = 5000;
   let carouselInterval;
-  let currentIndex = 0; // Initialize currentIndex outside the if block
+  let currentIndex = 0;
 
   if (carouselContainer && carouselImages.length > 0 && prevButton && nextButton) {
 
@@ -36,14 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const startCarousel = () => {
-      if (!carouselInterval) { // Prevent multiple intervals
+      if (!carouselInterval) {
         carouselInterval = setInterval(nextImage, carouselIntervalTime);
       }
     };
 
     const stopCarousel = () => {
       clearInterval(carouselInterval);
-      carouselInterval = null; // Reset carouselInterval
+      carouselInterval = null;
     };
 
     const resetCarousel = () => {
@@ -70,12 +70,22 @@ document.addEventListener('DOMContentLoaded', () => {
     startCarousel();
 
     // Accessibility: Pause carousel on hover
-    carouselContainer.addEventListener('mouseenter', stopCarousel); // Use mouseenter for better UX
-    carouselContainer.addEventListener('mouseleave', startCarousel); // Use mouseleave for better UX
+    carouselContainer.addEventListener('mouseenter', stopCarousel);
+    carouselContainer.addEventListener('mouseleave', startCarousel);
 
     // Accessibility: Pause carousel on focus
     carouselContainer.addEventListener('focusin', stopCarousel);
     carouselContainer.addEventListener('focusout', startCarousel);
+
+    // Optional: Keyboard navigation for carousel
+    carouselContainer.setAttribute('tabindex', '0'); // Make container focusable
+    carouselContainer.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        handlePrevClick(event);
+      } else if (event.key === 'ArrowRight') {
+        handleNextClick(event);
+      }
+    });
 
   } else {
     console.warn("Carousel elements not found. Carousel functionality will not be initialized.");
@@ -112,6 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.addEventListener('keydown', handleEscapeKey);
       showcaseModalButton.setAttribute('aria-expanded', 'true'); // Accessibility
       showcaseModal.focus(); // Set focus to the modal for accessibility
+      // Prevent scrolling of the background when the modal is open
+      document.body.style.overflow = 'hidden';
     };
 
     const closeModal = () => {
@@ -121,6 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.removeEventListener('keydown', handleEscapeKey);
       showcaseModalButton.setAttribute('aria-expanded', 'false'); // Accessibility
       showcaseModalButton.focus(); // Return focus to the button that opened the modal
+      // Restore scrolling of the background
+      document.body.style.overflow = '';
     };
 
     const handleModalButtonClick = (event) => {
@@ -160,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return (...args) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        func(...args); // Simplified apply
+        func(...args);
       }, delay);
     };
   };
@@ -181,11 +195,5 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', debouncedHandleResize);
 
   handleResize();
-
-
-  // --- Future Enhancements ---
-  // - Implement product filtering and sorting.
-  // - Add more sophisticated animations and transitions.
-  // - Integrate with backend data to dynamically load products.
 
 });

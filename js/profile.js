@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const userData = await response.json(); // Removed unnecessary await
+      const userData = await response.json();
       return userData;
 
     } catch (error) {
@@ -67,12 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
       let profilePictureURL = profilePicture || defaultProfilePicture;
 
       // Validate profile picture URL
-      try {
-          new URL(profilePictureURL);
-      } catch (error) {
-          console.warn("Invalid profile picture URL. Using default.");
-          profilePictureURL = defaultProfilePicture;
+      if (profilePicture) { // Only validate if a profile picture is provided
+        try {
+            new URL(profilePictureURL);
+        } catch (error) {
+            console.warn("Invalid profile picture URL. Using default.");
+            profilePictureURL = defaultProfilePicture;
+        }
       }
+
 
       profilePictureURL = DOMPurify.sanitize(profilePictureURL);
 
