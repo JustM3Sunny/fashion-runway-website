@@ -48,9 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function debounce(func, delay) {
         let timeout;
         return function(...args) {
-            const context = this; // Store the context
             clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), delay);
+            timeout = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
         };
     }
 
@@ -150,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadCart() {
         try {
-            const cartItems = getCartItems(); // Assuming getCartItems is defined in cart.js
+            const cartItems = await getCartItems(); // Assuming getCartItems is defined in cart.js
             return cartItems;
         } catch (error) {
             console.error('Error loading cart:', error);
