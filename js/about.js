@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new TypeError("Expected JSON response, but received: " + contentType);
+      }
       return await response.json();
 
     } catch (error) {
@@ -69,14 +73,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const fragment = document.createDocumentFragment(); // Use a fragment for better performance
 
     teamMembers.forEach(member => {
-      const memberDiv = createTeamMemberElement(member);
-      fragment.appendChild(memberDiv);
+      try {
+        const memberDiv = createTeamMemberElement(member);
+        fragment.appendChild(memberDiv);
+      } catch (error) {
+        console.error("Error creating team member element:", error);
+        displayErrorMessage("Failed to load one or more team members.");
+      }
     });
 
     teamContainer.appendChild(fragment); // Append the entire fragment at once
   }
 
   function createTeamMemberElement(member) {
+    if (!member || typeof member !== 'object') {
+      console.error("Invalid team member data:", member);
+      throw new Error("Invalid team member data"); // Throw error to be caught in renderTeamMembers
+    }
+
     const memberDiv = document.createElement('div');
     memberDiv.classList.add('team-member', 'p-4', 'border', 'rounded', 'shadow-md'); // Tailwind classes
 

@@ -123,7 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
       showcaseModalButton.setAttribute('aria-expanded', 'true'); // Accessibility
       showcaseModal.focus(); // Set focus to the modal for accessibility
       // Prevent scrolling of the background when the modal is open
-      document.body.style.overflow = 'hidden';
+      document.body.style.top = `-${window.scrollY}px`; // Store the current scroll position
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
     };
 
     const closeModal = () => {
@@ -133,8 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
       document.removeEventListener('keydown', handleEscapeKey);
       showcaseModalButton.setAttribute('aria-expanded', 'false'); // Accessibility
       showcaseModalButton.focus(); // Return focus to the button that opened the modal
+
       // Restore scrolling of the background
-      document.body.style.overflow = '';
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
     };
 
     const handleModalButtonClick = (event) => {

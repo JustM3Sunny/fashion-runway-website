@@ -64,18 +64,18 @@ document.addEventListener('DOMContentLoaded', () => {
       email = DOMPurify.sanitize(email);
       address = DOMPurify.sanitize(address);
       phone = DOMPurify.sanitize(phone);
+
       let profilePictureURL = profilePicture || defaultProfilePicture;
 
       // Validate profile picture URL
       if (profilePicture) { // Only validate if a profile picture is provided
         try {
-            new URL(profilePictureURL);
+          new URL(profilePictureURL);
         } catch (error) {
-            console.warn("Invalid profile picture URL. Using default.");
-            profilePictureURL = defaultProfilePicture;
+          console.warn("Invalid profile picture URL. Using default.");
+          profilePictureURL = defaultProfilePicture;
         }
       }
-
 
       profilePictureURL = DOMPurify.sanitize(profilePictureURL);
 
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const profileHTML = `
         <div class="bg-white shadow rounded-lg p-4">
           <div class="flex items-center space-x-4">
-            <img class="h-12 w-12 rounded-full object-cover" src="${profilePictureURL}" alt="Profile Picture">
+            <img class="h-12 w-12 rounded-full object-cover" src="${profilePictureURL}" alt="Profile Picture" onerror="this.onerror=null;this.src='${defaultProfilePicture}';">
             <div>
               <h2 class="text-xl font-semibold">${name}</h2>
               <p class="text-gray-500">${email}</p>
