@@ -81,10 +81,9 @@ function removeFromCart(productId) {
   }
 
   const cart = getCart();
-  const initialLength = cart.length;
   const updatedCart = cart.filter(item => item.productId !== productId);
 
-  if (updatedCart.length !== initialLength) {
+  if (cart.length !== updatedCart.length) {
     saveCart(updatedCart);
   }
 }
@@ -102,14 +101,16 @@ function updateCartItemQuantity(productId, quantity) {
   }
 
   const cart = getCart();
+  let updated = false;
   const updatedCart = cart.map(item => {
     if (item.productId === productId) {
+      updated = true;
       return { ...item, quantity: quantity };
     }
     return item;
   });
 
-  if (JSON.stringify(cart) !== JSON.stringify(updatedCart)) {
+  if (updated) {
     saveCart(updatedCart);
   }
 }

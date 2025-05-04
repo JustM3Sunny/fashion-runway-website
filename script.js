@@ -48,9 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function debounce(func, delay) {
         let timeout;
         return function(...args) {
+            const context = this; // Store the context
             clearTimeout(timeout);
             timeout = setTimeout(() => {
-                func.apply(this, args);
+                func.apply(context, args); // Use the stored context
             }, delay);
         };
     }
@@ -217,10 +218,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function initPage() {
         const pathname = window.location.pathname;
 
+        let pageInitialized = false;
+
         if (pathname.includes('products.html')) {
             initProductsPage();
+            pageInitialized = true;
         } else if (pathname.includes('cart.html')) {
             initCartPage();
+            pageInitialized = true;
+        }
+
+        if (!pageInitialized) {
+            console.log('No specific page initialization required.');
         }
     }
 

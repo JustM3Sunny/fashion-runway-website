@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!contentType || !contentType.includes("application/json")) {
         throw new TypeError("Expected JSON response, but received: " + contentType);
       }
-      return await response.json();
+      const data = await response.json();
+      return data;
 
     } catch (error) {
       console.error("Failed to fetch about content:", error);
@@ -105,6 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const bioElement = document.createElement('p');
     bioElement.classList.add('text-sm'); // Tailwind classes
     bioElement.textContent = member.bio || 'Bio not available';
+
+    // Optional: Add image element if member.image is available
+    if (member.image) {
+        const imageElement = document.createElement('img');
+        imageElement.src = member.image;
+        imageElement.alt = `Image of ${member.name}`;
+        imageElement.classList.add('w-24', 'h-24', 'rounded-full', 'mb-2'); // Tailwind classes for image styling
+        memberDiv.appendChild(imageElement);
+    }
 
     memberDiv.appendChild(nameElement);
     memberDiv.appendChild(roleElement);
