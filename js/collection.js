@@ -161,19 +161,21 @@ function createProductElement(product) {
 }
 
 // Function to handle category filtering
-function handleCategoryFilter() {
+function handleCategoryFilter(event) {
     // Call displayProducts with the selected category and the current sort option
+    const selectedCategory = event.target.value;
     const sortSelect = document.getElementById("sort-by");
     const selectedSort = sortSelect ? sortSelect.value : "price-low-to-high"; // Default sort option
-    displayProducts(this.value, selectedSort); // Use 'this' to get the selected value
+    displayProducts(selectedCategory, selectedSort);
 }
 
 // Function to handle sorting
-function handleSort() {
+function handleSort(event) {
     // Call displayProducts with the selected sort option and the current category
+    const selectedSort = event.target.value;
     const categorySelect = document.getElementById("category-filter");
     const selectedCategory = categorySelect ? categorySelect.value : 'all'; // Default to 'all' if category filter is missing
-    displayProducts(selectedCategory, this.value); // Use 'this' to get the selected value
+    displayProducts(selectedCategory, selectedSort);
 }
 
 // Function to initialize the page

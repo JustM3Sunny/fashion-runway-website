@@ -80,11 +80,12 @@ function removeFromCart(productId) {
     return;
   }
 
-  const cart = getCart();
-  const updatedCart = cart.filter(item => item.productId !== productId);
+  let cart = getCart();
+  const initialLength = cart.length;
+  cart = cart.filter(item => item.productId !== productId);
 
-  if (cart.length !== updatedCart.length) {
-    saveCart(updatedCart);
+  if (cart.length !== initialLength) {
+    saveCart(cart);
   }
 }
 
@@ -102,6 +103,7 @@ function updateCartItemQuantity(productId, quantity) {
 
   const cart = getCart();
   let updated = false;
+
   const updatedCart = cart.map(item => {
     if (item.productId === productId) {
       updated = true;

@@ -74,8 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
     carouselContainer.addEventListener('mouseleave', startCarousel);
 
     // Accessibility: Pause carousel on focus
-    carouselContainer.addEventListener('focusin', stopCarousel);
-    carouselContainer.addEventListener('focusout', startCarousel);
+    prevButton.addEventListener('focus', stopCarousel);
+    nextButton.addEventListener('focus', stopCarousel);
+    prevButton.addEventListener('blur', startCarousel);
+    nextButton.addEventListener('blur', startCarousel);
+
 
     // Optional: Keyboard navigation for carousel
     carouselContainer.setAttribute('tabindex', '0'); // Make container focusable

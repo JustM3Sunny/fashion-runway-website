@@ -112,7 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const imageElement = document.createElement('img');
         imageElement.src = member.image;
         imageElement.alt = `Image of ${member.name}`;
-        imageElement.classList.add('w-24', 'h-24', 'rounded-full', 'mb-2'); // Tailwind classes for image styling
+        imageElement.classList.add('w-24', 'h-24', 'rounded-full', 'mb-2', 'object-cover'); // Tailwind classes for image styling
+        imageElement.onerror = () => {
+            console.warn(`Failed to load image for ${member.name} at ${member.image}`);
+            imageElement.src = 'path/to/default/image.png'; // Provide a default image
+        };
         memberDiv.appendChild(imageElement);
     }
 
